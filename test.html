@@ -213,9 +213,9 @@
     ];
 
     var sizes = {
-        micro: 8,
+        micro: 12,
         meso: 12,
-        macro: 18,
+        macro: 12,
         research: 12
     };
 
@@ -255,8 +255,8 @@
         }
 
         function getSubcatColor(node) {
-            var lightnessDelta = d3.keys(categories[node.category].subcategories).indexOf(node.subcategory);
-            return d3.rgb(fill(getCatColor(node.category))).darker(lightnessDelta); 
+            var colorDelta = d3.keys(categories[node.category].subcategories).indexOf(node.subcategory);
+            return d3.rgb(fill(getCatColor(node.category))).brighter(colorDelta); 
         }
 
     var w = 960,
