@@ -36,8 +36,6 @@ class GraphsController < ApplicationController
 
     def create
         @graph = Graph.new(params[:graph])
-        @graph.categories = Category.all
-        @graph.stakeholders = Stakeholder.all
         @graph.import_data_from_attachment!
         redirect_to graphs_path
     end

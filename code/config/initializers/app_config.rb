@@ -6,7 +6,7 @@ Code::Application.configure do
         :required => {
             :category => 'Category',
             :subcategory => 'Subcategory',
-            :stakeholder => 'Stakeholder',
+            :stakeholders => 'Stakeholders',
             :idea => 'Idea'
         }
     }

@@ -31,28 +31,27 @@ class Graph < ActiveRecord::Base
         column_names = Code::Application.config.column_names[:required]
 
         category_names = table[column_names[:category]].uniq!
-        categories << Category.create(category_names.map { |c| { :name => c } })
+        category_names.each do |name|
+            categories << Category.new(:name => name)
+        end
 
-        stakeholder_names = table[column_names[:stakeholder]].uniq!.map{ |n| n.split(', ') }.flatten!.uniq!.delete_if{ |n| n == 'All' }
-        logger.debug(stakeholder_names.inspect)
-        stakeholders << Stakeholder.create(stakeholder_names.map { |s| { :name => s } })
+        stakeholder_names = table[column_names[:stakeholders]].uniq!.map{ |n| n.split(', ') }.flatten!.uniq!.delete_if{ |n| n == 'All' }
+        stakeholder_names.each do |name|
+            stakeholders << Stakeholder.new(:name => name)
+        end
+
+        self.save!
 
         table.each do |row|
             idea = Idea.new({ :content => row['Idea'] })
             idea_category = categories.find_by_name(row[column_names[:category]])
-            idea_stakeholder_names = row['Stakeholder'].split(', ')
+            idea_stakeholder_names = row[column_names[:stakeholders]].split(', ')
             if idea_stakeholder_names.include? 'All'
                 idea.stakeholders = stakeholders.all
             else 
                 idea.stakeholders << stakeholders.find_all_by_name(idea_stakeholder_names)
             end
-            if idea.stakeholders.empty?
-                logger.debug('content: ' + idea_stakeholder_names.inspect)
-            end
             idea.subcategory = Subcategory.where(:name => row[column_names[:subcategory]], :category_id => idea_category.id).first_or_initialize
-            if idea.subcategory.new_record?
-                idea.subcategory.category = idea_category
-            end
             ideas << idea
         end
 

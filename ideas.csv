@@ -1,4 +1,4 @@
-Category,Subcategory,Stakeholder,Idea
+Category,Subcategory,Stakeholders,Idea
 Macro,Community Building,All,Advocacy and awareness building among educational leaders
 Meso,Tools & Technology,All,Addressing technical interoperability
 Research & Metrics,Assessment,All,Case studies of promising practices
@@ -133,7 +133,7 @@ Micro,Accessibility,Facilitator,Use of more multimedia to increase accessibility
 Macro,Policy,Facilitator,Government support
 Research & Metrics,Quality Control,Builder,Improve quality
 Research & Metrics,Assessment,Builder,Include assessments
-Research & Metrics,Accessibility,Builder,Develop metrics that provide demonstrable outcomes
+Micro,Accessibility,Builder,Develop metrics that provide demonstrable outcomes
 Micro,Accessibility,Builder,"Universal model of production, tagging and discovering for improved accessibility"
 Macro,Community Building,Builder,Collaborative building of an OER community
 Meso,Copyright & Licensing,Builder,Working with publishers for more effective distribution
@@ -141,7 +141,7 @@ Macro,Community Building,All,Organizing community
 Meso,Tools & Technology,All,Tools for people to be able to build their own collections
 Macro,Community Building,All,Grassroots working with schools
 Macro,Community Building,Builder,Increased awareness
-Meso,Quality Control,Builder,Incorporation of variable licenses
+Research & Metrics,Quality Control,Builder,Incorporation of variable licenses
 Macro,Community Building,Builder,Coordinated lobbying to defend the legal and legislative territory from incumbents undercutting OER efforts
 Meso,Tools & Technology,Builder,Use of feature phones for mobile delivery in developing countries
 Meso,Tools & Technology,Builder,Improved interoperability and standards-compliance between platforms
