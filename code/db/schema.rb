@@ -11,13 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120323224942) do
+ActiveRecord::Schema.define(:version => 20120324031923) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
+    t.integer  "graph_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "categories", ["graph_id"], :name => "index_categories_on_graph_id"
 
   create_table "graphs", :force => true do |t|
     t.string   "name"
@@ -31,7 +34,6 @@ ActiveRecord::Schema.define(:version => 20120323224942) do
 
   create_table "ideas", :force => true do |t|
     t.text     "content"
-    t.integer  "stakeholder_id"
     t.integer  "subcategory_id"
     t.integer  "graph_id"
     t.datetime "created_at",     :null => false
@@ -39,14 +41,21 @@ ActiveRecord::Schema.define(:version => 20120323224942) do
   end
 
   add_index "ideas", ["graph_id"], :name => "index_ideas_on_graph_id"
-  add_index "ideas", ["stakeholder_id"], :name => "index_ideas_on_stakeholder_id"
   add_index "ideas", ["subcategory_id"], :name => "index_ideas_on_subcategory_id"
+
+  create_table "ideas_stakeholders", :id => false, :force => true do |t|
+    t.integer "idea_id"
+    t.integer "stakeholder_id"
+  end
 
   create_table "stakeholders", :force => true do |t|
     t.string   "name"
+    t.integer  "graph_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "stakeholders", ["graph_id"], :name => "index_stakeholders_on_graph_id"
 
   create_table "subcategories", :force => true do |t|
     t.integer  "category_id"

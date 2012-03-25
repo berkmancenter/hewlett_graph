@@ -1,19 +1,12 @@
 Code::Application.routes.draw do
-  get "graph/index"
 
-  get "graph/show"
+  resources :graphs do
+      get 'ideas', :on => :member
+      get 'categories', :on => :member
+      get 'stakeholders', :on => :member
+  end
 
-  get "graph/new"
-
-  get "graph/create"
-
-  get "graph/edit"
-
-  get "graph/update"
-
-  get "graph/destroy"
-
-  resources :graphs
+  root :to => 'graphs#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
