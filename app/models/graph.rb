@@ -58,6 +58,10 @@ class Graph < ActiveRecord::Base
         self.save!
     end
 
+    def days_of_ideas
+        (ideas.maximum('created_at').to_date - ideas.minimum('created_at').to_date).to_i + 1
+    end
+
     protected
     def table
         if data.exists?
