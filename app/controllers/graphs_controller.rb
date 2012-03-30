@@ -8,7 +8,7 @@ class GraphsController < ApplicationController
     def show
         respond_to do |format|
             format.html
-            format.json { render_for_api :all, :json => @graph }
+            format.json { render_for_api :everything, :json => @graph }
         end
     end
 
@@ -37,7 +37,7 @@ class GraphsController < ApplicationController
     def create
         @graph = Graph.new(params[:graph])
         @graph.import_data_from_attachment!
-        redirect_to graphs_path
+        redirect_to graph_path(@graph)
     end
 
     def edit
@@ -45,6 +45,8 @@ class GraphsController < ApplicationController
 
     def update
         @graph.update_attributes(params[:graph])
+        @graph.update_data_from_attachment!
+        redirect_to graph_path(@graph)
     end
 
     def destroy

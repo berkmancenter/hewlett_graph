@@ -3,12 +3,8 @@ class Category < ActiveRecord::Base
     has_many :subcategories
     acts_as_api
 
-    api_accessible :public_ideas do |t|
+    api_accessible :everything do |t|
         t.add :name
-    end
-
-    api_accessible :categories do |t|
-        t.add :name
-        t.add :subcategories
+        t.add :subcategories, :template => :just_name
     end
 end

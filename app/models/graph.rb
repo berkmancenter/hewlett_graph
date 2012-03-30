@@ -8,11 +8,12 @@ class Graph < ActiveRecord::Base
     has_many :subcategories, :through => :categories
     acts_as_api
 
-    api_accessible :all do |t|
-        t.add :ideas, :template => :public_ideas
-        t.add :categories, :template => :categories
-        t.add :subcategories, :template => :categories
-        t.add :stakeholders, :template => :stakeholders
+    api_accessible :everything do |t|
+        t.add :ideas
+        t.add :categories
+        t.add :subcategories
+        t.add :stakeholders
+        t.add :day
     end
 
     api_accessible :public_ideas do |t|
@@ -42,6 +43,12 @@ class Graph < ActiveRecord::Base
 
         self.save!
 
+        update_data_from_attachment!
+    end
+
+    def update_data_from_attachment!
+        column_names = Code::Application.config.column_names[:required]
+
         table.each do |row|
             idea = Idea.new({ :content => row['Idea'] })
             idea_category = categories.find_by_name(row[column_names[:category]])
@@ -60,6 +67,10 @@ class Graph < ActiveRecord::Base
 
     def days_of_ideas
         (ideas.maximum('created_at').to_date - ideas.minimum('created_at').to_date).to_i + 1
+    end
+
+    def day
+        return (0..days_of_ideas - 1).map{ |i| { :name => (ideas.minimum('created_at').to_date + i.days).strftime('%A') } }
     end
 
     protected
