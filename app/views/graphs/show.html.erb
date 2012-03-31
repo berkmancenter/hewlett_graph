@@ -3,29 +3,30 @@
         <span class="inline"><dt>Category</dt><dd id="category"></dd></span>
         <span class="inline"><dt>Subcategory</dt><dd id="subcategory"></dd></span>
         <span class="inline"><dt>Stakeholders</dt><dd id="stakeholders"></dd></span>
-        <span class="inline"><dt>Day</dt><dd id="day"></dd></span>
         <dt>Idea</dt><dd id="idea"></dd>
     </div>
 </div>
-<div id="controls">
-    <h2>Sort by:</h2>
-    <ul>
-        <li><input type="radio" name="sort" id="sortCat" value="category" checked="checked" /><label for="sortCat">Category</label></li>
-        <li><input type="radio" name="sort" id="sortSubcat" value="subcategory" /><label for="sortSubcat">Subcategory</label></li>
-        <li><input type="radio" name="sort" id="sortStake" value="stakeholders" /><label for="sortStake">Stakeholder</label></li>
-        <li><input type="radio" name="sort" id="sortDay" value="day" /><label for="sortDay">Day</label></li>
-    </ul>
-    <h2>Color by:</h2>
-    <ul>
-        <li><input type="radio" name="color" id="colorCat" value="category" checked="checked" /><label for="colorCat">Category</label></li>
-        <li><input type="radio" name="color" id="colorSubcat" value="subcategory" /><label for="colorSubcat">Subcategory</label></li>
-        <li><input type="radio" name="color" id="colorDay" value="day" /><label for="colorDay">Day</label></li>
-    </ul>
-    <input type="checkbox" name="showLabels" id="showLabels" /><label for="showLabels">Show Labels</label><br />
-    <input type="checkbox" name="veryDiffSubcatColors" id="veryDiffSubcatColors" /><label for="veryDiffSubcatColors">Very Different Subcategory Colors</label>
-</div>
-<div id="legend">
-    <h2>Legend</h2>
+<div id="notGraph">
+    <div id="controls">
+        <h2>Sort by:</h2>
+        <ul>
+            <li><input type="radio" name="sort" id="sortCat" value="category" checked="checked" /><label for="sortCat">Category</label></li>
+            <li><input type="radio" name="sort" id="sortSubcat" value="subcategory" /><label for="sortSubcat">Subcategory</label></li>
+            <li><input type="radio" name="sort" id="sortStake" value="stakeholders" /><label for="sortStake">Stakeholder</label></li>
+            <li><input type="radio" name="sort" id="sortDay" value="day" /><label for="sortDay">Day</label></li>
+        </ul>
+        <h2>Color by:</h2>
+        <ul>
+            <li><input type="radio" name="color" id="colorCat" value="category" checked="checked" /><label for="colorCat">Category</label></li>
+            <li><input type="radio" name="color" id="colorSubcat" value="subcategory" /><label for="colorSubcat">Subcategory</label></li>
+            <li><input type="radio" name="color" id="colorDay" value="day" /><label for="colorDay">Day</label></li>
+        </ul>
+        <input type="checkbox" name="showLabels" id="showLabels" /><label for="showLabels">Show Labels</label><br />
+        <input type="checkbox" name="veryDiffSubcatColors" id="veryDiffSubcatColors" /><label for="veryDiffSubcatColors">Very Different Subcategory Colors</label>
+    </div>
+    <div id="legend">
+        <h2>Legend</h2>
+    </div>
 </div>
 <script> 
     $.getJSON('/graphs/<%= @graph.id %>.json', doEverything);

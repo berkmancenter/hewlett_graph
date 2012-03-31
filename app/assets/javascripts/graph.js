@@ -1,6 +1,6 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
-var sortAttr = 'category', colorAttr = 'category';
+var sortAttr = 'category', colorAttr = 'category', oldSortAttr = 'category', oldColorAttr = 'category';
 
 var sizes = {
         'Micro': 10,
@@ -8,15 +8,23 @@ var sizes = {
         'Macro': 10,
         'Research & Metrics': 10
     },
+    totalTicks = 298,
+    reorganizePercent = 0.09,
     subcatColorScaleFactor = 0.65,
+    ticks = 0,
     foci = {},
+    colorFoci = {},
     retrievedData,
     catColorScale = d3.scale.category10(),
     dayColorScale = d3.scale.category10(),
     subcatColorScale = d3.scale.category10(),
     subcatColorsAreVeryDifferent = false,
     w,
-    h;
+    h,
+    k,
+    xs,
+    intermediateFoci,
+    force;
 
 function getFoci(groups) {
     var fociStack = [],
@@ -40,6 +48,11 @@ function getFoci(groups) {
     }
     return foci;
 }
+
+function getColorFieldFoci() {
+    return getFoci(retrievedData.graph[colorAttr].map(function(s) { return s.name; }));
+}
+
 
 String.prototype.toInt = function() {
     var sum = 0;
@@ -72,35 +85,35 @@ function getColorFromString(text) {
     }
 }
 
-function getX(foci, node, index) {
+function getX(foci, node, attr, index) {
+    // I should do caching in here so it doesn't take any time
     index = index || 0;
-    xs = [];
-    if (node[sortAttr] instanceof Array) {
-        for (i in node[sortAttr]) {
-            xs.push(foci[node[sortAttr][i].name][index]);
+    if (node[attr] instanceof Array) {
+        xs = [];
+        for (i in node[attr]) {
+            xs.push(foci[node[attr][i].name][index]);
         }
+        xs = d3.mean(xs);
     }
     else {
-        xs.push(foci[node[sortAttr].name][index]);
+        xs = foci[node[attr].name][index];
     }
-    return d3.mean(xs);
+    return xs;
 }
 
-function getY(foci, node) {
-    return getX(foci, node, 1);
+function getY(foci, node, attr) {
+    return getX(foci, node, attr, 1);
 }
 
 function addLabels() {
     var groups = retrievedData.graph[sortAttr].map(function(s) { return s.name; });
-    foci = getFoci(groups);
     var display = $('.label').css('display');
-    $('.label').remove();
+    $('.label').fadeOut(300, function() { $(this).remove(); });
     for (i in groups) {
         $('<div />').appendTo('body').addClass('label').text(groups[i]).css({
             'left': /*$('svg').offset().left +*/ foci[groups[i]][0],
-            'top': /*$('svg').offset().top +*/ foci[groups[i]][1],
-            'display': display
-        });
+            'top': /*$('svg').offset().top +*/ foci[groups[i]][1]
+        }).fadeIn();
     }
 }
 
@@ -110,7 +123,7 @@ function populateLegend() {
     retrievedData.graph[colorAttr].forEach(function(u) {
         $legend.append(function() {
             return $('<div class="legendEntry" />').append(function() {
-                return $('<span class="swatch"/>').css('backgroundColor', getColorFromString(u.name));
+                return $('<span class="swatch"/>').css('backgroundColor', getColorFromString(u.name)).add($('<span class="legendText" />').text(u.name));
             });
         });
     });
@@ -135,8 +148,9 @@ function doEverything(data) {
         .attr("height", h);
 
     foci = getFoci(data.graph[sortAttr].map(function(s) { return s.name; }));
+    colorFoci = getColorFieldFoci();
 
-    var force = d3.layout.force()
+    force = d3.layout.force()
         .nodes(nodes)
         .links([])
         .size([w, h])
@@ -148,10 +162,10 @@ function doEverything(data) {
 
     var node = vis.selectAll("circle.node")
         .data(nodes)
-      .enter().append("svg:circle")
+        .enter().append("svg:circle")
         .attr("class", "node")
-        .attr("cx", function(d) { return getX(foci, d); })
-        .attr("cy", function(d) { return getY(foci, d); })
+        .attr("cx", function(d) { return getX(foci, d, sortAttr); })
+        .attr("cy", function(d) { return getY(foci, d, sortAttr); })
         .attr("r", function(d) { return sizes[d.category.name]; })
         .style("fill", function(d, i) { return getColor(d); })
         .style("stroke", function(d, i) { return d3.rgb(getColor(d)).darker(2); })
@@ -162,17 +176,30 @@ function doEverything(data) {
         .duration(1000)
         .style("opacity", 1);
 
+    // It looks like animation decays.  Right now it takes 298 ticks to complete.
     force.on("tick", function(e) {
+        k = .05 * e.alpha;
+        var thisFoci = foci;
+        var nodeAttr = sortAttr;
+        if (oldSortAttr != colorAttr && sortAttr != colorAttr) {
+            if (ticks < totalTicks * reorganizePercent) {
+                thisFoci = colorFoci;
+                nodeAttr = colorAttr;
+            }
+            else if (ticks == Math.floor(totalTicks * reorganizePercent) + 1){
+                force.start();
+            }
+        }
 
-     var k = .05 * e.alpha;
-      nodes.forEach(function(o, i) {
-        o.y += (getY(foci, o) - o.y) * k;
-        o.x += (getX(foci, o) - o.x) * k;
-      });
+        nodes.forEach(function(o, i) {
+            o.y += (getY(thisFoci, o, nodeAttr) - o.y) * k;
+            o.x += (getX(thisFoci, o, nodeAttr) - o.x) * k;
+        });
+        ticks++;
 
-      vis.selectAll("circle.node")
-          .attr("cx", function(d) { return d.x; })
-          .attr("cy", function(d) { return d.y; })
+        vis.selectAll("circle.node")
+            .attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; })
     });
 
     d3.selectAll("circle.node").on("click", function(c) {
@@ -185,6 +212,7 @@ function doEverything(data) {
         }).on("mouseout", function() { d3.select(this).classed('activated', false); $('#data').hide(); });
 
     addLabels();
+    populateLegend();
 
     $('#showLabels').on("change", function(e) {
         $('.label').toggle();
@@ -195,18 +223,23 @@ function doEverything(data) {
     });
 
     $("input[type=radio][name=sort]").on("change", function(e) {
+        ticks = 0;
+        oldSortAttr = sortAttr;
         sortAttr = $(e.target).val();
+        foci = getFoci(retrievedData.graph[sortAttr].map(function(s) { return s.name; }));
+        colorFoci = getColorFieldFoci();
         addLabels();
         force.start();
     });
 
     $("input[type=radio][name=color]").on("change", function(e) {
+        ticks = 0;
         d3.selectAll('circle.node')
-            .transition().style("fill", function(d, i) { return getColor(d); })
-            .transition().style("stroke", function(d, i) { return d3.rgb(getColor(d)).darker(2); });
+            .transition().duration(300).style("fill", function(d, i) { return getColor(d); })
+            .transition().duration(300).style("stroke", function(d, i) { return d3.rgb(getColor(d)).darker(2); });
         colorAttr = $(e.target).val();
+        colorFoci = getColorFieldFoci();
         populateLegend();
-        addLabels();
         force.start();
     });
 }
