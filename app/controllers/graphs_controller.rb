@@ -7,26 +7,12 @@ class GraphsController < ApplicationController
 
     def show
         respond_to do |format|
-            format.html
+            format.html {
+                if request.xhr?
+                    render 'graph', :layout => false
+                end
+            }
             format.json { render_for_api :everything, :json => @graph }
-        end
-    end
-
-    def categories
-        respond_to do |format|
-            format.json { render_for_api :categories, :json => @graph }
-        end
-    end
-
-    def ideas
-        respond_to do |format|
-            format.json { render_for_api :public_ideas, :json => @graph }
-        end
-    end
-
-    def stakeholders
-        respond_to do |format|
-            format.json { render_for_api :stakeholders, :json => @graph }
         end
     end
 

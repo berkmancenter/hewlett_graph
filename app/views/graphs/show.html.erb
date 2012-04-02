@@ -21,7 +21,7 @@
             <li><input type="radio" name="color" id="colorSubcat" value="subcategory" /><label for="colorSubcat">Subcategory</label></li>
             <li><input type="radio" name="color" id="colorDay" value="day" /><label for="colorDay">Day</label></li>
         </ul>
-        <input type="checkbox" name="showLabels" id="showLabels" /><label for="showLabels">Show Labels</label><br />
+        <input type="checkbox" name="showLabels" id="showLabels" /><label for="showLabels">Hide Labels</label><br />
         <input type="checkbox" name="veryDiffSubcatColors" id="veryDiffSubcatColors" /><label for="veryDiffSubcatColors">Very Different Subcategory Colors</label>
     </div>
     <div id="legend">
@@ -29,5 +29,15 @@
     </div>
 </div>
 <script> 
+    var sortAttr = '<%= params[:sort_attr] or "category" %>', colorAttr = '<%= params[:color_attr] or "category" %>',
+        oldSortAttr = '<%= params[:sort_attr] or "category" %>', oldColorAttr = '<%= params[:color_attr] or "category" %>'
+    var slowJs = false;
     $.getJSON('/graphs/<%= @graph.id %>.json', doEverything);
+    if (slowJs) {
+        reorganizePercent = 0.2;
+        theta = 0.8;
+        $("input[type=radio]").on("change", function(e) {
+            $.get('/graphs/<%= @graph.id %>', { sort_attr: $('input[name=sort]:checked').val(), color_attr: $('input[name=color]:checked').val() }, replaceSVG, 'html');
+        });
+    }
 </script>

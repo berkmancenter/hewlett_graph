@@ -1,6 +1,5 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
-var sortAttr = 'category', colorAttr = 'category', oldSortAttr = 'category', oldColorAttr = 'category';
 
 var sizes = {
         'Micro': 10,
@@ -9,9 +8,10 @@ var sizes = {
         'Research & Metrics': 10
     },
     totalTicks = 298,
-    reorganizePercent = 0.09,
+    reorganizePercent = 0.15,
     subcatColorScaleFactor = 0.65,
     ticks = 0,
+    theta = 1.2,
     foci = {},
     colorFoci = {},
     retrievedData,
@@ -105,6 +105,11 @@ function getY(foci, node, attr) {
     return getX(foci, node, attr, 1);
 }
 
+function replaceSVG(data) {
+    force.stop();
+    $('#graph').empty().append(data);
+}
+
 function addLabels() {
     var groups = retrievedData.graph[sortAttr].map(function(s) { return s.name; });
     var display = $('.label').css('display');
@@ -133,8 +138,10 @@ function populateLegend() {
 function doEverything(data) {
 
     var nodes = data.graph.ideas;
-    w = $('body').width() * 0.7,
-    h = $(window).height() * 0.995,
+    /*w = $('body').width() * 0.7;
+    h = $(window).height() * 0.995;*/
+    w = 700;
+    h = 600;
     $('#graph').width(w);
 
     retrievedData = data;
@@ -155,7 +162,7 @@ function doEverything(data) {
         .links([])
         .size([w, h])
         .gravity(0)
-        .theta(1.2)
+        .theta(theta)
         .charge(-6)
         //.friction(0.9)
         .start();
@@ -222,6 +229,7 @@ function doEverything(data) {
         subcatColorsAreVeryDifferent = $(this).is(':checked');
     });
 
+    if (!slowJs) {
     $("input[type=radio][name=sort]").on("change", function(e) {
         ticks = 0;
         oldSortAttr = sortAttr;
@@ -242,4 +250,5 @@ function doEverything(data) {
         populateLegend();
         force.start();
     });
+    }
 }

@@ -9,6 +9,9 @@ gem 'pg'
 gem 'paperclip'
 gem 'formtastic'
 gem 'acts_as_api'
+gem 'capybara'
+gem 'capybara-webkit'
+gem 'headless'
 
 # Gems used only for assets and not required
 # in production environments by default.
