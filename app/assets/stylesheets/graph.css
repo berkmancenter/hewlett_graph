@@ -87,3 +87,6 @@ dd {
 .legendEntry {
     padding: 0.1em;
 }
+#d3Nodes {
+    display: none;
+}

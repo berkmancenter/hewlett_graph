@@ -1,6 +1,7 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
+var x, vis;
 var sizes = {
         'Micro': 10,
         'Meso': 10,
@@ -47,6 +48,10 @@ function getFoci(groups) {
         foci[groups[i]] = fociStack.pop();
     }
     return foci;
+}
+
+function spitOutNodes(force) {
+    $('<span id="d3Nodes" />').text(JSON.stringify(force.nodes())).appendTo('body');
 }
 
 function getColorFieldFoci() {
@@ -106,8 +111,22 @@ function getY(foci, node, attr) {
 }
 
 function replaceSVG(data) {
-    force.stop();
-    $('#graph').empty().append(data);
+    x = JSON.parse(data);
+    var a = vis.selectAll('circle.node').data(x);
+    a.enter()
+        .append("svg:circle")
+        .attr("class", "node")
+        .attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y })
+        .attr("r", function(d) { return d.r })
+        .style("fill", function(d, i) { return getColor(d); })
+        .style("stroke", function(d, i) { return d3.rgb(getColor(d)).darker(2); })
+        .style("stroke-width", 1.5);
+    vis.selectAll('circle.node')
+        .transition().duration(300).style("fill", function(d, i) { return getColor(d); })
+        .transition().duration(300).style("stroke", function(d, i) { return d3.rgb(getColor(d)).darker(2); });
+    a.exit().remove();
+    force.start();
 }
 
 function addLabels() {
@@ -141,10 +160,13 @@ function populateLegend() {
 function doEverything(data) {
 
     var nodes = data.graph.ideas;
-    w = $('body').width() * 0.7;
-    h = $(window).height() * 0.995;
-    /*w = 700;
-    h = 600;*/
+    if (slowJs) {
+        w = 700;
+        h = 600;
+    } else {
+        w = $('body').width() * 0.7;
+        h = $(window).height() * 0.995;
+    }
     $('#graph').width(w);
 
     retrievedData = data;
@@ -153,7 +175,7 @@ function doEverything(data) {
     retrievedData.graph.category = retrievedData.graph.categories;
     retrievedData.graph.subcategory = retrievedData.graph.subcategories;
 
-    var vis = d3.select("#graph").append("svg:svg")
+    vis = d3.select("#graph").append("svg:svg")
         .attr("width", w)
         .attr("height", h);
 
@@ -187,30 +209,35 @@ function doEverything(data) {
         .style("opacity", 1);
 
     // It looks like animation decays.  Right now it takes 298 ticks to complete.
-    force.on("tick", function(e) {
-        k = .05 * e.alpha;
-        var thisFoci = foci;
-        var nodeAttr = sortAttr;
-        if (/*oldSortAttr != colorAttr &&*/ sortAttr != colorAttr) {
-            if (ticks < totalTicks * reorganizePercent) {
-                thisFoci = colorFoci;
-                nodeAttr = colorAttr;
+        force.on("tick", function(e) {
+            if (ajax || !slowJs) {
+            k = .05 * e.alpha;
+            var thisFoci = foci;
+            var nodeAttr = sortAttr;
+            if (/*oldSortAttr != colorAttr &&*/ sortAttr != colorAttr) {
+                if (ticks < totalTicks * reorganizePercent) {
+                    thisFoci = colorFoci;
+                    nodeAttr = colorAttr;
+                }
+                else if (ticks == Math.floor(totalTicks * reorganizePercent) + 1){
+                    force.start();
+                }
             }
-            else if (ticks == Math.floor(totalTicks * reorganizePercent) + 1){
-                force.start();
+            if (ticks == totalTicks - 1) {
+                spitOutNodes(force);
             }
-        }
 
-        nodes.forEach(function(o, i) {
-            o.y += (getY(thisFoci, o, nodeAttr) - o.y) * k;
-            o.x += (getX(thisFoci, o, nodeAttr) - o.x) * k;
+            nodes.forEach(function(o, i) {
+                o.y += (getY(thisFoci, o, nodeAttr) - o.y) * k;
+                o.x += (getX(thisFoci, o, nodeAttr) - o.x) * k;
+            });
+            ticks++;
+            }
+
+            vis.selectAll("circle.node")
+                .attr("cx", function(d) { return d.x; })
+                .attr("cy", function(d) { return d.y; })
         });
-        ticks++;
-
-        vis.selectAll("circle.node")
-            .attr("cx", function(d) { return d.x; })
-            .attr("cy", function(d) { return d.y; })
-    });
 
     d3.selectAll("circle.node").on("click", function(c) {
         d3.select(this).classed('activated', true);
