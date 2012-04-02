@@ -2,11 +2,16 @@ class Subcategory < ActiveRecord::Base
     belongs_to :category
     acts_as_api
 
-    api_accessible :public_ideas do |t|
+    api_accessible :everything do |t|
+        t.add :name
+        t.add :category_name
+    end
+
+    api_accessible :just_name do |t|
         t.add :name
     end
 
-    api_accessible :categories do |t|
-        t.add :name
+    def category_name
+        category.name
     end
 end
