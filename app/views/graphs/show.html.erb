@@ -30,7 +30,7 @@
 </div>
 <script> 
     var sortAttr = '<%= params[:sort_attr] or "category" %>', colorAttr = '<%= params[:color_attr] or "category" %>',
-        oldSortAttr = '<%= params[:sort_attr] or "category" %>', oldColorAttr = '<%= params[:color_attr] or "category" %>'
+        oldSortAttr = '<%= params[:sort_attr] or "category" %>', oldColorAttr = '<%= params[:color_attr] or "category" %>';
     var slowJs = false;
     $.getJSON('/graphs/<%= @graph.id %>.json', doEverything);
     if (slowJs) {
