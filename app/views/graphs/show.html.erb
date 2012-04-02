@@ -1,203 +1,43 @@
-<style>
-  circle {
-      fill-opacity: 0.7;
-  }
-  circle:hover {
-      fill-opacity: 1;
-      fill: #ccc !important;
-      stroke: #666 !important;
-  }
-  svg, body, html {
-      font-family: Arial, sans-serif;
-  }
-  svg {
-      background-color: #999;
-      box-shadow: inset 0 0 20px #333;
-      border-radius: 20px;
-      display: inline-block;
-      position: relative;
-  }
-  #data {
-      display: inline-block;
-      width: 39%;
-      vertical-align: top;
-      padding-left: 0.5em;
-  }
-  .label {
-      position: absolute;
-      display: none;
-      border-radius: 4px;
-      background-color: rgba(255, 255, 255, 0.5);
-      padding: 0.6em;
-  }
-</style>
-<div id="data">
-    <dt>Category</dt><dd id="category"></dd>
-    <dt>Subcategory</dt><dd id="subcategory"></dd>
-    <dt>Stakeholders</dt><dd id="stakeholders"></dd>
-    <dt>Idea</dt><dd id="idea"></dd>
+<div id="graph">
+    <div id="data" style="display: none;">
+        <span class="inline"><dt>Category</dt><dd id="category"></dd></span>
+        <span class="inline"><dt>Subcategory</dt><dd id="subcategory"></dd></span>
+        <span class="inline"><dt>Stakeholders</dt><dd id="stakeholders"></dd></span>
+        <dt>Idea</dt><dd id="idea"></dd>
+    </div>
 </div>
-<ul id="categories"></ul>
-<ul id="stakeholders"></ul>
-Sort by:
-<label for="sortCat">Category</label><input type="radio" name="sort" id="sortCat" value="category" checked="checked" />
-<label for="sortSubcat">Subcategory</label><input type="radio" name="sort" id="sortSubcat" value="subcategory" />
-<label for="sortStake">Stakeholder</label><input type="radio" name="sort" id="sortStake" value="stakeholders" />
-<label for="showLabels">Show Labels</label><input type="checkbox" name="showLabels" id="showLabels" />
-<script type="text/javascript">
-    var sortAttr = 'category';
-
-    var sizes = {
-            'Micro': 10,
-            'Meso': 10,
-            'Macro': 10,
-            'Research & Metrics': 10
-        },
-        w = $('body').width() * 0.6,
-        h = 700,
-        foci = {},
-        retrievedData;
-
-    function getFoci(groups) {
-        var fociStack = [],
-            foci = {},
-            numGroups = groups.length,
-            perRow = Math.ceil(Math.sqrt(numGroups)),
-            numRows = Math.ceil(Math.sqrt(numGroups)),
-            numInRow;
-
-        for(i=0; i < numRows; i++) {
-            numInRow = Math.min(perRow, numGroups - (i * perRow));
-            for(j=0; j < numInRow; j++) {
-                fociStack.push(
-                    [(w / (numInRow + 1)) * (j + 1), (h / (numRows + 1)) * (i + 1)]
-                );
-            }
-        }
-
-        for (i in groups) {
-            foci[groups[i]] = fociStack.pop();
-        }
-        return foci;
-    }
-
-    function getCatColor(arg) {
-        var sum = 0;
-        for (i=0; i < arg.length; i++) {
-            sum += arg.charCodeAt(i);
-        }
-        return sum;
-    }
-
-    function getSubcatColor(node) {
-        var colorDelta = d3.keys(categories[node.category].subcategories).indexOf(node.subcategory);
-        return d3.rgb(fill(getCatColor(node.category))).brighter(colorDelta); 
-    }
-
-    function getX(foci, node, index) {
-        index = index || 0;
-        xs = [];
-        if (node[sortAttr] instanceof Array) {
-            for (i in node[sortAttr]) {
-                xs.push(foci[node[sortAttr][i].name][index]);
-            }
-        }
-        else {
-            xs.push(foci[node[sortAttr].name][index]);
-        }
-        return d3.mean(xs);
-    }
-
-    function getY(foci, node) {
-        return getX(foci, node, 1);
-    }
-
-    function addLabels() {
-        var groups = retrievedData.graph[sortAttr].map(function(s) { return s.name; });
-        foci = getFoci(groups);
-        var display = $('.label').css('display');
-        $('.label').remove();
-        for (i in groups) {
-            $('<div />').appendTo('body').addClass('label').text(groups[i]).css({
-                'left': /*$('svg').offset().left +*/ foci[groups[i]][0],
-                'top': /*$('svg').offset().top +*/ foci[groups[i]][1],
-                'display': display
-            });
-        }
-    }
-
-    $.getJSON('/graphs/<%= @graph.id %>.json', function(data) {
-
-        var fill = d3.scale.category10(),
-            nodes = data.graph.ideas;
-
-        retrievedData = data;
-        retrievedData.graph.category = retrievedData.graph.categories;
-        retrievedData.graph.subcategory = retrievedData.graph.subcategories;
-
-        var vis = d3.select("body").insert("svg:svg", "div")
-            .attr("width", w)
-            .attr("height", h);
-
-        foci = getFoci(data.graph[sortAttr].map(function(s) { return s.name; }));
-
-        var force = d3.layout.force()
-            .nodes(nodes)
-            .links([])
-            .size([w, h])
-            .gravity(0)
-            .theta(1.2)
-            .charge(-6)
-            .start();
-
-        var node = vis.selectAll("circle.node")
-            .data(nodes)
-          .enter().append("svg:circle")
-            .attr("class", "node")
-            .attr("cx", function(d) { return getX(foci, d); })
-            .attr("cy", function(d) { return getY(foci, d); })
-            .attr("r", function(d) { return sizes[d.category.name]; })
-            .style("fill", function(d, i) { return fill(getCatColor(d.category.name)); })
-            .style("stroke", function(d, i) { return d3.rgb(fill(getCatColor(d.category.name))).darker(2); })
-            .style("stroke-width", 1.5)
-//                .call(force.drag);
-
-        vis.style("opacity", 1e-6)
-          .transition()
-            .duration(1000)
-            .style("opacity", 1);
-
-        force.on("tick", function(e) {
-
-         var k = .05 * e.alpha;
-          nodes.forEach(function(o, i) {
-            o.y += (getY(foci, o) - o.y) * k;
-            o.x += (getX(foci, o) - o.x) * k;
-          });
-
-          vis.selectAll("circle.node")
-              .attr("cx", function(d) { return d.x; })
-              .attr("cy", function(d) { return d.y; });
-        });
-
-        d3.selectAll("circle.node").on("mouseover", function(c) {
-            d3.select("#category").text(c.category.name);
-            d3.select("#subcategory").text(c.subcategory.name);
-            d3.select("#stakeholders").text(c.stakeholders.map(function(s) { return s.name; }).toString());
-            d3.select("#idea").text(c.content);
-            $('#data').show();
-            }).on("mouseout", function() { $('#data').hide(); });
-
-        addLabels();
-
-        $('#showLabels').on("change", function(e) {
-            $('.label').toggle();
-        });
-
+<div id="notGraph">
+    <div id="controls">
+        <h2>Sort by:</h2>
+        <ul>
+            <li><input type="radio" name="sort" id="sortCat" value="category" checked="checked" /><label for="sortCat">Category</label></li>
+            <li><input type="radio" name="sort" id="sortSubcat" value="subcategory" /><label for="sortSubcat">Subcategory</label></li>
+            <li><input type="radio" name="sort" id="sortStake" value="stakeholders" /><label for="sortStake">Stakeholder</label></li>
+            <li><input type="radio" name="sort" id="sortDay" value="day" /><label for="sortDay">Day</label></li>
+        </ul>
+        <h2>Color by:</h2>
+        <ul>
+            <li><input type="radio" name="color" id="colorCat" value="category" checked="checked" /><label for="colorCat">Category</label></li>
+            <li><input type="radio" name="color" id="colorSubcat" value="subcategory" /><label for="colorSubcat">Subcategory</label></li>
+            <li><input type="radio" name="color" id="colorDay" value="day" /><label for="colorDay">Day</label></li>
+        </ul>
+        <input type="checkbox" name="showLabels" id="showLabels" /><label for="showLabels">Hide Labels</label><br />
+        <input type="checkbox" name="veryDiffSubcatColors" id="veryDiffSubcatColors" /><label for="veryDiffSubcatColors">Very Different Subcategory Colors</label>
+    </div>
+    <div id="legend">
+        <h2>Legend</h2>
+    </div>
+</div>
+<script> 
+    var sortAttr = '<%= params[:sort_attr] or "category" %>', colorAttr = '<%= params[:color_attr] or "category" %>',
+        oldSortAttr = '<%= params[:sort_attr] or "category" %>', oldColorAttr = '<%= params[:color_attr] or "category" %>';
+    var slowJs = false;
+    $.getJSON('/graphs/<%= @graph.id %>.json', doEverything);
+    if (slowJs) {
+        reorganizePercent = 0.2;
+        theta = 0.8;
         $("input[type=radio]").on("change", function(e) {
-            sortAttr = $(e.target).val();
-            addLabels();
-            force.start();
+            $.get('/graphs/<%= @graph.id %>', { sort_attr: $('input[name=sort]:checked').val(), color_attr: $('input[name=color]:checked').val() }, replaceSVG, 'html');
         });
-    });
+    }
 </script>
