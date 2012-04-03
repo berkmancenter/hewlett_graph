@@ -1,6 +1,54 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
-var vis;
+Graph = {
+    config: {
+        browserSpeed: 'slow',
+        totalTicks: 298,
+        reorganizePercent: 0.09,
+        subcatColorScaleFactor: 0.65,
+        theta: 1.2,
+        subcatColorsAreVeryDifferent: false,
+        colorAttr: 'category',
+        sizeAttr: 'category'
+    },
+
+    foci: {},
+    colorFoci: {},
+    retrievedData: {},
+    catColorScale: d3.scale.category10(),
+    dayColorScale: d3.scale.category10(),
+    subcatColorScale: d3.scale.category10(),
+    forceLayout: {},
+    getDimensions: function() {
+        switch (this.config.browserSpeed) {
+        case 'serverside':
+        case 'medium':
+        case 'slow':
+            return {
+                w: 700,
+                h: 600
+            }
+        case 'fast':
+            return {
+                w: $('body').width() * 0.7,
+                h: $(window).height() * 0.995
+            }
+        }
+    },
+    updateLegend: function() {
+        $('#legend :not(:header)').remove();
+        var $legend = $('<div />');
+        this.retrievedData.graph[colorAttr].forEach(function(u) {
+            $legend.append(function() {
+                return $('<div class="legendEntry" />').append(function() {
+                    return $('<span class="swatch"/>').css('backgroundColor', getColorFromString(u.name)).add($('<span class="legendText" />').text(u.name));
+                });
+            });
+        });
+        $('#legend :header').after($legend.html());
+    }
+};
+
 var browserSpeed = 'slow';
 var totalTicks = 298,
 reorganizePercent = 0.09,
@@ -16,9 +64,6 @@ subcatColorScale = d3.scale.category10(),
 subcatColorsAreVeryDifferent = false,
 w,
 h,
-k,
-xs,
-intermediateFoci,
 force;
 
 
@@ -53,14 +98,6 @@ function getColorFieldFoci() {
 	}));
 }
 
-String.prototype.toInt = function() {
-	var sum = 0;
-	for (i = 0; i < this.length; i++) {
-		sum += this.charCodeAt(i);
-	}
-	return sum;
-}
-
 function getColor(node) {
 	return getColorFromString(node[colorAttr].name);
 }
@@ -68,11 +105,11 @@ function getColor(node) {
 function getColorFromString(text) {
 	switch (colorAttr) {
 	case 'day':
-		return d3.rgb(dayColorScale(text.toInt()));
+		return d3.rgb(dayColorScale(text));
 	case 'subcategory':
 		// Evidently d3 has scales, which could probably do this for me
 		if (subcatColorsAreVeryDifferent) {
-			return d3.rgb(subcatColorScale(text.toInt()));
+			return d3.rgb(subcatColorScale(text));
 		} else {
 			var subcategory = retrievedData.graph.subcategories.filter(function(subcat) {
 				return subcat.name == text;
@@ -83,16 +120,17 @@ function getColorFromString(text) {
 			var colorDelta = (category.subcategories.map(function(s) {
 				return s.name;
 			}).indexOf(text) - Math.floor(category.subcategories.length / 2)) * subcatColorScaleFactor;
-			return d3.rgb(catColorScale(category.name.toInt())).brighter(colorDelta);
+			return d3.rgb(catColorScale(category.name)).brighter(colorDelta);
 		}
 	case 'category':
-		return d3.rgb(catColorScale(text.toInt()));
+		return d3.rgb(catColorScale(text));
 	}
 }
 
 function getX(foci, node, attr, index) {
 	// I should do caching in here so it doesn't take any time
 	index = index || 0;
+    var xs;
 	if (node[attr] instanceof Array) {
 		xs = [];
 		for (i in node[attr]) {
@@ -111,7 +149,7 @@ function getY(foci, node, attr) {
 }
 
 function replaceSVG(data) {
-    var nodes = vis.selectAll('circle.node');
+    var nodes = d3.selectAll('circle.node');
     nodes.data(JSON.parse(data));
 
     switch (browserSpeed) {
@@ -170,7 +208,7 @@ function populateLegend() {
 	$('#legend :header').after($legend.html());
 }
 function onTick(e) {
-	k = .05 * e.alpha;
+	var k = .05 * e.alpha;
 	var thisFoci = foci;
 	var nodeAttr = sortAttr;
 	if (
@@ -194,7 +232,7 @@ function onTick(e) {
 	});
 	ticks++;
 
-	vis.selectAll("circle.node").attr("cx", function(d) {
+	d3.selectAll("circle.node").attr("cx", function(d) {
 		return d.x;
 	}).attr("cy", function(d) {
 		return d.y;
@@ -333,4 +371,3 @@ function doEverything(data) {
     $('#controls h2 ~ *').slideUp();
     $('#controls h2').on('click', function() { $(this).find('~ *').slideToggle(); });
 }
-
