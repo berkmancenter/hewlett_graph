@@ -11,7 +11,6 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
-//= require jquery.json-2.3.min
 //= require jquery_ujs
 //= require d3
 //= require_tree .

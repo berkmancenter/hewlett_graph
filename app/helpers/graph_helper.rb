@@ -11,9 +11,9 @@ module GraphHelper
     include Capybara::DSL
 
     def rendered_svg(graph, sort_attr, color_attr)
-        cache = ActiveSupport::Cache::MemoryStore.new
+        cache = ActiveSupport::Cache::FileStore.new Rails.public_path
 
-        key = graph.id.to_s + '-' + sort_attr + '-' + color_attr
+        key = [graph.id, sort_attr, color_attr]
         if cache.exist?(key)
             return cache.read(key)
         else
