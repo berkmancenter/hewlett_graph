@@ -36,7 +36,6 @@ html, body, svg {
 }
 #notGraph {
     vertical-align: top;
-    font-size: 14px;
 }
 #controls, #legend {
     padding: 0.3em 1em 1em;
@@ -86,4 +85,13 @@ dd {
 }
 .legendEntry {
     padding: 0.1em;
+}
+#d3Nodes {
+    display: none;
+}
+#controls {
+    font-size: 12px;
+}
+#controls h2 {
+    cursor: pointer;
 }

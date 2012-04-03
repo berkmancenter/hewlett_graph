@@ -7,37 +7,50 @@
     </div>
 </div>
 <div id="notGraph">
+    <div id="legend">
+        <h3>Legend</h3>
+    </div>
     <div id="controls">
-        <h2>Sort by:</h2>
+        <h2>Advanced</h2>
+        <h3>Sort by:</h3>
         <ul>
             <li><input type="radio" name="sort" id="sortCat" value="category" checked="checked" /><label for="sortCat">Category</label></li>
             <li><input type="radio" name="sort" id="sortSubcat" value="subcategory" /><label for="sortSubcat">Subcategory</label></li>
             <li><input type="radio" name="sort" id="sortStake" value="stakeholders" /><label for="sortStake">Stakeholder</label></li>
             <li><input type="radio" name="sort" id="sortDay" value="day" /><label for="sortDay">Day</label></li>
         </ul>
-        <h2>Color by:</h2>
+        <h3>Color by:</h3>
         <ul>
             <li><input type="radio" name="color" id="colorCat" value="category" checked="checked" /><label for="colorCat">Category</label></li>
             <li><input type="radio" name="color" id="colorSubcat" value="subcategory" /><label for="colorSubcat">Subcategory</label></li>
             <li><input type="radio" name="color" id="colorDay" value="day" /><label for="colorDay">Day</label></li>
         </ul>
+        <h3>Browser Speed:</h3>
+        <ul>
+            <% if params[:browser_speed] == 'fast' %>
+            <li><input type="radio" name="speed" id="speedFast" value="fast" /><label for="speedFast">Fast</label></li>
+            <% else %>
+            <li><input type="radio" name="speed" id="speedMedium" value="medium" /><label for="speedMedium">Medium</label></li>
+            <li><input type="radio" name="speed" id="speedSlow" value="slow" /><label for="speedSlow">Slow</label></li>
+            <% end %>
+        </ul>
         <input type="checkbox" name="showLabels" id="showLabels" /><label for="showLabels">Hide Labels</label><br />
-        <input type="checkbox" name="veryDiffSubcatColors" id="veryDiffSubcatColors" /><label for="veryDiffSubcatColors">Very Different Subcategory Colors</label>
-    </div>
-    <div id="legend">
-        <h2>Legend</h2>
+        <input type="checkbox" name="veryDiffSubcatColors" id="veryDiffSubcatColors" /><label for="veryDiffSubcatColors">Very Different Subcategory Colors</label><br />
     </div>
 </div>
 <script> 
     var sortAttr = '<%= params[:sort_attr] or "category" %>', colorAttr = '<%= params[:color_attr] or "category" %>',
         oldSortAttr = '<%= params[:sort_attr] or "category" %>', oldColorAttr = '<%= params[:color_attr] or "category" %>';
-    var slowJs = false;
     $.getJSON('/graphs/<%= @graph.id %>.json', doEverything);
-    if (slowJs) {
-        reorganizePercent = 0.2;
-        theta = 0.8;
-        $("input[type=radio]").on("change", function(e) {
-            $.get('/graphs/<%= @graph.id %>', { sort_attr: $('input[name=sort]:checked').val(), color_attr: $('input[name=color]:checked').val() }, replaceSVG, 'html');
+    browserSpeed = '<%= params[:browser_speed] or "medium" %>';
+
+    if (browserSpeed == 'slow' || browserSpeed == 'medium') {
+        $("input[name=sort], input[name=color]").on("change", function(e) {
+            force.stop();
+            sortAttr = $('input[name=sort]:checked').val();
+            colorAttr = $('input[name=color]:checked').val();
+            $.get('/graphs/<%= @graph.id %>', { sort_attr: sortAttr, color_attr: colorAttr }, replaceSVG, 'html');
         });
     }
+
 </script>
