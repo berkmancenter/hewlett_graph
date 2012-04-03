@@ -2,13 +2,7 @@
 // All this logic will automatically be available in application.js.
 var vis;
 var browserSpeed = 'slow';
-var sizes = {
-	'Micro': 10,
-	'Meso': 10,
-	'Macro': 10,
-	'Research & Metrics': 10
-},
-totalTicks = 298,
+var totalTicks = 298,
 reorganizePercent = 0.09,
 subcatColorScaleFactor = 0.65,
 ticks = 0,
@@ -260,7 +254,7 @@ function doEverything(data) {
         .attr("class", "node")
         .attr("cx", function(d) { return getX(foci, d, sortAttr); })
         .attr("cy", function(d) { return getY(foci, d, sortAttr); })
-        .attr("r", function(d) { return sizes[d.category.name]; })
+        .attr("r", function(d) { return 10; })
         .style("fill", function(d, i) { return getColor(d); })
         .style("stroke", function(d, i) { return d3.rgb(getColor(d)).darker(2); })
         .style("stroke-width", 1.5);
