@@ -39,17 +39,22 @@
     </div>
 </div>
 <script> 
-    var sortAttr = '<%= params[:sort_attr] or "category" %>', colorAttr = '<%= params[:color_attr] or "category" %>',
-        oldSortAttr = '<%= params[:sort_attr] or "category" %>', oldColorAttr = '<%= params[:color_attr] or "category" %>';
-    $.getJSON('/graphs/<%= @graph.id %>.json', doEverything);
+    Graph.config.sortAttr = '<%= params[:sort_attr] or "category" %>';
+    Graph.config.colorAttr = '<%= params[:color_attr] or "category" %>';
+    Graph.config.oldSortAttr = '<%= params[:sort_attr] or "category" %>';
+    Graph.config.oldColorAttr = '<%= params[:color_attr] or "category" %>';
     browserSpeed = '<%= params[:browser_speed] or "medium" %>';
+    Graph.config.browserSpeed = browserSpeed;
+    $.getJSON('/graphs/<%= @graph.id %>.json', Graph.init);
 
     if (browserSpeed == 'slow' || browserSpeed == 'medium') {
         $("input[name=sort], input[name=color]").on("change", function(e) {
-            force.stop();
-            sortAttr = $('input[name=sort]:checked').val();
-            colorAttr = $('input[name=color]:checked').val();
-            $.get('/graphs/<%= @graph.id %>', { sort_attr: sortAttr, color_attr: colorAttr }, replaceSVG, 'html');
+            Graph.config.sortAttr = $('input[name=sort]:checked').val();
+            Graph.config.colorAttr = $('input[name=color]:checked').val();
+            Graph.updateFoci();
+            Graph.updateColorFoci();
+            Graph.forceLayout.stop();
+            $.get('/graphs/<%= @graph.id %>', { sort_attr: Graph.config.sortAttr, color_attr: Graph.config.colorAttr }, Graph.updateNodesFromData , 'html');
         });
     }
 
