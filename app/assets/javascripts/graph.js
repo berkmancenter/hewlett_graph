@@ -27,10 +27,6 @@ xs,
 intermediateFoci,
 force;
 
-if (browserSpeed == 'serverside') {
-    reorganizePercent = 0.2;
-    theta = 0.8;
-}
 
 function getFoci(groups) {
 	var fociStack = [],
@@ -227,6 +223,12 @@ function getSVGDimensions(browserSpeed) {
 	}
 }
 function doEverything(data) {
+
+    if (browserSpeed == 'serverside') {
+        reorganizePercent = 0.20;
+        theta = 0.8;
+    }
+
 	nodes = data.graph.ideas;
 	dimensions = getSVGDimensions(browserSpeed);
 	w = dimensions.w;
