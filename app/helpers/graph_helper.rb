@@ -18,7 +18,7 @@ module GraphHelper
             return cache.read(key)
         else
             Headless.ly({ :dimensions => '800x600x24'}) do |headless|
-                visit( graph_path(graph, :sort_attr => sort_attr, :color_attr => color_attr, :ajax => :true) )
+                visit( graph_path(graph, :sort_attr => sort_attr, :color_attr => color_attr, :browser_speed => :serverside) )
                 page.find('#d3Nodes')
                 text = Nokogiri::HTML.parse(page.html).css('#d3Nodes').first.inner_text
                 cache.write(key, text)
