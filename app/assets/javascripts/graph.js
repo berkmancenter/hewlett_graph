@@ -306,8 +306,10 @@ var Graph = {
             d3.select("#stakeholders").text(c.stakeholders.map(function(s) { return ' ' + s.name; }).toString());
             d3.select("#idea").text(c.content);
             $('#data').show();
-        }).on("mouseout", function() {
-            d3.select(this).classed('activated', false);
+        });
+
+        $('#dataClose').on("click", function() {
+            d3.select('circle.node.activated').classed('activated', false);
             $('#data').hide();
         });
 
