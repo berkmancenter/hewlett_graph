@@ -27,6 +27,7 @@ circle.activated {
 html, body, svg {
     margin: 0;
     padding: 0;
+    font-size: 13px;
 }
 #graph, #notGraph {
     display: inline-block;
@@ -39,8 +40,15 @@ html, body, svg {
 }
 #controls, #legend {
     padding: 0.3em 1em 1em;
+    margin: 0.1em;
     border-radius: 20px;
-    box-shadow: inset 0 0 8px #aaa;
+    border: 4px solid #888;
+    background-color: #123;
+    color: white;
+    min-width: 230px;
+}
+#controls h2, #legend h2{
+    text-align: center;
 }
 #notGraph ul {
     list-style-type: none;
@@ -68,8 +76,9 @@ dd {
     position: absolute;
     display: none;
     border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.55);
+    background-color: rgba(255, 255, 255, 0.65);
     padding: 0.6em;
+    font-size: 0.8em;
 }
 .inline {
     display: inline-block;
