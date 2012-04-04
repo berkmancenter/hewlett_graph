@@ -113,9 +113,6 @@ var Graph = {
     updateLegend: function() {
         $('#legend :not(:header)').remove();
         var $legend = $('<div />'), entries = this.data[this.config.colorAttr];
-        if (this.config.colorAttr == 'subcategory') {
-            entries.sort(function(a, b) { return a.category_name == b.category_name ? 0 : 1; });
-        }
         entries.forEach(function(u) {
             $legend.append(function() {
                 return $('<div class="legendEntry" />').append(function() {
@@ -161,18 +158,18 @@ var Graph = {
         var groups = this.data[this.config.sortAttr].map(function(s) {
             return s.name;
         }),
-            display = $('.label').css('display');
-        $('.label').fadeOut(300, function() {
+            display = $('.sortLabel').css('display');
+        $('.sortLabel').fadeOut(300, function() {
             $(this).remove();
         });
         for (i in groups) {
-            $('<div class="label"/>').appendTo('body').text(groups[i]).css({
+            $('<div class="sortLabel"/>').appendTo('body').text(groups[i]).css({
                 'left': this.foci[groups[i]][0],
                 'top': this.foci[groups[i]][1]
             });
         }
         if (display != 'none') {
-            $('.label').fadeIn();
+            $('.sortLabel').fadeIn();
         }
     },
     outputNodes: function() {
@@ -318,7 +315,7 @@ var Graph = {
             return false;
         });
 
-        $('#showLabels').on("change", function(e) { $('.label').fadeToggle(); });
+        $('#showLabels').on("change", function(e) { $('.sortLabel').fadeToggle(); });
 
         $('#veryDiffSubcatColors').on('change', function(e) {
             Graph.config.subcatColorsAreVeryDifferent = $(this).is(':checked');
