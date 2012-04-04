@@ -87,7 +87,7 @@ dd {
     margin-left: 0;
     font-size: 0.9em;
 }
-.label {
+.sortLabel {
     position: absolute;
     display: none;
     border-radius: 4px;
