@@ -3,9 +3,9 @@ require 'csv'
 class Graph < ActiveRecord::Base
     has_attached_file :data
     has_many :ideas
-    has_many :categories
-    has_many :stakeholders
-    has_many :subcategories, :through => :categories
+    has_many :categories, :order => :name
+    has_many :stakeholders, :order => :name
+    has_many :subcategories, :through => :categories, :order => 'category_id, name'
     acts_as_api
 
     api_accessible :everything do |t|

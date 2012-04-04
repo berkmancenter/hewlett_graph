@@ -1,6 +1,6 @@
 class Category < ActiveRecord::Base
     belongs_to :graph
-    has_many :subcategories
+    has_many :subcategories, :order => :name
     acts_as_api
 
     api_accessible :everything do |t|

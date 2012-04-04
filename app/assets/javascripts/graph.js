@@ -5,7 +5,7 @@ var Graph = {
         browserSpeed: 'slow',
         totalTicks: 298,
         reorganizePercent: 0.09,
-        subcatColorScaleFactor: 0.65,
+        subcatColorScaleFactor: 0.55,
         theta: 1.2,
         subcatColorsAreVeryDifferent: false,
         colorAttr: 'category',
@@ -72,7 +72,6 @@ var Graph = {
                     break;
                 case 'medium':
                 case 'slow':
-                    Graph.forceLayout = d3.layout.force().nodes(Graph.data.ideas);
                     Graph.updateNodesFromData();
             }
 
@@ -149,25 +148,35 @@ var Graph = {
                             .attr("cx", function(d) { return d.x; })
                             .attr("cy", function(d) { return d.y; });
                 }
-                Graph.forceLayout.start().alpha(0);
              },
             'html'
         );
+    },
+    correctLabelPositions: function() {
+       var position;
+        $('div.sortLabel').fadeOut(150, function() {
+            $(this).each(function() {
+                position = Graph.getGroupAvgPosition($(this).text());
+                $(this).css({ left: position[0] - 20, top: position[1] + 20});
+            });
+            $(this).fadeIn(150);
+        });
     },
     updateLabels: function() {
         var groups = this.data[this.config.sortAttr].map(function(s) {
             return s.name;
         }),
-            display = $('.sortLabel').css('display');
+            display = $('.sortLabel').css('display'),
+            position;
         $('.sortLabel').fadeOut(300, function() {
             $(this).remove();
         });
-        for (i in groups) {
-            $('<div class="sortLabel"/>').appendTo('body').text(groups[i]).css({
-                'left': this.foci[groups[i]][0],
-                'top': this.foci[groups[i]][1]
+        groups.forEach(function(group) {
+            $('<div class="sortLabel"/>').appendTo('body').text(group).css({
+                'left': Graph.foci[group][0],
+                'top': Graph.foci[group][1]
             });
-        }
+        });
         if (display != 'none') {
             $('.sortLabel').fadeIn();
         }
@@ -189,6 +198,8 @@ var Graph = {
                 fociStack.push([(w / (numInRow + 1)) * (j + 1), (h / (numRows + 1)) * (i + 1)]);
             }
         }
+
+        fociStack.reverse();
 
         for (i in groups) {
             foci[groups[i]] = fociStack.pop();
@@ -229,6 +240,17 @@ var Graph = {
     getY: function(foci, node, attr) {
         return this.getX(foci, node, attr, 1);
     },
+    getGroupAvgPosition: function(groupName) {
+        var nodes = this.forceLayout.nodes().filter(function(d) { return d[Graph.config.sortAttr].name == groupName; });
+        var avg = [0, 0];
+        nodes.forEach(function(node) {
+            avg[0] += node.x;
+            avg[1] += node.y;
+        });
+        avg[0] /= nodes.length;
+        avg[1] /= nodes.length;
+        return avg;
+    },
     getColor: function(node) {
         return this.stringToColor(node[this.config.colorAttr].name);
     },
@@ -250,7 +272,7 @@ var Graph = {
                     colorDelta = (category.subcategories.map(function(s) {
                         return s.name;
                     }).indexOf(string) - Math.floor(category.subcategories.length / 2)) * this.config.subcatColorScaleFactor;
-                return d3.rgb(this.catColorScale(category.name)).brighter(colorDelta);
+                return d3.rgb(this.catColorScale(category.name)).darker(colorDelta);
             }
         case 'category':
             return d3.rgb(this.catColorScale(string));
@@ -275,6 +297,9 @@ var Graph = {
                         Graph.forceLayout.alpha(0.13);
                 }
             }
+        }
+        if (Graph.tickCount == Graph.config.totalTicks - 120) {
+            Graph.correctLabelPositions();
         }
         if (Graph.tickCount == Graph.config.totalTicks - 1) {
             Graph.outputNodes();
@@ -334,7 +359,6 @@ var Graph = {
                     break;
                 case 'medium':
                 case 'slow':
-                    Graph.forceLayout.stop();
                     Graph.updateNodesFromData();
             }
         });
@@ -357,7 +381,6 @@ var Graph = {
                     break;
                 case 'medium':
                 case 'slow':
-                    Graph.forceLayout.stop();
                     Graph.updateNodesFromData();
             }
         });
