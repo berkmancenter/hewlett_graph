@@ -8,7 +8,7 @@
 </div>
 <div id="notGraph">
     <div id="legend">
-        <h3>Legend</h3>
+        <h2>Legend</h2>
     </div>
     <div id="controls">
         <h2>Advanced</h2>
@@ -39,23 +39,11 @@
     </div>
 </div>
 <script> 
+    Graph.id = <%= @graph.id %>;
     Graph.config.sortAttr = '<%= params[:sort_attr] or "category" %>';
     Graph.config.colorAttr = '<%= params[:color_attr] or "category" %>';
     Graph.config.oldSortAttr = '<%= params[:sort_attr] or "category" %>';
     Graph.config.oldColorAttr = '<%= params[:color_attr] or "category" %>';
-    browserSpeed = '<%= params[:browser_speed] or "medium" %>';
-    Graph.config.browserSpeed = browserSpeed;
-    $.getJSON('/graphs/<%= @graph.id %>.json', Graph.init);
-
-    if (browserSpeed == 'slow' || browserSpeed == 'medium') {
-        $("input[name=sort], input[name=color]").on("change", function(e) {
-            Graph.config.sortAttr = $('input[name=sort]:checked').val();
-            Graph.config.colorAttr = $('input[name=color]:checked').val();
-            Graph.updateFoci();
-            Graph.updateColorFoci();
-            Graph.forceLayout.stop();
-            $.get('/graphs/<%= @graph.id %>', { sort_attr: Graph.config.sortAttr, color_attr: Graph.config.colorAttr }, Graph.updateNodesFromData , 'html');
-        });
-    }
-
+    Graph.config.browserSpeed =  '<%= params[:browser_speed] or "medium" %>';
+    Graph.init();
 </script>

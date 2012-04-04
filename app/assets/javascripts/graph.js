@@ -13,6 +13,7 @@ var Graph = {
         prevColorAttr: 'category',
         prevSortAttr: 'category',
     },
+    id: 0,
     foci: {},
     colorFoci: {},
     data: {
@@ -28,59 +29,69 @@ var Graph = {
     forceLayout: {},
     tickCount: 0,
 
-    init: function(data) {
+    init: function() {
+        $.getJSON('/graphs/' + this.id + '.json', function(data) {
+            if (Graph.config.browserSpeed == 'serverside') {
+                Graph.config.reorganizePercent = 0.20;
+                Graph.config.theta = 0.8;
+            }
 
-        Graph.config.browserSpeed = browserSpeed;
-        if (Graph.config.browserSpeed == 'serverside') {
-            Graph.config.reorganizePercent = 0.20;
-            Graph.config.theta = 0.8;
-        }
+            Graph.data.categories = data.graph.categories;
+            Graph.data.subcategories = data.graph.subcategories;
+            Graph.data.stakeholders = data.graph.stakeholders;
+            Graph.data.ideas = data.graph.ideas;
+            Graph.data.day = data.graph.day;
 
-        Graph.data.categories = data.graph.categories;
-        Graph.data.subcategories = data.graph.subcategories;
-        Graph.data.stakeholders = data.graph.stakeholders;
-        Graph.data.ideas = data.graph.ideas;
-        Graph.data.day = data.graph.day;
+            dimensions = Graph.getDimensions();
+            w = dimensions.w;
+            h = dimensions.h;
+            $('#graph').width(w);
 
-        dimensions = Graph.getDimensions();
-        w = dimensions.w;
-        h = dimensions.h;
-        $('#graph').width(w);
+            // These are here so plurals aren't an issue when switching sorting
+            // I need to get rid of this.
+            Graph.data.category = data.graph.categories;
+            Graph.data.subcategory = data.graph.subcategories;
 
-        // These are here so plurals aren't an issue when switching sorting
-        // I need to get rid of this.
-        Graph.data.category = data.graph.categories;
-        Graph.data.subcategory = data.graph.subcategories;
+            var vis = d3.select("#graph").append("svg:svg").attr("width", w).attr("height", h);
 
-        var vis = d3.select("#graph").append("svg:svg").attr("width", w).attr("height", h);
+            Graph.foci = Graph.getFoci();
+            Graph.colorFoci = Graph.getColorFoci();
 
-        Graph.foci = Graph.getFoci();
-        Graph.colorFoci = Graph.getColorFoci();
+            switch(Graph.config.browserSpeed) {
+                case 'serverside':
+                case 'fast':
+                    Graph.forceLayout = d3.layout.force()
+                        .nodes(Graph.data.ideas)
+                        .links([])
+                        .size([w, h])
+                        .gravity(0)
+                        .theta(Graph.config.theta)
+                        .charge(-6)
+                        .start();
 
-        Graph.forceLayout = d3.layout.force()
-            .nodes(Graph.data.ideas)
-            .links([])
-            .size([w, h])
-            .gravity(0)
-            .theta(Graph.config.theta)
-            .charge(-6)
-            .start();
+                    break;
+                case 'medium':
+                case 'slow':
+                    Graph.forceLayout = d3.layout.force().nodes(Graph.data.ideas);
+                    Graph.updateNodesFromData();
+            }
 
-        var node = vis.selectAll("circle.node").data(Graph.data.ideas).enter()
-            .append("svg:circle")
-            .attr("class", "node")
-            .attr("cx", function(d) { return Graph.getX(Graph.foci, d, Graph.config.sortAttr); })
-            .attr("cy", function(d) { return Graph.getY(Graph.foci, d, Graph.config.sortAttr); })
-            .attr("r", function(d) { return 10; })
-            .style("fill", function(d, i) { return Graph.getColor(d); })
-            .style("stroke", function(d, i) { return d3.rgb(Graph.getColor(d)).darker(2); })
-            .style("stroke-width", 1.5);
+            var node = vis.selectAll("circle.node").data(Graph.data.ideas).enter()
+                .append("svg:circle")
+                .attr("class", "node")
+                .attr("cx", function(d) { return Graph.getX(Graph.foci, d, Graph.config.sortAttr); })
+                .attr("cy", function(d) { return Graph.getY(Graph.foci, d, Graph.config.sortAttr); })
+                .attr("r", function(d) { return 10; })
+                .style("fill", function(d, i) { return Graph.getColor(d); })
+                .style("stroke", function(d, i) { return d3.rgb(Graph.getColor(d)).darker(2); })
+                .style("stroke-width", 1.5);
 
-        vis.style("opacity", 1e-6).transition().duration(1000).style("opacity", 1);
+            vis.style("opacity", 1e-6).transition().duration(1000).style("opacity", 1);
 
-        Graph.updateLabels();
-        Graph.updateLegend();
-        Graph.addEventHandlers();
+            Graph.updateLabels();
+            Graph.updateLegend();
+            Graph.updateEventHandlers();
+        });
     },
 
     getDimensions: function() {
@@ -111,28 +122,37 @@ var Graph = {
         });
         $('#legend :header').after($legend.html());
     },
-    updateNodesFromData: function(data) {
-        var nodes = d3.selectAll('circle.node');
-        nodes.data(JSON.parse(data));
+    updateNodesFromData: function() {
+        $.get('/graphs/' + Graph.id,
+            {
+                sort_attr: Graph.config.sortAttr,
+                color_attr: Graph.config.colorAttr
+            },
+            function(data) {
+                var nodes = d3.selectAll('circle.node');
+                nodes.data(JSON.parse(data));
 
-        switch (Graph.config.browserSpeed) {
-            case 'medium':
-                nodes
-                    .transition()
-                    .duration(1200)
-                    .attr("cx", function(d) { return d.x; })
-                    .attr("cy", function(d) { return d.y; })
-                    .style("fill", function(d) { return Graph.getColor(d); })
-                    .style("stroke", function(d) { return d3.rgb(Graph.getColor(d)).darker(2); });
-                break;
-            case 'slow':
-                nodes
-                    .style("fill", function(d) { return Graph.getColor(d); })
-                    .style("stroke", function(d) { return d3.rgb(Graph.getColor(d)).darker(2); })
-                    .attr("cx", function(d) { return d.x; })
-                    .attr("cy", function(d) { return d.y; });
-        }
-        Graph.forceLayout.start().alpha(0);
+                switch (Graph.config.browserSpeed) {
+                    case 'medium':
+                        nodes
+                            .transition()
+                            .duration(1200)
+                            .attr("cx", function(d) { return d.x; })
+                            .attr("cy", function(d) { return d.y; })
+                            .style("fill", function(d) { return Graph.getColor(d); })
+                            .style("stroke", function(d) { return d3.rgb(Graph.getColor(d)).darker(2); });
+                        break;
+                    case 'slow':
+                        nodes
+                            .style("fill", function(d) { return Graph.getColor(d); })
+                            .style("stroke", function(d) { return d3.rgb(Graph.getColor(d)).darker(2); })
+                            .attr("cx", function(d) { return d.x; })
+                            .attr("cy", function(d) { return d.y; });
+                }
+                Graph.forceLayout.start().alpha(0);
+             },
+            'html'
+        );
     },
     updateLabels: function() {
         var groups = this.data[this.config.sortAttr].map(function(s) {
@@ -144,7 +164,7 @@ var Graph = {
         });
         for (i in groups) {
             $('<div class="label"/>').appendTo('body').text(groups[i]).css({
-                'left': this.foci[groups[i]][0] - 30,
+                'left': this.foci[groups[i]][0],
                 'top': this.foci[groups[i]][1]
             });
         }
@@ -240,14 +260,20 @@ var Graph = {
         var k = .05 * e.alpha,
             thisFoci = Graph.foci,
             nodeAttr = Graph.config.sortAttr;
-        if (Graph.config.oldSortAttr != Graph.config.colorAttr
-            && Graph.config.sortAttr != Graph.config.colorAttr) {
+        if (/*Graph.config.oldSortAttr != Graph.config.colorAttr &&*/
+            Graph.config.sortAttr != Graph.config.colorAttr) {
             if (Graph.tickCount < Graph.config.totalTicks * Graph.config.reorganizePercent) {
                 thisFoci = Graph.colorFoci;
                 nodeAttr = Graph.config.colorAttr;
             }
             else if (Graph.tickCount == Math.floor(Graph.config.totalTicks * Graph.config.reorganizePercent) + 1) {
-                Graph.forceLayout.start();
+                switch(Graph.config.browserSpeed) {
+                    case 'fast':
+                        Graph.forceLayout.start();
+                        break;
+                    case 'serverside':
+                        Graph.forceLayout.alpha(0.13);
+                }
             }
         }
         if (Graph.tickCount == Graph.config.totalTicks - 1) {
@@ -264,9 +290,13 @@ var Graph = {
             .attr("cx", function(d) { return d.x; })
             .attr("cy", function(d) { return d.y; });
     },
-    addEventHandlers: function() {
-        if (this.config.browserSpeed != 'slow') {
-            this.forceLayout.on("tick", this.onTick);
+    updateEventHandlers: function() {
+        $("input[name=sort], input[name=color], input[name=speed], #showLabels, #veryDiffSubcatColors").off("change");
+
+        switch(Graph.config.browserSpeed) {
+            case 'serverside':
+            case 'fast':
+                this.forceLayout.on("tick", this.onTick);
         }
 
         d3.selectAll("circle.node").on("click", function(c) {
@@ -287,46 +317,49 @@ var Graph = {
             Graph.config.subcatColorsAreVeryDifferent = $(this).is(':checked');
         });
 
-        $("input[type=radio][name=sort]").on("change", function(e) {
+        $("input[name=sort]").on("change", function(e) {
+            Graph.config.oldSortAttr = Graph.config.sortAttr;
+            Graph.config.sortAttr = $(this).val();
+            Graph.updateFoci();
+            Graph.updateLabels();
             switch (Graph.config.browserSpeed) {
                 case 'serverside':
                 case 'fast':
                     Graph.tickCount = 0;
-                    Graph.config.oldSortAttr = Graph.config.sortAttr;
-                    Graph.config.sortAttr = $(e.target).val();
-                    Graph.updateFoci();
-                    Graph.updateLabels();
                     Graph.forceLayout.start();
+                    break;
                 case 'medium':
                 case 'slow':
-                    Graph.updateLabels();
+                    Graph.forceLayout.stop();
+                    Graph.updateNodesFromData();
             }
         });
 
-        $("input[type=radio][name=color]").on("change", function(e) {
+        $("input[name=color]").on("change", function(e) {
+            Graph.tickCount = 0;
+            Graph.config.oldColorAttr = Graph.config.colorAttr;
+            Graph.config.colorAttr = $(e.target).val();
+            Graph.updateColorFoci();
+            Graph.updateLegend();
             switch (Graph.config.browserSpeed) {
                 case 'serverside':
                 case 'fast':
-                    Graph.tickCount = 0;
-                    Graph.config.oldColorAttr = Graph.config.colorAttr;
-                    Graph.config.colorAttr = $(e.target).val();
                     d3.selectAll('circle.node')
                         .transition()
                         .duration(300)
                         .style("fill", function(d, i) { return Graph.getColor(d); })
                         .style("stroke", function(d, i) { return d3.rgb(Graph.getColor(d)).darker(2); });
-                    Graph.updateColorFoci();
-                    Graph.updateLegend();
                     Graph.forceLayout.start();
                     break;
                 case 'medium':
                 case 'slow':
-                    Graph.updateLegend();
+                    Graph.forceLayout.stop();
+                    Graph.updateNodesFromData();
             }
         });
 
         $('input[name=speed][value=' + Graph.config.browserSpeed + ']').attr('checked', true);
-        $('input[type=radio][name=speed]').on('change', function() { Graph.config.browserSpeed = $(this).val(); });
+        $('input[name=speed]').on('change', function() { Graph.config.browserSpeed = $(this).val(); });
         $('#controls h2 ~ *').slideUp();
         $('#controls h2').on('click', function() { $(this).find('~ *').slideToggle(); });
     },
