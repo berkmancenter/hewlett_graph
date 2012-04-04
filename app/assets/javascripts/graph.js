@@ -112,8 +112,11 @@ var Graph = {
     },
     updateLegend: function() {
         $('#legend :not(:header)').remove();
-        var $legend = $('<div />');
-        this.data[this.config.colorAttr].forEach(function(u) {
+        var $legend = $('<div />'), entries = this.data[this.config.colorAttr];
+        if (this.config.colorAttr == 'subcategory') {
+            entries.sort(function(a, b) { return a.category_name == b.category_name ? -1 : 0; });
+        }
+        entries.forEach(function(u) {
             $legend.append(function() {
                 return $('<div class="legendEntry" />').append(function() {
                     return $('<span class="swatch"/>').css('backgroundColor', Graph.stringToColor(u.name)).add($('<span class="legendText" />').text(u.name));
@@ -300,6 +303,7 @@ var Graph = {
         }
 
         d3.selectAll("circle.node").on("click", function(c) {
+            d3.select('circle.node.activated').classed('activated', false);
             d3.select(this).classed('activated', true);
             d3.select("#category").text(c.category.name);
             d3.select("#subcategory").text(c.subcategory.name);
@@ -311,6 +315,7 @@ var Graph = {
         $('#dataClose').on("click", function() {
             d3.select('circle.node.activated').classed('activated', false);
             $('#data').hide();
+            return false;
         });
 
         $('#showLabels').on("change", function(e) { $('.label').fadeToggle(); });
