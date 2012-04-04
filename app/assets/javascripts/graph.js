@@ -114,7 +114,7 @@ var Graph = {
         $('#legend :not(:header)').remove();
         var $legend = $('<div />'), entries = this.data[this.config.colorAttr];
         if (this.config.colorAttr == 'subcategory') {
-            entries.sort(function(a, b) { return a.category_name == b.category_name ? -1 : 0; });
+            entries.sort(function(a, b) { return a.category_name == b.category_name ? 0 : 1; });
         }
         entries.forEach(function(u) {
             $legend.append(function() {
