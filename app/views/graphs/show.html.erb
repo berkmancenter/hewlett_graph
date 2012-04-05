@@ -28,12 +28,9 @@
         </ul>
         <h3>Browser Speed:</h3>
         <ul>
-            <% if params[:browser_speed] == 'fast' %>
             <li><input type="radio" name="speed" id="speedFast" value="fast" /><label for="speedFast">Fast</label></li>
-            <% else %>
             <li><input type="radio" name="speed" id="speedMedium" value="medium" /><label for="speedMedium">Medium</label></li>
             <li><input type="radio" name="speed" id="speedSlow" value="slow" /><label for="speedSlow">Slow</label></li>
-            <% end %>
         </ul>
         <input type="checkbox" name="showLabels" id="showLabels" /><label for="showLabels">Hide Labels</label><br />
         <input type="checkbox" name="veryDiffSubcatColors" id="veryDiffSubcatColors" /><label for="veryDiffSubcatColors">Very Different Subcategory Colors</label><br />
