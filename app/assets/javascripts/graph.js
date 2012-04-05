@@ -50,7 +50,12 @@ var Graph = {
 	},
 	setup: function() {
 		Graph.initDimensions();
-		d3.select("#graph").append("svg:svg").attr("width", Graph.width).attr("height", Graph.height);
+        if (!Graph.initialized) {
+            d3.select("#graph").append("svg:svg").attr("width", Graph.width).attr("height", Graph.height);
+        } else {
+            d3.select("#graph").select("svg").transition().attr("width", Graph.width).attr("height", Graph.height);
+            Graph.initialized = false;
+        }
 		Util.updateEventHandlers();
 		Graph.getData();
 	},
@@ -347,6 +352,7 @@ var Util = {
 	},
 	updateEventHandlers: function() {
 		$("input[name=sort], input[name=color], input[name=speed], #showLabels, #veryDiffSubcatColors").off("change");
+        $('#dataClose, #controls h2').off('click');
 
 		$('#dataClose').on("click", function() {
 			d3.select('circle.node.activated').classed('activated', false);
@@ -404,6 +410,7 @@ var Util = {
 		$('input[name=speed][value=' + Graph.config.browserSpeed + ']').attr('checked', true);
 		$('input[name=speed]').on('change', function() {
 			Graph.config.browserSpeed = $(this).val();
+            Graph.setup();
 		});
 		$('#controls h2 ~ *').slideUp();
 		$('#controls h2').on('click', function() {
