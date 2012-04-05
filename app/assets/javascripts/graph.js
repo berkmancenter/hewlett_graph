@@ -16,9 +16,9 @@ var Graph = {
 		widthPercentage: 0.7,
 		heightPercentage: 0.995,
 		nodeRadius: 10,
-        strokeWidth: 1.5,
+		strokeWidth: 1.5,
 		gravity: 0,
-		charge: -6,
+		charge: - 6,
 	},
 	data: {
 		categories: {},
@@ -42,7 +42,7 @@ var Graph = {
 
 	init: function() {
 		if (Graph.config.browserSpeed == 'serverside') {
-			Graph.config.reorganizePercent = 0.20;
+			Graph.config.reorganizePercent = 0.18;
 			Graph.config.theta = 0.8;
 		}
 
@@ -82,6 +82,7 @@ var Graph = {
 		case 'serverside':
 		case 'fast':
 			if (!Graph.initialized) {
+                Util.updateGraphEventHandlers();
 				Graph.createForceLayout();
 			}
 			break;
@@ -90,10 +91,6 @@ var Graph = {
 			Graph.updateLameCircles();
 		}
 
-		if (!Graph.initialized) {
-			// TODO: This needs to move
-			Graph.updateGraphEventHandlers();
-		}
 	},
 	createForceLayout: function() {
 		Graph.foci = Graph.getFoci();
@@ -123,7 +120,11 @@ var Graph = {
 		var nodes = d3.select('svg').selectAll("circle.node").data(Graph.data.ideas, function(d) {
 			return d.uuid
 		});
-        nodes.enter().append("svg:circle").attr("class", "node").attr("r", Graph.config.nodeRadius).attr("stroke-width", Graph.config.strokeWidth);
+		nodes.enter().append("svg:circle").attr("class", "node").attr("r", Graph.config.nodeRadius).attr("stroke-width", Graph.config.strokeWidth).attr("cx", function(d) {
+			return d.x;
+		}).attr("cy", function(d) {
+			return d.y;
+		});
 
 		switch (Graph.config.browserSpeed) {
 		case 'medium':
@@ -149,10 +150,11 @@ var Graph = {
 			});
 		}
 
-        Graph.updateLabels();
-        Graph.updateLegend();
+		Graph.updateLabels();
+		Graph.updateLegend();
 
 		if (!Graph.initialized) {
+			Util.updateGraphEventHandlers();
 			Graph.initialized = true;
 		}
 	},
@@ -191,39 +193,41 @@ var Graph = {
 		$('.sortLabel').fadeOut(300, function() {
 			$(this).remove();
 		});
-        switch(Graph.config.browserSpeed) {
-            case 'serverside':
-            case 'fast':
-                groups.forEach(function(group) {
-                    $('<div class="sortLabel"/>').appendTo('body').text(group).css({
-                        'left': Graph.foci[group][0],
-                        'top': Graph.foci[group][1]
-                    });
-                });
-                break;
-            case 'medium':
-            case 'slow':
-                groups.forEach(function(group) {
-                    nodes = d3.selectAll('circle.node').filter(function(n) {
-                        if (n[Graph.config.sortAttr] instanceof Array) {
-                            return n[Graph.config.sortAttr].map(function(d) { return d.name; }).indexOf(group) != -1 && n[Graph.config.sortAttr].length == 1;
-                        }
-                        else {
-                            return n[Graph.config.sortAttr].name == group;
-                        }
-                    });
-                    position = Graph.getNodesAvgPosition(nodes);
-                    $('<div class="sortLabel"/>').appendTo('body').text(group).css({
-                        'left': position[0],
-                        'top': position[1]
-                    });
-                });
-        }
+		switch (Graph.config.browserSpeed) {
+		case 'serverside':
+		case 'fast':
+			groups.forEach(function(group) {
+				$('<div class="sortLabel"/>').appendTo('body').text(group).css({
+					'left':
+					Graph.foci[group][0],
+					'top': Graph.foci[group][1]
+				});
+			});
+			break;
+		case 'medium':
+		case 'slow':
+			groups.forEach(function(group) {
+				nodes = d3.selectAll('circle.node').filter(function(n) {
+					if (n[Graph.config.sortAttr] instanceof Array) {
+						return n[Graph.config.sortAttr].map(function(d) {
+							return d.name;
+						}).indexOf(group) != - 1 && n[Graph.config.sortAttr].length == 1;
+					}
+					else {
+						return n[Graph.config.sortAttr].name == group;
+					}
+				});
+				position = Graph.getNodesAvgPosition(nodes);
+				$('<div class="sortLabel"/>').appendTo('body').text(group).css({
+					'left': position[0],
+					'top': position[1]
+				});
+			});
+		}
 		if (display != 'none') {
 			$('.sortLabel').fadeIn();
 		}
 	},
-	// TODO: only do this if we're serverside
 	outputNodes: function() {
 		$('<span id="d3Nodes" />').text(JSON.stringify(Graph.forceLayout.nodes())).appendTo('body');
 	},
@@ -261,13 +265,14 @@ var Graph = {
 				nodeAttr = Graph.config.colorAttr;
 			}
 			else if (Graph.tickCount == Math.floor(Graph.totalTicks * Graph.config.reorganizePercent) + 1) {
-                Graph.forceLayout.start();
+				Graph.forceLayout.start();
 			}
 		}
 		if (Graph.tickCount == Graph.totalTicks - 120) {
-		//	Graph.correctLabelPositions();
+            // TODO: Fix this
+			//	Graph.correctLabelPositions();
 		}
-		if (Graph.tickCount == Graph.totalTicks - 1) {
+		if (Graph.tickCount == Graph.totalTicks - 1 && Graph.config.browserSpeed == 'serverside') {
 			Graph.outputNodes();
 		}
 
@@ -287,9 +292,9 @@ var Graph = {
 		var position, nodes;
 		$('div.sortLabel').fadeOut(150, function() {
 			$(this).each(function(label) {
-                nodes = Graph.forceLayout.nodes().filter(function(d) {
-                    return d[Graph.config.sortAttr].name == $(label).text();
-                });
+				nodes = Graph.forceLayout.nodes().filter(function(d) {
+					return d[Graph.config.sortAttr].name == $(label).text();
+				});
 				position = Graph.getNodesAvgPosition(nodes);
 				$(this).css({
 					left: position[0] - 20,
@@ -364,8 +369,8 @@ var Util = {
 			case 'serverside':
 			case 'fast':
 				Graph.tickCount = 0;
-                Graph.updateFoci();
-                Graph.updateLabels();
+				Graph.updateFoci();
+				Graph.updateLabels();
 				Graph.forceLayout.start();
 				break;
 			case 'medium':
@@ -380,14 +385,14 @@ var Util = {
 			switch (Graph.config.browserSpeed) {
 			case 'serverside':
 			case 'fast':
-                Graph.tickCount = 0;
+				Graph.tickCount = 0;
 				d3.selectAll('circle.node').transition().duration(300).style("fill", function(d, i) {
 					return Node.getColor(d);
 				}).style("stroke", function(d, i) {
 					return d3.rgb(Node.getColor(d)).darker(2);
 				});
-                Graph.updateColorFoci();
-                Graph.updateLegend();
+				Graph.updateColorFoci();
+				Graph.updateLegend();
 				Graph.forceLayout.start();
 				break;
 			case 'medium':
@@ -421,7 +426,7 @@ var Util = {
 					return cat.uuid == subcategory.category_uuid;
 				})[0],
 				colorDelta = category.subcategory_uuids.indexOf(subcategory.uuid);
-                colorDelta = (colorDelta - Math.floor(category.subcategory_uuids.length / 2)) * Graph.config.subcatColorScaleFactor;
+				colorDelta = (colorDelta - Math.floor(category.subcategory_uuids.length / 2)) * Graph.config.subcatColorScaleFactor;
 				return d3.rgb(Graph.catColorScale(category.name)).darker(colorDelta);
 			}
 		case 'category':
@@ -455,6 +460,6 @@ var Util = {
 			foci[groups[i]] = fociStack.pop();
 		}
 		return foci;
-	},
+	}
 };
 
