@@ -12,7 +12,15 @@ class GraphsController < ApplicationController
                     render 'graph', :layout => false
                 end
             }
-            format.json { render_for_api :everything, :json => @graph }
+            format.json {
+                if params[:prerendered] == 'true'
+                    @graph.sort_attr = params[:sort_attr]
+                    @graph.color_attr = params[:color_attr]
+                    render_for_api :prerendered, :json => @graph
+                else
+                    render_for_api :everything, :json => @graph 
+                end
+            }
         end
     end
 
