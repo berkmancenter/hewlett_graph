@@ -1,4 +1,8 @@
 require 'csv'
+require 'capybara'
+require 'capybara/dsl'
+require 'nokogiri'
+require 'headless'
 
 class Graph < ActiveRecord::Base
     has_attached_file :data
@@ -8,24 +12,25 @@ class Graph < ActiveRecord::Base
     has_many :subcategories, :through => :categories, :order => 'category_id, name'
     acts_as_api
 
+    attr_accessor :sort_attr, :color_attr
     api_accessible :everything do |t|
         t.add :ideas
         t.add :categories
         t.add :subcategories
         t.add :stakeholders
-        t.add :day
+        t.add :days
     end
 
-    api_accessible :public_ideas do |t|
-        t.add :ideas
+    api_accessible :prerendered do |t|
+        t.add :prerendered_ideas, :as => :ideas
+        t.add :categories, :template => :everything
+        t.add :subcategories, :template => :everything
+        t.add :stakeholders, :template => :everything
+        t.add :days, :template => :everything
     end
 
-    api_accessible :categories do |t|
+    api_accessible :hierarchy do |t|
         t.add :categories
-    end
-
-    api_accessible :stakeholders do |t|
-        t.add :stakeholders
     end
 
     def import_data_from_attachment!
@@ -69,10 +74,31 @@ class Graph < ActiveRecord::Base
         (ideas.maximum('created_at').to_date - ideas.minimum('created_at').to_date).to_i + 1
     end
 
-    def day
+    def days
         return (0..days_of_ideas - 1).map{ |i| { :name => (ideas.minimum('created_at').to_date + i.days).strftime('%A') } }
     end
 
+    def prerendered_ideas
+        Capybara.default_driver = :webkit
+        Capybara.default_wait_time = 20
+        Capybara.app_host = 'http://localhost:3000' 
+        cache = ActiveSupport::Cache::FileStore.new Rails.public_path
+
+        key = [id, sort_attr, color_attr]
+        if cache.exist?(key)
+            return JSON(cache.read(key))
+        else
+            Headless.ly({ :dimensions => '800x600x24'}) do |headless|
+                session = Capybara::Session.new(:webkit)
+                session.visit( Rails.application.routes.url_helpers.graph_path(self, :sort_attr => sort_attr, :color_attr => color_attr, :browser_speed => :serverside) )
+                session.find('#d3Nodes')
+                text = Nokogiri::HTML.parse(session.html).css('#d3Nodes').first.inner_text
+                cache.write(key, text)
+                return JSON(text)
+            end
+        end
+    end
+   
     protected
     def table
         if data.exists?
@@ -80,5 +106,9 @@ class Graph < ActiveRecord::Base
         else
             CSV.read(data.uploaded_file.tempfile.path, :headers => true)
         end
+    end
+
+    def link_hash(source, target)
+        { :source => source.uuid, :target => target.uuid }
     end
 end

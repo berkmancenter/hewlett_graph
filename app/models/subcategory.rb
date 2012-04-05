@@ -3,15 +3,12 @@ class Subcategory < ActiveRecord::Base
     acts_as_api
 
     api_accessible :everything do |t|
+        t.add :uuid
         t.add :name
-        t.add :category_name
+        t.add :category_uuid
     end
 
-    api_accessible :just_name do |t|
-        t.add :name
-    end
-
-    def category_name
-        category.name
+    def category_uuid
+        category.uuid
     end
 end
