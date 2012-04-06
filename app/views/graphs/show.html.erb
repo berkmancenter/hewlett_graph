@@ -46,8 +46,19 @@
 </div>
 <% if params[:layout] == 'tree' %>
 <style>
-    #notGraph {
+    #controls, #questions {
         display: none;
+    }
+    .legendEntry {
+        display: inline-block;
+        margin: 0 1em;
+    }
+    #notGraph {
+        display: block;
+        text-align: center;
+    }
+    #legend {
+        display: inline-block;
     }
 </style>
 <% end %>

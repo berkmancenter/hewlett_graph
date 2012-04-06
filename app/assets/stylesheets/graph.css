@@ -31,13 +31,13 @@ circle.activated {
    stroke: #123 !important;
    stroke-width: 1.5px;
 } 
-.node.open circle {
-    fill: white !important;
+.node.closed circle {
+    fill: #ABC !important;
 }
 .node.open text {
     font-weight: bold;
 }
-.node.closed circle {
+.node.open circle {
     fill: #123 !important;
 }
 g.node.idea {

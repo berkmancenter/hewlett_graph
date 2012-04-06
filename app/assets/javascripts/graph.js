@@ -114,7 +114,7 @@ var Graph = {
 
 	},
     createDendrogram: function() {
-        var w = 1390,
+        var w = 1400,
         h = 630,
         i = 0,
         duration = 500,
@@ -134,6 +134,7 @@ var Graph = {
 
           Graph.hierarchy.x0 = 0;
           Graph.hierarchy.y0 = 0;
+          Graph.updateLegend();
           update(root = Graph.hierarchy);
 
         function update(source) {
@@ -151,12 +152,12 @@ var Graph = {
 
           // Enter any new nodes at the parent's previous position.
           nodeEnter.append("svg:circle")
-              .attr("r", function(d) { return d.children || d._children ? 8.5 : 3.5; })
-              .style("fill", function(d) { return d._children || d.children ? "lightsteelblue" : "#ccc"; })
+              .attr("r", function(d) { return d.children || d._children ? 8.5 : 6.5; })
+              .style("fill", function(d) { return d._children || d.children ? "lightsteelblue" : Graph.catColorScale(d.idea_type.name); })
               .on("click", click);
 
           nodeEnter.append("svg:text")
-              .attr("x", function(d) { return d.children || d._children ? 12 : 4; })
+              .attr("x", function(d) { return d.children || d._children ? 12 : 10; })
               .attr("y", 3)
               .text(function(d) { return typeof d.name == 'undefined' ? d.content : d.name; })
               .on("click", click);
@@ -324,15 +325,26 @@ var Graph = {
 	},
 	updateLegend: function() {
 		$('#legend :not(:header)').remove();
-		var $legend = $('<div />'),
-		entries = Graph.data[Graph.config.colorAttr];
-		entries.forEach(function(u) {
-			$legend.append(function() {
-				return $('<div class="legendEntry" />').append(function() {
-					return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name)).add($('<span class="legendText" />').text(u.name));
-				});
-			});
-		});
+        var $legend = $('<div />');
+        if (Graph.config.layout != 'tree') {
+            var entries = Graph.data[Graph.config.colorAttr];
+            entries.forEach(function(u) {
+                $legend.append(function() {
+                    return $('<div class="legendEntry" />').append(function() {
+                        return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name)).add($('<span class="legendText" />').text(u.name));
+                    });
+                });
+            });
+        } else {
+            var entries = Graph.hierarchy.idea_types;
+            entries.forEach(function(u) {
+                $legend.append(function() {
+                    return $('<div class="legendEntry" />').append(function() {
+                        return $('<span class="swatch"/>').css('backgroundColor', Graph.catColorScale(u.name)).add($('<span class="legendText" />').text(u.name));
+                    });
+                });
+            });
+        }
 		$('#legend :header').after($legend.html());
 	},
 	updateLabels: function() {

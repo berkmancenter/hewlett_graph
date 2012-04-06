@@ -18,6 +18,7 @@ class Idea < ActiveRecord::Base
     api_accessible :hierarchy do |t|
         t.add :content
         t.add :day
+        t.add :idea_type
         t.add :stakeholders
     end
 

@@ -34,6 +34,7 @@ class Graph < ActiveRecord::Base
     api_accessible :hierarchy do |t|
         t.add :name
         t.add :categories, :as => :children
+        t.add :idea_types
     end
 
     def import_data_from_attachment!

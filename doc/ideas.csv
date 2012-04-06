@@ -2,9 +2,9 @@ Category,Subcategory,Stakeholders,Idea,Type
 Meso,Accessibility,Facilitator,Translation into other languages,Intervention
 Meso,Accessibility,Facilitator,Creation of coherent adoption language for all U.S. Schools,Intervention
 Meso,Accessibility,All,More effective and targeted distribution for increased accessibility,Intervention
-Meso,Accessibility,Builder,"Universal model of production, tagging and discovering for improved accessibility",Intervnetion
-Meso,Accessibility,All,"Better cataloging, tagging and organizing of resources for better accessibility",Intervnetion
-Meso,Accessibility,Learner,OER textbooks to make it affordable and accessible,Intervnetion
+Meso,Accessibility,Builder,"Universal model of production, tagging and discovering for improved accessibility",Intervention
+Meso,Accessibility,All,"Better cataloging, tagging and organizing of resources for better accessibility",Intervention
+Meso,Accessibility,Learner,OER textbooks to make it affordable and accessible,Intervention
 Meso,Accessibility,Facilitator,Ensuring that OER is produced in accordance with Universal Design Principles,Opportunity
 Meso,Accessibility,Facilitator,Understanding the local media and language to increase accessibility,Opportunity
 Meso,Accessibility,Builder,Working with publishers for more effective distribution,Opportunity
@@ -14,13 +14,13 @@ Meso,Accessibility,All,"How the principles of openness can facilitate multi-site
 Meso,Accreditation,"Learner, Facilitator",Allow for study time credit/diploma/certificate,Opportunity
 Meso,Accreditation,All,Transnational qualifications,Problem
 Meso,Accreditation,"Facilitator, Builder",Credible accreditation,Problem
-Research,Assessment,Builder,Develop metrics that provide demonstrable outcomes,Intervnetion
+Research,Assessment,Builder,Develop metrics that provide demonstrable outcomes,Intervention
 Research,Assessment,All,Demonstrate evidence/outcome,Problem
 Research,Assessment,All,Action research: we must demonstrate that OER is not only as effective but can be more effective than traditional content,Problem
 Research,Assessment,Learner,Need for assessment that go beyond contents,Problem
 Research,Assessment,Builder,Evidence of effectiveness,Problem
 Research,Assessment,Builder,Evaluation of the use of OER in institutions,Problem
-Micro,Business Models,Builder,Supporting new business models,Opportunity 
+Micro,Business Models,Builder,Supporting new business models,Opportunity
 Research,Case Studies,All,Case studies of promising practices,Opportunity
 Macro,Community Building,Learner,Shifting the default settings on education from privileged privacy to free and open access for all,Opportunity
 Macro,Community Building,Facilitator,"Recruit mainstream users, not just early adopters",Opportunity
@@ -47,19 +47,19 @@ Micro,"Customization, Remix & Reuse",Facilitator,Enabling contextualization to a
 Micro,"Customization, Remix & Reuse",Builder,Encouraging customization around the world,Opportunity
 Micro,"Customization, Remix & Reuse",Facilitator,Easy access to remix and reuse,Problem
 Micro,"Customization, Remix & Reuse",Builder,Teacher customization,Problem
-Meso,Feedback,Builder,Learning analytics based on feedback loop,Intervnetion
-Meso,Feedback,Builder,Peer review process,Intervnetion
-Meso,Feedback,Builder,Clear guidelines for user feedback,Intervnetion
+Meso,Feedback,Builder,Learning analytics based on feedback loop,Intervention
+Meso,Feedback,Builder,Peer review process,Intervention
+Meso,Feedback,Builder,Clear guidelines for user feedback,Intervention
 Micro,"Guidance, Training & Maintenance",Facilitator,Professional learning opportunities that develop educator confidence,Intervention
 Micro,"Guidance, Training & Maintenance",All,Scalable capacity development for all educators in OER reuse/remix ,Intervention
-Micro,"Guidance, Training & Maintenance","Facilitator, Builder",Help educators learn how to use OER effectively,Intervnetion
-Micro,"Guidance, Training & Maintenance","Facilitator, Builder",Develop a systemic approach to helping teachers how to learn to use OER,Intervnetion
+Micro,"Guidance, Training & Maintenance","Facilitator, Builder",Help educators learn how to use OER effectively,Intervention
+Micro,"Guidance, Training & Maintenance","Facilitator, Builder",Develop a systemic approach to helping teachers how to learn to use OER,Intervention
 Micro,"Guidance, Training & Maintenance",Builder,Social support groups for informal learning,Opportunity
 Macro,Policy,Facilitator,Providing more tangible support for faculty professionals,Intervention
 Macro,Policy,Facilitator,Create national policies that ensure that all federally funded research outputs are made accessible to all users,Intervention
 Macro,Policy,Facilitator,Adoption of government policies on open licensing,Intervention
 Macro,Policy,Builder,Integration of OER into national educational policies,Intervention
-Macro,Policy,Builder,Build policy to make OER adoptable at scale,Intervnetion
+Macro,Policy,Builder,Build policy to make OER adoptable at scale,Intervention
 Macro,Policy,All,Getting governments to develop policy on OER,Problem
 Macro,Policy,Facilitator,Institutional leadership with faculty incentive adoption,Opportunity
 Macro,Policy,"Facilitator, Builder",Financial or reputational incentives to support the creation of OER,Opportunity
@@ -91,9 +91,9 @@ Meso,Tools & Technology,Facilitator,Simpler educational software platforms,Inter
 Meso,Tools & Technology,Builder,Tools enabling easy classroom integration,Intervention
 Meso,Tools & Technology,Builder,API standardization,Intervention
 Meso,Tools & Technology,Builder,Use of feature phones for mobile delivery in developing countries,Intervention
-Meso,Tools & Technology,All,Host open sources repositories on the cloud,Intervnetion
-Meso,Tools & Technology,All,Create operating technological guidelines to support interoperability,Intervnetion
-Meso,Tools & Technology,Builder,Tools to aggregate OER from all sources,Intervnetion
+Meso,Tools & Technology,All,Host open sources repositories on the cloud,Intervention
+Meso,Tools & Technology,All,Create operating technological guidelines to support interoperability,Intervention
+Meso,Tools & Technology,Builder,Tools to aggregate OER from all sources,Intervention
 Meso,Tools & Technology,Facilitator,Design focus on legal and technical interoperability,Opportunity
 Meso,Tools & Technology,Facilitator,Usage of online videos and other SNS,Opportunity
 Meso,Tools & Technology,Facilitator,Use of GIS,Opportunity

@@ -1,6 +1,6 @@
 class Subcategory < ActiveRecord::Base
     belongs_to :category
-    has_many :ideas
+    has_many :ideas, :order => 'idea_type_id'
     acts_as_api
 
     api_accessible :everything do |t|
