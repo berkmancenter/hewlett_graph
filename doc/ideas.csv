@@ -1,248 +1,103 @@
-Category,Subcategory,Stakeholders,Idea
-Macro,Community Building,All,Advocacy and awareness building among educational leaders
-Meso,Tools & Technology,All,Addressing technical interoperability
-Research & Metrics,Assessment,All,Case studies of promising practices
-Macro,Policy,All,Getting governments to develop policy on OER
-Macro,Community Building,All,Getting institutions in the North to use OER from the South
-Micro,Accessibility,All,Continue to make it easier to find good OER
-Meso,Tools & Technology,All,We need better synchronous software so virtual courses feel more real
-Macro,Community Building,All,We need to impact urban and rural high school students who attend schools with weak STEM offerings
-Macro,Community Building,All,"We need a central hub, or dispatcher site, where multiple OER resources by multiple providers can be accessed"
-Meso,Tools & Technology,All,How the use of internet-based social networks and communities can be used to facilitate research
-Micro,Accessibility,All,"How the principles of openness can facilitate multi-site, multi-institutional academic research"
-Meso,Tools & Technology,Facilitator,Design focus on legal and technical interoperability
-Micro,Accessibility,Facilitator,Easy access to remix and translate
-Macro,Policy,Facilitator,Institutional and policy support
-Meso,Tools & Technology,Builder,API standardization
-Meso,Tools & Technology,Builder,Translation solutions
-Micro,Teaching & Learning,Builder,Digital OER text book case studies targeted for administrators
-Micro,Teaching & Learning,Facilitator,Show teachers how to use OER
-Micro,Accessibility,Facilitator,Have OER creators tag their materials in a consistent manner
-Micro,Accessibility,Facilitator,Point users to one place to find OER so they don't have to look all over the web
-Meso,Tools & Technology,Builder,We need a search engine to find curriculum appropriate to OER
-Micro,Teaching & Learning,Builder,Peer-2-Peer learning is an important complement to OER for learning
-Meso,Tools & Technology,Builder,We need to develop a platform that comprehensively indexes all OER Questions & Assessments
-Macro,Policy,Facilitator,Gaining supports from the governments
-Macro,Community Building,Facilitator,Involving various actors in OER
-Micro,Accessibility,Facilitator,Accessibility to the resources
-Macro,Policy,"Facilitator, Builder",Get more institutions to adopt OER
-Meso,Tools & Technology,"Facilitator, Builder",Create tools and systems that use the unique advantages of OER material
-Macro,Community Building,"Facilitator, Builder",Create educational campaigns to FUD of the publishing industry
-Micro,Teaching & Learning,Facilitator,Highly relevant use cases for teachers and students that inspire innovation in learning
-Micro,Teaching & Learning,Facilitator,Professional learning opportunities that develop educator confidence
-Meso,Copyright & Licensing,Facilitator,"Approachable discussions of intellectual property rights, licensing"
-Meso,Tools & Technology,Facilitator,Common metadata
-Micro,Accessibility,Facilitator,Easy search
-Micro,Teaching & Learning,Facilitator,User experience
-Micro,Teaching & Learning,"Learner, Facilitator",Allow for study time credit/diploma/certificate
-Meso,Copyright & Licensing,"Learner, Facilitator",Modify and provide clarity around various licensing parameters around OER
-Micro,Accessibility,"Learner, Facilitator",Allow emerging countries better access and participation
-Macro,Policy,Facilitator,Help governments understand and adopt policies
-Micro,Accessibility,Facilitator,Improve search and discovery of OER
-Meso,Tools & Technology,Facilitator,Simpler educational software platforms
-Micro,Teaching & Learning,All,Formal accreditation
-Micro,Teaching & Learning,All,Transnational qualifications
-Micro,Teaching & Learning,All,Scalable capacity development for all educators in OER reuse/remix
-Macro,Policy,Facilitator,Providing more tangible support for faculty professionals
-Macro,Community Building,Facilitator,Building awareness of the advantages of OER
-Meso,Tools & Technology,Facilitator,Ensuring that OER is produced in accordance with Universal Design Principles
-Macro,Policy,Facilitator,Institutional leadership with faculty incentive adoption
-Macro,Community Building,Facilitator,Collective fundraising
-Research & Metrics,Quality Control,Facilitator,Quality assurance
-Research & Metrics,Assessment,All,Evaluation of OER
-Micro,Teaching & Learning,All,Tying OER to real gaps in teaching & learning
-Research & Metrics,Assessment,All,Assessment in OER usage
-Macro,Policy,"Facilitator, Builder",Financial or reputational incentives to support the creation of OER
-Micro,Accessibility,"Facilitator, Builder",Discoverability of OER
-Micro,Teaching & Learning,"Facilitator, Builder",Better integration of OER into mainstream curriculum
-Meso,Tools & Technology,Learner,Creating a platform for students voice in open education
-Macro,Community Building,Learner,Increasing collaboration and communication among all members
-Macro,Community Building,Learner,Shifting the default settings on education from privileged privacy to free and open access for all
-Meso,Tools & Technology,All,Make tools to enable easier remixing/reusing
-Research & Metrics,Assessment,All,Demonstrate evidence/outcome
-Micro,Teaching & Learning,All,Giving credible certification
-Macro,Policy,Facilitator,Create national policies that ensure that all federally funded research outputs are made accessible to all users
-Macro,Community Building,Facilitator,Create a coalition that aligns the “open” movements to leverage resources and increase impact
-Micro,Accessibility,Builder,"The resources should be easy to find, navigate and share"
-Micro,Accessibility,Builder,The resources should be easy to understand
-Micro,Teaching & Learning,Builder,The resources should be easily adapted by teachers to reflect their teaching styles and interests
-Macro,Community Building,All,Recruit participation with a greater diversity of perspectives
-Micro,Accessibility,All,Address gaps and needs to increase accessibility
-Macro,Community Building,All,Create global learning communities that support dynamic learning
-Macro,Policy,Facilitator,Adoption of government policies on open licensing
-Micro,Teaching & Learning,Facilitator,Move to 1:1 learning environment
-Micro,Accessibility,Facilitator,Ubiquitous connectivity worldwide to increase accessibility
-Micro,Accessibility,Facilitator,Focus on demand and users
-Macro,Community Building,Facilitator,"Recruit mainstream users, not just early adopters"
-Macro,Community Building,Facilitator,"Develop partnerships (states, publishers, other businesses)"
-Research & Metrics,Quality Control,All,Common core state standards
-Micro,Teaching & Learning,All,Online learning/blended learning
-Research & Metrics,Assessment,All,Action research: we must demonstrate that OER is not only as effective but can be more effective than traditional content
-Macro,Community Building,Facilitator,Involving all parties to create a sense of ownership
-Micro,Teaching & Learning,Facilitator,Enabling contextualization to allow integration into classrooms
-Macro,Community Building,Facilitator,Bottom-up grassroots empowerment
-Micro,Accessibility,Facilitator,Translation into other languages
-Micro,Accessibility,Facilitator,Tagging to ease use and increase accessibility
-Research & Metrics,Quality Control,Facilitator,Quality control
-Macro,Community Building,Facilitator,"Increasing more awareness, PR"
-Meso,Tools & Technology,Facilitator,Usage of online videos and other SNS
-Macro,Policy,Builder,Implementation of 2010 World OER Congress
-Macro,Community Building,Facilitator,Set up a teachers OER group on Creative Commons
-Macro,Policy,Builder,Preparatory Regional for a for the World OER Congress
-Macro,Policy,Builder,Integration of OER into national educational policies
-Meso,Tools & Technology,Facilitator,Use of smartphones as distribution platform
-Meso,Tools & Technology,Facilitator,Use of SNS platforms
-Meso,Tools & Technology,Facilitator,Use of GIS
-Macro,Policy,Facilitator,Unified human capital strategy
-Macro,Community Building,Facilitator,Creation of coherent adoption language for all U.S. Schools
-Macro,Community Building,Facilitator,Need for a series of conversations withint he OER community about who we want to have the biggest impact on
-Meso,Tools & Technology,Builder,Tools enabling easy classroom integration
-Macro,Policy,Builder,Policy support
-Macro,Community Building,Builder,Going beyond the content
-Macro,Community Building,Builder,Increase general awareness
-Macro,Community Building,Builder,Social support groups for informal learning
-Micro,Accessibility,Builder,Common classification to increase discoverability
-Meso,Tools & Technology,Builder,User-focused new tools
-Micro,Teaching & Learning,Builder,Faculty training
-Macro,Community Building,Facilitator,"Raise awareness among policymakers, curriculum planners and politicians"
-Macro,Community Building,Facilitator,Advocacy to support the value of OER in the academia
-Micro,Accessibility,Facilitator,Improving the ease of use for better accessibility
-Micro,Accessibility,All,More effective and targeted distribution for increased accessibility
-Macro,Policy,All,Solidification of stable lines of funding
-Research & Metrics,Quality Control,All,Quality indicators
-Micro,Accessibility,Builder,"Better tagging for better accessibility, discoverability"
-Meso,Tools & Technology,Builder,Build Pandora-esque playlist
-Research & Metrics,Quality Control,Builder,Peer reviews
-Research & Metrics,Quality Control,"Facilitator, Builder",Credible quality ratings
-Micro,Teaching & Learning,"Facilitator, Builder",Credible accreditation
-Macro,Community Building,"Facilitator, Builder","Crowd-sourced, human assistance"
-Micro,Teaching & Learning,Learner,Training for educators
-Macro,Community Building,Learner,Need for role models
-Research & Metrics,Assessment,Learner,Need for assessment that go beyond contents
-Macro,Community Building,Builder,Viral community building
-Macro,Policy,Builder,Get backing
-Macro,Community Building,Builder,Creation of communities to share findings from OER initiatives
-Meso,Tools & Technology,All,Host open sources repositories on the cloud
-Macro,Community Building,All,Build an open education developers community
-Meso,Tools & Technology,All,Create operating technological guidelines to support interoperability
-Meso,Tools & Technology,Builder,Tools to aggregate OER from all sources
-Macro,Community Building,Builder,Organization of OER into traditional and nontraditional pathways to increase awareness
-Macro,Community Building,Builder,"Stimulating submission of materials for such initiatives as Open Textbook Challenge, Permissions Initiative, etc."
-Micro,Accessibility,Facilitator,Understanding the local media and language to increase accessibility
-Micro,Accessibility,Facilitator,Use of more multimedia to increase accessibility
-Macro,Policy,Facilitator,Government support
-Research & Metrics,Quality Control,Builder,Improve quality
-Research & Metrics,Assessment,Builder,Include assessments
-Micro,Accessibility,Builder,Develop metrics that provide demonstrable outcomes
-Micro,Accessibility,Builder,"Universal model of production, tagging and discovering for improved accessibility"
-Macro,Community Building,Builder,Collaborative building of an OER community
-Meso,Copyright & Licensing,Builder,Working with publishers for more effective distribution
-Macro,Community Building,All,Organizing community
-Meso,Tools & Technology,All,Tools for people to be able to build their own collections
-Macro,Community Building,All,Grassroots working with schools
-Macro,Community Building,Builder,Increased awareness
-Research & Metrics,Quality Control,Builder,Incorporation of variable licenses
-Macro,Community Building,Builder,Coordinated lobbying to defend the legal and legislative territory from incumbents undercutting OER efforts
-Meso,Tools & Technology,Builder,Use of feature phones for mobile delivery in developing countries
-Meso,Tools & Technology,Builder,Improved interoperability and standards-compliance between platforms
-Macro,Community Building,Builder,Making the in-class educators the focus of the movement
-Micro,Teaching & Learning,"Facilitator, Builder",Help educators learn how to use OER effectively
-Micro,Teaching & Learning,"Facilitator, Builder",Develop a systemic approach to helping teachers how to learn to use OER
-Macro,Community Building,"Facilitator, Builder",organizing of a workable network involving teachers who may be isolated in classrooms
-Micro,Accessibility,All,"Better cataloging, tagging and organizing of resources for better accessibility"
-Macro,Community Building,All,Need for simple ways to connect teachers using OER
-Meso,Tools & Technology,All,Ability to be able to track my learning
-Micro,Accessibility,Builder,Universally designed content
-Micro,Accessibility,Builder,Easy to find resources
-Research & Metrics,Quality Control,Builder,Incorporation of best practices from the learning sciences
-Macro,Policy,Facilitator,Leverage government as catalyst to socialize
-Macro,Policy,Facilitator,Leverage US government to socialize through our embassies with foreign partners
-Micro,Teaching & Learning,Builder,Teacher customization
-Research & Metrics,Quality Control,Builder,Grounded in research
-Research & Metrics,Assessment,Builder,Evidence of effectiveness
-Research & Metrics,Assessment,All,Assessment and analysis
-Macro,Community Building,All,OER-ganizational openness
-Macro,Community Building,All,Create an OER working group for outreach
-Micro,Accessibility,Learner,OER textbooks to make it affordable and accessible
-Macro,Community Building,Learner,Organizing students to spread the word
-Macro,Policy,Learner,Openness in public policy
-Meso,Copyright & Licensing,Builder,Clarifying intellectual property rights
-Macro,Community Building,Builder,How to better engage educators
-Micro,Accessibility,Builder,Crowd-sourced translation services for accessibility
-Macro,Policy,Builder,Build policy to make OER adoptable at scale
-Macro,Community Building,Builder,Begin a conversation about how we fund fully adaptive OER
-Micro,Accessibility,Builder,Findability of OER
-Research & Metrics,Feedback,Builder,Learning analytics based on feedback loop
-Micro,Teaching & Learning,Builder,Teacher customization
-Macro,Policy,Builder,Supporting new business models
-Research & Metrics,Quality Control,Learner,Editorial rigor
-Micro,Accessibility,Learner,Discoverability of OER
-Macro,Community Building,Learner,Support and maintenance
-Micro,Accessibility,Facilitator,"Translation, curating resources"
-Micro,Teaching & Learning,Builder,Better distribution targeted at faculty
-Research & Metrics,Assessment,Builder,Peer review process
-Research & Metrics,Quality Control,Builder,"Clear guidelines for classification, user feedback, etc."
-Macro,Community Building,Facilitator,Understanding the landscape
-Research & Metrics,Assessment,Facilitator,Measuring the impact
-Macro,Community Building,Facilitator,Understanding the academic needs
-Meso,Tools & Technology,"Facilitator, Builder",Technical and design interoperability
-Macro,Policy,"Facilitator, Builder",How can OER be a viable political message?
-Macro,Community Building,"Facilitator, Builder",How can we get schools to adopt OER?
-Macro,Community Building,Builder,Encouraging co-usage around the world
-Research & Metrics,Quality Control,Builder,Encouraging the creation of locally quality-assured OER repositories
-Micro,Teaching & Learning,Builder,Matching the needs of users with the contents of OER
-Macro,Policy,Builder,Adoption of OER policy by institutions
-Macro,Community Building,Builder,Sharing stories of collaborators who are building OER
-Research & Metrics,Assessment,Builder,Evaluation of the use of OER in institutions
-Micro,Teaching & Learning,All,Teachers materials
-Micro,Accessibility,All,Childrens' books in local language
-Micro,Teaching & Learning,All,Guidelines and materials for school administrators
-Research & Metrics,Assessment,Facilitator,Measuring the impact
-Research & Metrics,Assessment,Facilitator,Build in feedback loops
-Micro,Accessibility,Facilitator,Who has access to these materials? Pay attention to equity
-Research & Metrics,Assessment,All,"Assessment, accountability, badges"
-Meso,Tools & Technology,All,Open source by design
-Micro,Accessibility,All,Modularity
-Meso,Tools & Technology,"Facilitator, Builder",Open data sharing from different OER repositories
-Meso,Tools & Technology,"Facilitator, Builder",Better infrastructure for tracking remixes
-Meso,Tools & Technology,"Facilitator, Builder",Mobile distribution of content
-Macro,Policy,Facilitator,Support policyto enable OER to scale
-Micro,Teaching & Learning,Facilitator,Fill gaps in K-12 curriculum
-Micro,Teaching & Learning,Facilitator,Professional development of school administrators
-Meso,Tools & Technology,"Learner, Builder","User-friendly design, features"
-Micro,Teaching & Learning,"Learner, Builder",Promote self-study 
-Micro,Accessibility,"Learner, Builder",Contextualization for audiences in the developing countries
-Micro,Teaching & Learning,All,Professional development for teachers in sub-Saharan Africa
-Micro,Accessibility,All,Repackaging OER to make them accessible to teachers who are just beginning to use them
-Macro,Community Building,All,Increasing the joined-up thinking
-Macro,Policy,Facilitator,Facilitate proper regulation and funding
-Meso,Tools & Technology,Facilitator,Educational tools based on local society
-Macro,Policy,Facilitator,"Committ national governments, major funders and donor countries to assure development of independent educational system"
-Macro,Policy,Facilitator,Build strong relationships between governments and OER producers
-Macro,Community Building,Facilitator,Focus on communities
-Micro,Teaching & Learning,Facilitator,Focus on certification
-Macro,Policy,Facilitator,Importance of national policy to mainstream OER
-Macro,Policy,Facilitator,Foster business models based on services around OER
-Micro,Teaching & Learning,Facilitator,Start a global OER Graduate School
-Macro,Community Building,Builder,"Encourage faculty to co-develop OER with researchers, developers"
-Micro,Teaching & Learning,Builder,Using OER for reiterating and sharing teaching practices
-Macro,Community Building,Builder,Work on partnerships with publishers
-Micro,Teaching & Learning,Builder,Open professional development for teachers
-Macro,Community Building,Builder,Professional development networks
-Macro,Community Building,Builder,Collaborative authoring
-Research & Metrics,Assessment,"Facilitator, Builder",Engendering different types of assessment
-Research & Metrics,Quality Control,"Facilitator, Builder",Category-based peer reviews by volunteers (a la Wikipedia style)
-Macro,Community Building,"Facilitator, Builder",Unite different organizations producing similarcontent
-Meso,Tools & Technology,All,"Create open source enterprise media management system to allow easy editing, creation and distribution"
-Meso,Tools & Technology,All,Better standards for OER metadata to improve search results
-Meso,Tools & Technology,All,Improved features and tools to allow more meaningful interaction with content
-Macro,Community Building,All,"Creation of direct partnerships between learners, employers, and accreditation agencies for job creation"
-Research & Metrics,Assessment,All,Development of robust assessment mechanism that testify to OER quality
-Meso,Tools & Technology,All,OER delivery systems that live at the browser level/fit into existing LMS systems
-Macro,Policy,Facilitator,Policy reform from the edge (external forces such as P2PU) and from the core (internal forces within governments & institutions)
-Macro,Community Building,Facilitator,Strengthen the sense of shared purpose among OER practitioners
-Research & Metrics,Quality Control,Facilitator,Improve the consistency and thoroughness of coverage of OER
-Research & Metrics,Assessment,Facilitator,Provide opportunities for small-scale experimentation with OER with noticeable results
-Macro,Community Building,Learner,Need to pay attention to the  audience
-Research & Metrics,Quality Control,Learner,"OER must be of exemplary quality, drawing on latest research"
-Macro,Community Building,Learner,OER will benefit from being well-connected to things our audience are interested in
+Category,Subcategory,Stakeholders,Idea,Type
+Meso,Accessibility,Facilitator,Translation into other languages,Intervention
+Meso,Accessibility,Facilitator,Creation of coherent adoption language for all U.S. Schools,Intervention
+Meso,Accessibility,All,More effective and targeted distribution for increased accessibility,Intervention
+Meso,Accessibility,Builder,"Universal model of production, tagging and discovering for improved accessibility",Intervnetion
+Meso,Accessibility,All,"Better cataloging, tagging and organizing of resources for better accessibility",Intervnetion
+Meso,Accessibility,Learner,OER textbooks to make it affordable and accessible,Intervnetion
+Meso,Accessibility,Facilitator,Ensuring that OER is produced in accordance with Universal Design Principles,Opportunity
+Meso,Accessibility,Facilitator,Understanding the local media and language to increase accessibility,Opportunity
+Meso,Accessibility,Builder,Working with publishers for more effective distribution,Opportunity
+Meso,Accessibility,Builder,Better distribution targeted at faculty,Opportunity
+Meso,Accessibility,"Learner, Facilitator",Allow emerging countries better access and participation,Problem
+Meso,Accessibility,All,"How the principles of openness can facilitate multi-site, multi-institutional academic research",Opportunity
+Meso,Accreditation,"Learner, Facilitator",Allow for study time credit/diploma/certificate,Opportunity
+Meso,Accreditation,All,Transnational qualifications,Problem
+Meso,Accreditation,"Facilitator, Builder",Credible accreditation,Problem
+Research,Assessment,Builder,Develop metrics that provide demonstrable outcomes,Intervnetion
+Research,Assessment,All,Demonstrate evidence/outcome,Problem
+Research,Assessment,All,Action research: we must demonstrate that OER is not only as effective but can be more effective than traditional content,Problem
+Research,Assessment,Learner,Need for assessment that go beyond contents,Problem
+Research,Assessment,Builder,Evidence of effectiveness,Problem
+Research,Assessment,Builder,Evaluation of the use of OER in institutions,Problem
+Micro,Business Models,Builder,Supporting new business models,Opportunity 
+Research,Case Studies,All,Case studies of promising practices,Opportunity
+Macro,Community Building,Learner,Shifting the default settings on education from privileged privacy to free and open access for all,Opportunity
+Macro,Community Building,Facilitator,"Recruit mainstream users, not just early adopters",Opportunity
+Macro,Community Building,Facilitator,"Develop partnerships (states, publishers, other businesses)",Opportunity
+Macro,Community Building,Facilitator,Set up a teachers OER group on Creative Commons ,Opportunity
+Macro,Community Building,Facilitator,Advocacy to support the value of OER in the academia,Opportunity
+Macro,Community Building,All,Build an open education developers community,Opportunity
+Macro,Community Building,Builder,Organization of OER into traditional and nontraditional pathways to increase awareness,Opportunity
+Macro,Community Building,Builder,Making the in-class educators the focus of the movement,Opportunity
+Macro,Community Building,All,Create an OER working group for outreach,Opportunity
+Macro,Community Building,Learner,Organizing students to spread the word,Opportunity
+Macro,Community Building,All,Getting institutions in the North to use OER from the South,Problem
+Macro,Community Building,All,We need to impact urban and rural high school students who attend schools with weak STEM offerings,Problem
+Meso,Tools & Technology,All,"We need a central hub, or dispatcher site, where multiple OER resources by multiple providers can be accessed",Intervention
+Macro,Community Building,Facilitator,"Raise awareness among policymakers, curriculum planners and politicians",Problem
+Macro,Community Building,Builder,Coordinated lobbying to defend the legal and legislative territory from incumbents undercutting OER efforts,Problem
+Macro,Community Building,Facilitator,Understanding the landscape,Problem
+Macro,Copyright & Licensing,"Learner, Facilitator",Modify and provide clarity around various licensing parameters around OER,Opportunity
+Macro,Copyright & Licensing,Facilitator,"Approachable discussions of intellectual property rights, licensing",Opportunity
+Macro,Copyright & Licensing,Builder,Incorporation of variable licenses,Problem
+Macro,Copyright & Licensing,Builder,Clarifying intellectual property rights,Problem
+Micro,"Customization, Remix & Reuse",All,Make tools to enable easier remixing/reusing,Intervention
+Micro,"Customization, Remix & Reuse",Facilitator,Enabling contextualization to allow integration into classrooms,Opportunity
+Micro,"Customization, Remix & Reuse",Builder,Encouraging customization around the world,Opportunity
+Micro,"Customization, Remix & Reuse",Facilitator,Easy access to remix and reuse,Problem
+Micro,"Customization, Remix & Reuse",Builder,Teacher customization,Problem
+Meso,Feedback,Builder,Learning analytics based on feedback loop,Intervnetion
+Meso,Feedback,Builder,Peer review process,Intervnetion
+Meso,Feedback,Builder,Clear guidelines for user feedback,Intervnetion
+Micro,"Guidance, Training & Maintenance",Facilitator,Professional learning opportunities that develop educator confidence,Intervention
+Micro,"Guidance, Training & Maintenance",All,Scalable capacity development for all educators in OER reuse/remix ,Intervention
+Micro,"Guidance, Training & Maintenance","Facilitator, Builder",Help educators learn how to use OER effectively,Intervnetion
+Micro,"Guidance, Training & Maintenance","Facilitator, Builder",Develop a systemic approach to helping teachers how to learn to use OER,Intervnetion
+Micro,"Guidance, Training & Maintenance",Builder,Social support groups for informal learning,Opportunity
+Macro,Policy,Facilitator,Providing more tangible support for faculty professionals,Intervention
+Macro,Policy,Facilitator,Create national policies that ensure that all federally funded research outputs are made accessible to all users,Intervention
+Macro,Policy,Facilitator,Adoption of government policies on open licensing,Intervention
+Macro,Policy,Builder,Integration of OER into national educational policies,Intervention
+Macro,Policy,Builder,Build policy to make OER adoptable at scale,Intervnetion
+Macro,Policy,All,Getting governments to develop policy on OER,Problem
+Macro,Policy,Facilitator,Institutional leadership with faculty incentive adoption,Opportunity
+Macro,Policy,"Facilitator, Builder",Financial or reputational incentives to support the creation of OER,Opportunity
+Macro,Policy,Builder,Implementation of 2010 World OER Congress,Opportunity
+Macro,Policy,Facilitator,Leverage US government to socialize through our embassies with foreign partners,Opportunity
+Macro,Policy,Facilitator,Help governments understand and adopt policies,Problem
+Macro,Policy,All,Solidification of stable lines of funding,Problem
+Macro,Policy,Builder,Adoption of OER policy by institutions,Problem
+Meso,Quality Control,All,Common core state standards,Intervention
+Meso,Quality Control,"Facilitator, Builder",Credible quality ratings,Problem
+Meso,Quality Control,Builder,Grounded in research,Problem
+Meso,Quality Control,Learner,Editorial rigor,Problem
+Meso,Quality Control,Builder ,Incorporation of best practices from the learning sciences,Opportunity
+Meso,Search & Discoverability,Builder,Common classification to increase discoverability,Intervention
+Meso,Search & Discoverability,Facilitator,Point users to one place to find OER so they don't have to look all over the web,Opportunity
+Meso,Search & Discoverability,All,Continue to make it easier to find good OER,Problem
+Meso,Search & Discoverability,Facilitator,Improve search and discovery of OER,Problem
+Meso,Search & Discoverability,Builder,"The resources should be easy to find, navigate and share",Problem
+Meso,Search & Discoverability,Learner ,Discoverability of OER,Problem
+Micro,Teaching & Learning,Builder,Peer-2-Peer learning is an important complement to OER for learning,Opportunity
+Micro,Teaching & Learning,Facilitator,Highly relevant use cases for teachers and students that inspire innovation in learning,Opportunity
+Micro,Teaching & Learning,All,Online learning/blended learning,Opportunity
+Micro,Teaching & Learning,All,Tying OER to real gaps in teaching & learning,Problem
+Micro,Teaching & Learning,"Facilitator, Builder",Better integration of OER into mainstream curriculum,Problem
+Micro,Teaching & Learning,Facilitator,Move to 1:1 learning environment,Problem
+Micro,Teaching & Learning,Builder,Matching the needs of users with the contents of OER,Problem
+Micro,Teaching & Learning,Builder,The resources should be easily adapted by teachers to reflect their teaching styles and interests,Problem
+Meso,Tools & Technology,Facilitator,Simpler educational software platforms,Intervention
+Meso,Tools & Technology,Builder,Tools enabling easy classroom integration,Intervention
+Meso,Tools & Technology,Builder,API standardization,Intervention
+Meso,Tools & Technology,Builder,Use of feature phones for mobile delivery in developing countries,Intervention
+Meso,Tools & Technology,All,Host open sources repositories on the cloud,Intervnetion
+Meso,Tools & Technology,All,Create operating technological guidelines to support interoperability,Intervnetion
+Meso,Tools & Technology,Builder,Tools to aggregate OER from all sources,Intervnetion
+Meso,Tools & Technology,Facilitator,Design focus on legal and technical interoperability,Opportunity
+Meso,Tools & Technology,Facilitator,Usage of online videos and other SNS,Opportunity
+Meso,Tools & Technology,Facilitator,Use of GIS,Opportunity
+Meso,Tools & Technology,All,Tools for people to be able to build their own collections,Opportunity
+Meso,Tools & Technology,Builder,We need a search engine to find curriculum appropriate to OER,Problem
+Meso,Tools & Technology,Builder,We need to develop a platform that comprehensively indexes all OER Questions & Assessments,Problem
+Meso,Tools & Technology,All,Ability to be able to track my learning,Problem
