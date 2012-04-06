@@ -3,7 +3,7 @@
   They will automatically be included in application.css.
 */
 circle {
-    fill-opacity: 0.7;
+    /*fill-opacity: 0.7;*/
 }
 circle:hover {
     fill-opacity: 1;
@@ -23,6 +23,14 @@ svg {
 circle.activated {
     fill: #EE0 !important;
     stroke: #660 !important;
+}
+circle.closed {
+    fill: #F00 !important;
+}
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
 }
 html, body, svg {
     margin: 0;

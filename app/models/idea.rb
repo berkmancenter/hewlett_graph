@@ -14,6 +14,12 @@ class Idea < ActiveRecord::Base
         t.add :day
     end
 
+    api_accessible :hierarchy do |t|
+        t.add :content
+        t.add :day
+        t.add :stakeholders
+    end
+
     def day
         value = 0
         first_day = graph.ideas.minimum('created_at').to_date.to_time
