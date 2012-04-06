@@ -11,7 +11,7 @@ class Category < ActiveRecord::Base
 
     api_accessible :hierarchy do |t|
         t.add :name
-        t.add :subcategories
+        t.add :subcategories, :as => :children
     end
 
     def subcategory_uuids

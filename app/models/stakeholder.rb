@@ -6,4 +6,8 @@ class Stakeholder < ActiveRecord::Base
         t.add :uuid
         t.add :name
     end
+
+    api_accessible :hierarchy do |t|
+        t.add :name
+    end
 end
