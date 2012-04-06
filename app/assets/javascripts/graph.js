@@ -51,11 +51,13 @@ var Graph = {
 	},
 	setup: function() {
 		Graph.initDimensions();
-        if (!Graph.initialized) {
-            d3.select("#graph").append("svg:svg").attr("width", Graph.width).attr("height", Graph.height);
-        } else {
-            d3.select("#graph").select("svg").transition().attr("width", Graph.width).attr("height", Graph.height);
-            Graph.initialized = false;
+        if (Graph.config.layout != 'tree') {
+            if (!Graph.initialized) {
+                d3.select("#graph").append("svg:svg").attr("width", Graph.width).attr("height", Graph.height).classed('density', true);
+            } else {
+                d3.select("#graph").select("svg").transition().attr("width", Graph.width).attr("height", Graph.height);
+                Graph.initialized = false;
+            }
         }
 		Util.updateEventHandlers();
 		Graph.getData();
@@ -64,25 +66,28 @@ var Graph = {
 
 		var data = {};
 
-		switch (Graph.config.browserSpeed) {
-		case 'medium':
-		case 'slow':
-			data = {
-				prerendered: true,
-				sort_attr: Graph.config.sortAttr,
-				color_attr: Graph.config.colorAttr
-			};
-            break;
-        case 'tree':
+        if (Graph.config.layout == 'tree') {
             data = {
-                hierarchy: true
+                layout: 'tree'
             };
-		}
+        } else {
+            switch (Graph.config.browserSpeed) {
+            case 'medium':
+            case 'slow':
+                data = {
+                    prerendered: true,
+                    sort_attr: Graph.config.sortAttr,
+                    color_attr: Graph.config.colorAttr
+                };
+                break;
+            case 'tree':
+            }
+        }
 
 		$.getJSON('/graphs/' + Graph.id + '.json', data, Graph.update);
 	},
 	update: function(data) {
-        if (Graph.config.browserSpeed == 'tree') {
+        if (Graph.config.layout == 'tree') {
             Graph.hierarchy = data.graph;
             Graph.createDendrogram();
             return;
@@ -109,14 +114,14 @@ var Graph = {
 
 	},
     createDendrogram: function() {
-        var w = 960,
-        h = 600,
+        var w = 1390,
+        h = 630,
         i = 0,
         duration = 500,
         root;
 
         var tree = d3.layout.tree()
-          .size([h, w - 500]);
+          .size([h, w - 700]);
 
         var diagonal = d3.svg.diagonal()
           .projection(function(d) { return [d.y, d.x]; });
@@ -136,10 +141,9 @@ var Graph = {
           // Compute the new tree layout.
           var nodes = tree.nodes(root).reverse();
 
-
           // Update the nodes…
           var node = vis.selectAll("g.node")
-              .data(nodes, function(d) { return d.id || (d.id = ++i); });
+              .data(nodes, function(d) { return d.id || (d.id = ++i); })
 
           var nodeEnter = node.enter().append("svg:g")
               .attr("class", "node")
@@ -152,9 +156,10 @@ var Graph = {
               .on("click", click);
 
           nodeEnter.append("svg:text")
-              .attr("x", function(d) { return d.children || d._children ? 10 : 4; })
+              .attr("x", function(d) { return d.children || d._children ? 12 : 4; })
               .attr("y", 3)
-              .text(function(d) { return typeof d.name == 'undefined' ? d.content : d.name; });
+              .text(function(d) { return typeof d.name == 'undefined' ? d.content : d.name; })
+              .on("click", click);
 
           // Transition nodes to their new position.
           nodeEnter.transition()
@@ -173,6 +178,11 @@ var Graph = {
               .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
               .style("opacity", 1e-6)
               .remove();
+
+          node
+              .classed('closed', function(d) { return d._children; })
+              .classed('open', function(d) { return d.children; })
+              .classed('idea', function(d) { return !d.children && !d._children; });
 
           // Update the links…
           var link = vis.selectAll("path.link")

@@ -17,7 +17,7 @@ class GraphsController < ApplicationController
                     @graph.sort_attr = params[:sort_attr]
                     @graph.color_attr = params[:color_attr]
                     render_for_api :prerendered, :json => @graph
-                elsif params[:hierarchy] == 'true'
+                elsif params[:layout] == 'tree'
                     render_for_api :hierarchy, :json => @graph
                 else
                     render_for_api :everything, :json => @graph 

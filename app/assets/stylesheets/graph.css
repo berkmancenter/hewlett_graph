@@ -13,19 +13,35 @@ circle:hover {
 svg, body, html {
     font-family: Arial, sans-serif;
 }
-svg {
+svg.density {
     background-color: #999;
     box-shadow: inset 0 0 20px #333;
     border-radius: 20px;
     display: inline-block;
     position: relative;
 }
+g.node {
+    cursor: pointer;
+}
 circle.activated {
     fill: #EE0 !important;
     stroke: #660 !important;
 }
-circle.closed {
-    fill: #F00 !important;
+.node.open circle, .node.closed circle {
+   stroke: #123 !important;
+   stroke-width: 1.5px;
+} 
+.node.open circle {
+    fill: white !important;
+}
+.node.open text {
+    font-weight: bold;
+}
+.node.closed circle {
+    fill: #123 !important;
+}
+g.node.idea {
+    cursor: auto;
 }
 .link {
     fill: none;
@@ -54,6 +70,7 @@ html, body, svg {
 }
 #graph {
     position: relative;
+    margin-top: 5px;
 }
 #notGraph {
     vertical-align: top;
