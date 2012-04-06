@@ -2,8 +2,8 @@
   Place all the styles related to the matching controller here.
   They will automatically be included in application.css.
 */
-circle {
-    /*fill-opacity: 0.7;*/
+circle.node {
+    fill-opacity: 0.7;
 }
 circle:hover {
     fill-opacity: 1;
