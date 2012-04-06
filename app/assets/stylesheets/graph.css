@@ -75,7 +75,7 @@ html, body, svg {
 #notGraph {
     vertical-align: top;
 }
-#controls, #legend {
+.panel {
     padding: 0.3em 1em 1em;
     margin: 0 1em;
     border-radius: 20px;
@@ -84,10 +84,13 @@ html, body, svg {
     color: white;
     min-width: 230px;
 }
+#questions ul {
+    padding-left: 0;
+}
 #controls {
     margin-top: 0.6em;
 }
-#controls h2, #legend h2{
+.panel h2 {
     text-align: center;
 }
 #notGraph ul {

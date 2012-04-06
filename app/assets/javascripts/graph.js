@@ -339,7 +339,7 @@ var Graph = {
 		var groups = Graph.data[Graph.config.sortAttr].map(function(s) {
 			return s.name;
 		}),
-		display = $('.sortLabel').css('display'),
+		hidden = $('#hideLabels').is(':checked'),
 		position;
 		$('.sortLabel').fadeOut(300, function() {
 			$(this).remove();
@@ -375,7 +375,7 @@ var Graph = {
 				});
 			});
 		}
-		if (display != 'none') {
+		if (!hidden) {
 			$('.sortLabel').fadeIn();
 		}
 	},
@@ -497,7 +497,7 @@ var Util = {
 
 	},
 	updateEventHandlers: function() {
-		$("input[name=sort], input[name=color], input[name=speed], #showLabels, #veryDiffSubcatColors").off("change");
+		$("input[name=sort], input[name=color], input[name=speed], #hideLabels, #veryDiffSubcatColors").off("change");
         $('#dataClose, #controls h2').off('click');
 
 		$('#dataClose').on("click", function() {
@@ -506,7 +506,7 @@ var Util = {
 			return false;
 		});
 
-		$('#showLabels').on("change", function(e) {
+		$('#hideLabels').on("change", function(e) {
             console.log($(this).is(':checked'));
             if ($(this).is(':checked')) {
                 $('.sortLabel').fadeOut();
@@ -539,7 +539,7 @@ var Util = {
         $('a.question').on('click', function(e) {
             $('input[name=sort][value=' + $(this).attr('data-sort') + ']').attr('checked', true).trigger('change');
             $('input[name=color][value=' + $(this).attr('data-color') + ']').attr('checked', true).trigger('change');
-            $('#showLabels').attr('checked', function() { return $(e.target).attr('data-hide-labels') == 't' ? true : false; }).trigger('change');
+            $('#hideLabels').attr('checked', function() { return $(e.target).attr('data-hide-labels') == 't' ? true : false; }).trigger('change');
             return false;
             //$(this).attr('data-selected-idea')
         });
