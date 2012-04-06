@@ -30,7 +30,8 @@ class Graph < ActiveRecord::Base
     end
 
     api_accessible :hierarchy do |t|
-        t.add :categories
+        t.add :name
+        t.add :categories, :as => :children
     end
 
     def import_data_from_attachment!

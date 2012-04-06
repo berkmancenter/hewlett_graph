@@ -36,6 +36,13 @@
         <input type="checkbox" name="veryDiffSubcatColors" id="veryDiffSubcatColors" /><label for="veryDiffSubcatColors">Very Different Subcategory Colors</label><br />
     </div>
 </div>
+<% if params[:layout] == 'tree' %>
+<style>
+    #notGraph {
+        display: none;
+    }
+</style>
+<% end %>
 <script> 
     Graph.id = <%= @graph.id %>;
     Graph.config.sortAttr = '<%= params[:sort_attr] or "category" %>';
@@ -43,5 +50,6 @@
     Graph.config.oldSortAttr = '<%= params[:sort_attr] or "category" %>';
     Graph.config.oldColorAttr = '<%= params[:color_attr] or "category" %>';
     Graph.config.browserSpeed =  '<%= params[:browser_speed] or "medium" %>';
+    Graph.config.layout =  '<%= params[:layout] or "density" %>';
     Graph.init();
 </script>
