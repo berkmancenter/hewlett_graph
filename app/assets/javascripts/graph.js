@@ -507,7 +507,12 @@ var Util = {
 		});
 
 		$('#showLabels').on("change", function(e) {
-			$('.sortLabel').fadeToggle();
+            console.log($(this).is(':checked'));
+            if ($(this).is(':checked')) {
+                $('.sortLabel').fadeOut();
+            } else {
+                $('.sortLabel').fadeIn();
+            }
 		});
 
 		$('#veryDiffSubcatColors').on('change', function(e) {
@@ -530,6 +535,14 @@ var Util = {
 				Graph.getData();
 			}
 		});
+
+        $('a.question').on('click', function(e) {
+            $('input[name=sort][value=' + $(this).attr('data-sort') + ']').attr('checked', true).trigger('change');
+            $('input[name=color][value=' + $(this).attr('data-color') + ']').attr('checked', true).trigger('change');
+            $('#showLabels').attr('checked', function() { return $(e.target).attr('data-hide-labels') == 't' ? true : false; }).trigger('change');
+            return false;
+            //$(this).attr('data-selected-idea')
+        });
 
 		$("input[name=color]").on("change", function(e) {
 			Graph.config.oldColorAttr = Graph.config.colorAttr;

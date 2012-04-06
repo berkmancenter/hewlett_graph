@@ -10,6 +10,7 @@ class Graph < ActiveRecord::Base
     has_many :categories, :order => :name
     has_many :stakeholders, :order => :name
     has_many :subcategories, :through => :categories, :order => 'category_id, name'
+    has_many :questions
     acts_as_api
 
     attr_accessor :sort_attr, :color_attr

@@ -11,6 +11,14 @@
     <div id="legend">
         <h2>Legend</h2>
     </div>
+    <% if @graph.questions %>
+    <div id="questions">
+        <h2>Questions</h2>
+        <ul>
+            <%= render :partial => 'shared/line_items/question', :collection => @graph.questions %>
+        </ul>
+    </div>
+    <% end %>
     <div id="controls">
         <h2>Advanced</h2>
         <h3>Sort by:</h3>
