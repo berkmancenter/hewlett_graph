@@ -92,6 +92,7 @@ html, body, svg {
 }
 .panel h2 {
     text-align: center;
+    margin: 0.4em 0;
 }
 #notGraph ul {
     list-style-type: none;
@@ -133,10 +134,14 @@ dd {
     width: 25px;
     height: 25px;
     border-radius: 4px;
-    margin-right: 0.3em;
+    margin-right: 0.5em;
+    vertical-align: middle;
 }
 .legendEntry {
-    padding: 0.1em;
+    padding: 0.3em;
+}
+.legendText {
+    vertical-align: middle;
 }
 #d3Nodes {
     display: none;
