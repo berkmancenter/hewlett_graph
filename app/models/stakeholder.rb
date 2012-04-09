@@ -1,5 +1,5 @@
 class Stakeholder < ActiveRecord::Base
-    has_and_belongs_to_many :ideas
+    has_and_belongs_to_many :interventions
     acts_as_api
 
     api_accessible :everything do |t|

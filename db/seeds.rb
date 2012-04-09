@@ -21,10 +21,10 @@ Question.create([
     },
     {
         :graph_id => 1,
-        :content => 'What does an "idea" consist of?',
+        :content => 'What does an "intervention" consist of?',
         :sort_by => 'category',
         :color_by => 'category',
-        :selected_idea_id => 1
+        :selected_intervention_id => 1
     }
 ])
 

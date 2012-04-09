@@ -6,7 +6,7 @@ class CreateQuestions < ActiveRecord::Migration
       t.string :sort_by, :null => false
       t.string :color_by, :null => false
       t.boolean :hide_labels, :default => false
-      t.integer :selected_idea_id
+      t.integer :selected_intervention_id
 
       t.timestamps
     end

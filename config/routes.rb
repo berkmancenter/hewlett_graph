@@ -1,9 +1,7 @@
 Code::Application.routes.draw do
 
   resources :graphs do
-      get 'ideas', :on => :member
-      get 'categories', :on => :member
-      get 'stakeholders', :on => :member
+      resources :interventions
   end
 
   root :to => 'graphs#index'
