@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120324031923) do
+ActiveRecord::Schema.define(:version => 20120406224136) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -32,10 +32,18 @@ ActiveRecord::Schema.define(:version => 20120324031923) do
     t.datetime "updated_at",        :null => false
   end
 
+  create_table "idea_types", :force => true do |t|
+    t.string   "name"
+    t.integer  "graph_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "ideas", :force => true do |t|
     t.text     "content"
     t.integer  "subcategory_id"
     t.integer  "graph_id"
+    t.integer  "idea_type_id"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
@@ -46,6 +54,17 @@ ActiveRecord::Schema.define(:version => 20120324031923) do
   create_table "ideas_stakeholders", :id => false, :force => true do |t|
     t.integer "idea_id"
     t.integer "stakeholder_id"
+  end
+
+  create_table "questions", :force => true do |t|
+    t.integer  "graph_id"
+    t.text     "content",                             :null => false
+    t.string   "sort_by",                             :null => false
+    t.string   "color_by",                            :null => false
+    t.boolean  "hide_labels",      :default => false
+    t.integer  "selected_idea_id"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   create_table "stakeholders", :force => true do |t|

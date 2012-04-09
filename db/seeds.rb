@@ -5,22 +5,27 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-# Stakeholder.create([{ :name => 'Learner' }, { :name => 'Facilitator' }, { :name => 'Builder' }])
-# Category.create([
-#     {
-#         :name => 'Micro',
-#         :subcategories => Subcategory.create([{ :name => 'Accessibility' }, { :name => 'Teaching & Learning' }])
-#     },
-#     {
-#         :name => 'Meso',
-#         :subcategories => Subcategory.create([{ :name => 'Tools & Technology' }, { :name => 'Copyright & Licensing' }])
-#     },
-#     {
-#         :name => 'Macro',
-#         :subcategories => Subcategory.create([{ :name => 'Policy' }, { :name => 'Community Building' }])
-#     },
-#     {
-#         :name => 'Research & Metrics',
-#         :subcategories => Subcategory.create([{ :name => 'Quality Control' }, { :name => 'Assessment' }, { :name => 'Feedback' }])
-#     }
-# ])
+Question.create([
+    {
+        :graph_id => 1,
+        :content => 'Which subcategories have received the most attention?',
+        :sort_by => 'subcategory',
+        :color_by => 'subcategory',
+        :hide_labels => true
+    },
+    {
+        :graph_id => 1,
+        :content => 'What categories are more interesting to Facilitators than to Builders?',
+        :sort_by => 'stakeholders',
+        :color_by => 'category'
+    },
+    {
+        :graph_id => 1,
+        :content => 'What does an "idea" consist of?',
+        :sort_by => 'category',
+        :color_by => 'category',
+        :selected_idea_id => 1
+    }
+])
+
+

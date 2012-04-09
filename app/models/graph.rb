@@ -10,6 +10,8 @@ class Graph < ActiveRecord::Base
     has_many :categories, :order => :name
     has_many :stakeholders, :order => :name
     has_many :subcategories, :through => :categories, :order => 'category_id, name'
+    has_many :questions
+    has_many :idea_types
     acts_as_api
 
     attr_accessor :sort_attr, :color_attr
@@ -32,6 +34,7 @@ class Graph < ActiveRecord::Base
     api_accessible :hierarchy do |t|
         t.add :name
         t.add :categories, :as => :children
+        t.add :idea_types
     end
 
     def import_data_from_attachment!
@@ -40,6 +43,11 @@ class Graph < ActiveRecord::Base
         category_names = table[column_names[:category]].uniq!
         category_names.each do |name|
             categories << Category.new(:name => name)
+        end
+
+        type_names = table[column_names[:type]].uniq!
+        type_names.each do |name|
+            idea_types << IdeaType.new(:name => name)
         end
 
         stakeholder_names = table[column_names[:stakeholders]].uniq!.map{ |n| n.split(', ') }.flatten!.uniq!.delete_if{ |n| n == 'All' }
@@ -56,8 +64,9 @@ class Graph < ActiveRecord::Base
         column_names = Code::Application.config.column_names[:required]
 
         table.each do |row|
-            idea = Idea.new({ :content => row['Idea'] })
+            idea = Idea.new({ :content => row[column_names[:idea]] })
             idea_category = categories.find_by_name(row[column_names[:category]])
+            idea_type = idea_types.find_by_name(row[column_names[:type]])
             idea_stakeholder_names = row[column_names[:stakeholders]].split(', ')
             if idea_stakeholder_names.include? 'All'
                 idea.stakeholders = stakeholders.all
@@ -65,6 +74,7 @@ class Graph < ActiveRecord::Base
                 idea.stakeholders << stakeholders.find_all_by_name(idea_stakeholder_names)
             end
             idea.subcategory = Subcategory.where(:name => row[column_names[:subcategory]], :category_id => idea_category.id).first_or_initialize
+            idea.idea_type = idea_type
             ideas << idea
         end
 
