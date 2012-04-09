@@ -52,13 +52,12 @@ var Graph = {
 	},
 	setup: function() {
 		Graph.initDimensions();
-        if (Graph.config.layout != 'tree') {
-            if (!Graph.initialized) {
-                d3.select("#graph").append("svg:svg").attr("width", Graph.width).attr("height", Graph.height).classed('density', true);
-            } else {
-                d3.select("#graph").select("svg").transition().attr("width", Graph.width).attr("height", Graph.height);
-                Graph.initialized = false;
-            }
+        if (!Graph.initialized) {
+            d3.select("#graph").append("svg:svg").attr("width", Graph.width).attr("height", Graph.height);
+            d3.selectAll('body, #graph svg').attr('class', function() { return Graph.config.layout == 'tree' ? 'tree' : 'density'; });
+        } else {
+            d3.select("#graph").select("svg").transition().attr("width", Graph.width).attr("height", Graph.height);
+            Graph.initialized = false;
         }
 		Util.updateEventHandlers();
 		Graph.getData();
@@ -115,21 +114,17 @@ var Graph = {
 
 	},
     createDendrogram: function() {
-        var w = 1400,
-        h = 630,
-        i = 0,
+        var i = 0,
         duration = 500,
         root;
 
         var tree = d3.layout.tree()
-          .size([h, w - 700]);
+          .size([Graph.height, Graph.width - 700]);
 
         var diagonal = d3.svg.diagonal()
           .projection(function(d) { return [d.y, d.x]; });
 
-        var vis = d3.select("#graph").append("svg:svg")
-          .attr("width", w)
-          .attr("height", h)
+        var vis = d3.select("#graph").select("svg")
           .append("svg:g")
           .attr("transform", "translate(40,0)");
 
@@ -312,16 +307,23 @@ var Graph = {
 		}
 	},
 	initDimensions: function() {
+        if (Graph.config.layout == 'tree') {
+            Graph.width = 1400;
+            Graph.height = 630;
+            return;
+        }
+
 		switch (Graph.config.browserSpeed) {
 		case 'serverside':
+		case 'fast':
 		case 'medium':
 		case 'slow':
 			Graph.width = Graph.config.defaultWidth;
 			Graph.height = Graph.config.defaultHeight;
 			break;
-		case 'fast':
+		/*case 'fast':
 			Graph.width = $('body').width() * Graph.config.widthPercentage;
-			Graph.height = $(window).height() * Graph.config.heightPercentage;
+			Graph.height = $(window).height() * Graph.config.heightPercentage;*/
 		}
 	},
 	updateLegend: function() {
@@ -362,9 +364,8 @@ var Graph = {
 		case 'fast':
 			groups.forEach(function(group) {
 				$('<div class="sortLabel"/>').appendTo('body').text(group).css({
-					'left':
-					Graph.foci[group][0],
-					'top': Graph.foci[group][1]
+					'left': Graph.foci[group][0] + $('#graph svg').offset().left,
+					'top': Graph.foci[group][1] + $('#graph svg').offset().top
 				});
 			});
 			break;
@@ -383,8 +384,8 @@ var Graph = {
 				});
 				position = Graph.getNodesAvgPosition(nodes);
 				$('<div class="sortLabel"/>').appendTo('body').text(group).css({
-					'left': position[0],
-					'top': position[1]
+					'left': position[0] + $('#graph svg').offset().left,
+					'top': position[1] + $('#graph svg').offset().top
 				});
 			});
 		}
@@ -515,8 +516,11 @@ var Util = {
 
         $('#changeLayout').on('click', function() {
             $('body').toggleClass('tree');
+            $('body').toggleClass('density');
             $('svg').remove();
             $('.sortLabel').remove();
+            $(this).text(function() { return $(this).text() == 'Tree View' ? 'Density View' : 'Tree View'; });
+            Graph.initialized = false;
             Graph.config.layout = Graph.config.layout == 'tree' ? 'density' : 'tree';
             Graph.setup();
         });
@@ -528,7 +532,6 @@ var Util = {
 		});
 
 		$('#hideLabels').on("change", function(e) {
-            console.log($(this).is(':checked'));
             if ($(this).is(':checked')) {
                 $('.sortLabel').fadeOut();
             } else {

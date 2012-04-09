@@ -2,6 +2,19 @@
   Place all the styles related to the matching controller here.
   They will automatically be included in application.css.
 */
+html, body, svg {
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+}
+body {
+    padding: 0.5em 0.2em 0;
+    margin: 0 auto;
+    background-image: url('<%= asset_path 'cross_scratches.png' %>');
+}
+body.density {
+    width: 960px;
+}
 circle.node {
     fill-opacity: 0.7;
 }
@@ -48,11 +61,6 @@ g.node.idea {
     stroke: #ccc;
     stroke-width: 1.5px;
 }
-html, body, svg {
-    margin: 0;
-    padding: 0;
-    font-size: 13px;
-}
 #dataClose {
     position: absolute;
     top: 6px;
@@ -70,25 +78,34 @@ html, body, svg {
 }
 #graph {
     position: relative;
-    margin-top: 5px;
+}
+body.density #notGraph {
+    width: 242px;
 }
 #notGraph {
     vertical-align: top;
+    margin: 0;
+    margin-left: 1em;
 }
 .panel {
     padding: 0.3em 1em 1em;
-    margin: 0 1em;
+    margin-bottom: 0.4em;
     border-radius: 20px;
     border: 4px solid #888;
     background-color: #123;
     color: white;
-    min-width: 230px;
+    min-width: 214px;
 }
 #questions ul {
     padding-left: 0;
 }
-#controls {
-    margin-top: 0.6em;
+#questions li {
+    margin-bottom: 0.5em;
+    padding: 0.3em;
+    border-radius: 3px;
+}
+#questions li:hover {
+    background-color: #345;
 }
 .panel h2 {
     text-align: center;
@@ -131,14 +148,17 @@ dd {
 }
 .swatch {
     display: inline-block;
-    width: 25px;
-    height: 25px;
-    border-radius: 4px;
+    width: 21px;
+    height: 21px;
+    border-radius: 3px;
     margin-right: 0.5em;
     vertical-align: middle;
 }
 .legendEntry {
     padding: 0.3em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .legendText {
     vertical-align: middle;
@@ -165,4 +185,11 @@ body.tree #notGraph {
 }
 body.tree #legend {
     display: inline-block;
+}
+a.question {
+    color: white;
+    text-decoration: none;
+}
+#evidenceHub {
+    text-align: center;
 }
