@@ -44,24 +44,7 @@
         <input type="checkbox" name="veryDiffSubcatColors" id="veryDiffSubcatColors" /><label for="veryDiffSubcatColors">Very Different Subcategory Colors</label><br />
     </div>
 </div>
-<% if params[:layout] == 'tree' %>
-<style>
-    #controls, #questions {
-        display: none;
-    }
-    .legendEntry {
-        display: inline-block;
-        margin: 0 1em;
-    }
-    #notGraph {
-        display: block;
-        text-align: center;
-    }
-    #legend {
-        display: inline-block;
-    }
-</style>
-<% end %>
+<button id="changeLayout">Tree View</button>
 <script> 
     Graph.id = <%= @graph.id %>;
     Graph.config.sortAttr = '<%= params[:sort_attr] or "category" %>';

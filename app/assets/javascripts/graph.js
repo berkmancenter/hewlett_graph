@@ -35,6 +35,7 @@ var Graph = {
 	colorFoci: {},
 	catColorScale: d3.scale.category10(),
 	dayColorScale: d3.scale.category10(),
+	typeColorScale: d3.scale.category10(),
 	subcatColorScale: d3.scale.category20(),
 	forceLayout: {},
 	tickCount: 0,
@@ -153,7 +154,7 @@ var Graph = {
           // Enter any new nodes at the parent's previous position.
           nodeEnter.append("svg:circle")
               .attr("r", function(d) { return d.children || d._children ? 8.5 : 6.5; })
-              .style("fill", function(d) { return d._children || d.children ? "lightsteelblue" : Graph.catColorScale(d.idea_type.name); })
+              .style("fill", function(d) { return d._children || d.children ? "lightsteelblue" : Graph.typeColorScale(d.idea_type.name); })
               .on("click", click);
 
           nodeEnter.append("svg:text")
@@ -340,7 +341,7 @@ var Graph = {
             entries.forEach(function(u) {
                 $legend.append(function() {
                     return $('<div class="legendEntry" />').append(function() {
-                        return $('<span class="swatch"/>').css('backgroundColor', Graph.catColorScale(u.name)).add($('<span class="legendText" />').text(u.name));
+                        return $('<span class="swatch"/>').css('backgroundColor', Graph.typeColorScale(u.name)).add($('<span class="legendText" />').text(u.name));
                     });
                 });
             });
@@ -510,8 +511,16 @@ var Util = {
 	},
 	updateEventHandlers: function() {
 		$("input[name=sort], input[name=color], input[name=speed], #hideLabels, #veryDiffSubcatColors").off("change");
-        $('#dataClose, #controls h2').off('click');
+        $('#dataClose, #controls h2, #changeLayout').off('click');
 
+        $('#changeLayout').on('click', function() {
+            $('body').toggleClass('tree');
+            $('svg').remove();
+            $('.sortLabel').remove();
+            Graph.config.layout = Graph.config.layout == 'tree' ? 'density' : 'tree';
+            Graph.setup();
+        });
+         
 		$('#dataClose').on("click", function() {
 			d3.select('circle.node.activated').classed('activated', false);
 			$('#data').hide();

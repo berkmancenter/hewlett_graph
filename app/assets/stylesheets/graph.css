@@ -152,3 +152,17 @@ dd {
 #controls h2 {
     cursor: pointer;
 }
+body.tree #controls, body.tree #questions {
+    display: none;
+}
+body.tree .legendEntry {
+    display: inline-block;
+    margin: 0 1em;
+}
+body.tree #notGraph {
+    display: block;
+    text-align: center;
+}
+body.tree #legend {
+    display: inline-block;
+}
