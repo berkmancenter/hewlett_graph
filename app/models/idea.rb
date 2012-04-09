@@ -2,6 +2,7 @@ class Idea < ActiveRecord::Base
     has_and_belongs_to_many :stakeholders
     belongs_to :subcategory
     belongs_to :graph
+    belongs_to :idea_type
     has_one :category, :through => :subcategory
     acts_as_api
 
@@ -17,6 +18,7 @@ class Idea < ActiveRecord::Base
     api_accessible :hierarchy do |t|
         t.add :content
         t.add :day
+        t.add :idea_type
         t.add :stakeholders
     end
 

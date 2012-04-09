@@ -35,6 +35,7 @@ var Graph = {
 	colorFoci: {},
 	catColorScale: d3.scale.category10(),
 	dayColorScale: d3.scale.category10(),
+	typeColorScale: d3.scale.category10(),
 	subcatColorScale: d3.scale.category20(),
 	forceLayout: {},
 	tickCount: 0,
@@ -51,13 +52,12 @@ var Graph = {
 	},
 	setup: function() {
 		Graph.initDimensions();
-        if (Graph.config.layout != 'tree') {
-            if (!Graph.initialized) {
-                d3.select("#graph").append("svg:svg").attr("width", Graph.width).attr("height", Graph.height).classed('density', true);
-            } else {
-                d3.select("#graph").select("svg").transition().attr("width", Graph.width).attr("height", Graph.height);
-                Graph.initialized = false;
-            }
+        if (!Graph.initialized) {
+            d3.select("#graph").append("svg:svg").attr("width", Graph.width).attr("height", Graph.height);
+            d3.selectAll('body, #graph svg').attr('class', function() { return Graph.config.layout == 'tree' ? 'tree' : 'density'; });
+        } else {
+            d3.select("#graph").select("svg").transition().attr("width", Graph.width).attr("height", Graph.height);
+            Graph.initialized = false;
         }
 		Util.updateEventHandlers();
 		Graph.getData();
@@ -114,26 +114,23 @@ var Graph = {
 
 	},
     createDendrogram: function() {
-        var w = 1390,
-        h = 630,
-        i = 0,
+        var i = 0,
         duration = 500,
         root;
 
         var tree = d3.layout.tree()
-          .size([h, w - 700]);
+          .size([Graph.height, Graph.width - 700]);
 
         var diagonal = d3.svg.diagonal()
           .projection(function(d) { return [d.y, d.x]; });
 
-        var vis = d3.select("#graph").append("svg:svg")
-          .attr("width", w)
-          .attr("height", h)
+        var vis = d3.select("#graph").select("svg")
           .append("svg:g")
           .attr("transform", "translate(40,0)");
 
           Graph.hierarchy.x0 = 0;
           Graph.hierarchy.y0 = 0;
+          Graph.updateLegend();
           update(root = Graph.hierarchy);
 
         function update(source) {
@@ -151,12 +148,12 @@ var Graph = {
 
           // Enter any new nodes at the parent's previous position.
           nodeEnter.append("svg:circle")
-              .attr("r", function(d) { return d.children || d._children ? 8.5 : 3.5; })
-              .style("fill", function(d) { return d._children || d.children ? "lightsteelblue" : "#ccc"; })
+              .attr("r", function(d) { return d.children || d._children ? 8.5 : 6.5; })
+              .style("fill", function(d) { return d._children || d.children ? "lightsteelblue" : Graph.typeColorScale(d.idea_type.name); })
               .on("click", click);
 
           nodeEnter.append("svg:text")
-              .attr("x", function(d) { return d.children || d._children ? 12 : 4; })
+              .attr("x", function(d) { return d.children || d._children ? 12 : 10; })
               .attr("y", 3)
               .text(function(d) { return typeof d.name == 'undefined' ? d.content : d.name; })
               .on("click", click);
@@ -310,36 +307,54 @@ var Graph = {
 		}
 	},
 	initDimensions: function() {
+        if (Graph.config.layout == 'tree') {
+            Graph.width = 1400;
+            Graph.height = 630;
+            return;
+        }
+
 		switch (Graph.config.browserSpeed) {
 		case 'serverside':
+		case 'fast':
 		case 'medium':
 		case 'slow':
 			Graph.width = Graph.config.defaultWidth;
 			Graph.height = Graph.config.defaultHeight;
 			break;
-		case 'fast':
+		/*case 'fast':
 			Graph.width = $('body').width() * Graph.config.widthPercentage;
-			Graph.height = $(window).height() * Graph.config.heightPercentage;
+			Graph.height = $(window).height() * Graph.config.heightPercentage;*/
 		}
 	},
 	updateLegend: function() {
 		$('#legend :not(:header)').remove();
-		var $legend = $('<div />'),
-		entries = Graph.data[Graph.config.colorAttr];
-		entries.forEach(function(u) {
-			$legend.append(function() {
-				return $('<div class="legendEntry" />').append(function() {
-					return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name)).add($('<span class="legendText" />').text(u.name));
-				});
-			});
-		});
+        var $legend = $('<div />');
+        if (Graph.config.layout != 'tree') {
+            var entries = Graph.data[Graph.config.colorAttr];
+            entries.forEach(function(u) {
+                $legend.append(function() {
+                    return $('<div class="legendEntry" />').append(function() {
+                        return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name)).add($('<span class="legendText" />').text(u.name));
+                    });
+                });
+            });
+        } else {
+            var entries = Graph.hierarchy.idea_types;
+            entries.forEach(function(u) {
+                $legend.append(function() {
+                    return $('<div class="legendEntry" />').append(function() {
+                        return $('<span class="swatch"/>').css('backgroundColor', Graph.typeColorScale(u.name)).add($('<span class="legendText" />').text(u.name));
+                    });
+                });
+            });
+        }
 		$('#legend :header').after($legend.html());
 	},
 	updateLabels: function() {
 		var groups = Graph.data[Graph.config.sortAttr].map(function(s) {
 			return s.name;
 		}),
-		display = $('.sortLabel').css('display'),
+		hidden = $('#hideLabels').is(':checked'),
 		position;
 		$('.sortLabel').fadeOut(300, function() {
 			$(this).remove();
@@ -349,9 +364,8 @@ var Graph = {
 		case 'fast':
 			groups.forEach(function(group) {
 				$('<div class="sortLabel"/>').appendTo('body').text(group).css({
-					'left':
-					Graph.foci[group][0],
-					'top': Graph.foci[group][1]
+					'left': Graph.foci[group][0] + $('#graph svg').offset().left,
+					'top': Graph.foci[group][1] + $('#graph svg').offset().top
 				});
 			});
 			break;
@@ -370,12 +384,12 @@ var Graph = {
 				});
 				position = Graph.getNodesAvgPosition(nodes);
 				$('<div class="sortLabel"/>').appendTo('body').text(group).css({
-					'left': position[0],
-					'top': position[1]
+					'left': position[0] + $('#graph svg').offset().left,
+					'top': position[1] + $('#graph svg').offset().top
 				});
 			});
 		}
-		if (display != 'none') {
+		if (!hidden) {
 			$('.sortLabel').fadeIn();
 		}
 	},
@@ -497,17 +511,32 @@ var Util = {
 
 	},
 	updateEventHandlers: function() {
-		$("input[name=sort], input[name=color], input[name=speed], #showLabels, #veryDiffSubcatColors").off("change");
-        $('#dataClose, #controls h2').off('click');
+		$("input[name=sort], input[name=color], input[name=speed], #hideLabels, #veryDiffSubcatColors").off("change");
+        $('#dataClose, #controls h2, #changeLayout').off('click');
 
+        $('#changeLayout').on('click', function() {
+            $('body').toggleClass('tree');
+            $('body').toggleClass('density');
+            $('svg').remove();
+            $('.sortLabel').remove();
+            $(this).text(function() { return $(this).text() == 'Tree View' ? 'Density View' : 'Tree View'; });
+            Graph.initialized = false;
+            Graph.config.layout = Graph.config.layout == 'tree' ? 'density' : 'tree';
+            Graph.setup();
+        });
+         
 		$('#dataClose').on("click", function() {
 			d3.select('circle.node.activated').classed('activated', false);
 			$('#data').hide();
 			return false;
 		});
 
-		$('#showLabels').on("change", function(e) {
-			$('.sortLabel').fadeToggle();
+		$('#hideLabels').on("change", function(e) {
+            if ($(this).is(':checked')) {
+                $('.sortLabel').fadeOut();
+            } else {
+                $('.sortLabel').fadeIn();
+            }
 		});
 
 		$('#veryDiffSubcatColors').on('change', function(e) {
@@ -530,6 +559,14 @@ var Util = {
 				Graph.getData();
 			}
 		});
+
+        $('a.question').on('click', function(e) {
+            $('input[name=sort][value=' + $(this).attr('data-sort') + ']').attr('checked', true).trigger('change');
+            $('input[name=color][value=' + $(this).attr('data-color') + ']').attr('checked', true).trigger('change');
+            $('#hideLabels').attr('checked', function() { return $(e.target).attr('data-hide-labels') == 't' ? true : false; }).trigger('change');
+            return false;
+            //$(this).attr('data-selected-idea')
+        });
 
 		$("input[name=color]").on("change", function(e) {
 			Graph.config.oldColorAttr = Graph.config.colorAttr;

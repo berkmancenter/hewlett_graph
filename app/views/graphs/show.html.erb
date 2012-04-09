@@ -8,10 +8,18 @@
     </div>
 </div>
 <div id="notGraph">
-    <div id="legend">
+    <div class="panel" id="legend">
         <h2>Legend</h2>
     </div>
-    <div id="controls">
+    <% if @graph.questions %>
+    <div class="panel" id="questions">
+        <h2>Questions</h2>
+        <ul>
+            <%= render :partial => 'shared/line_items/question', :collection => @graph.questions %>
+        </ul>
+    </div>
+    <% end %>
+    <div class="panel" id="controls">
         <h2>Advanced</h2>
         <h3>Sort by:</h3>
         <ul>
@@ -32,17 +40,12 @@
             <li><input type="radio" name="speed" id="speedMedium" value="medium" /><label for="speedMedium">Medium</label></li>
             <li><input type="radio" name="speed" id="speedSlow" value="slow" /><label for="speedSlow">Slow</label></li>
         </ul>
-        <input type="checkbox" name="showLabels" id="showLabels" /><label for="showLabels">Hide Labels</label><br />
+        <input type="checkbox" name="hideLabels" id="hideLabels" /><label for="hideLabels">Hide Labels</label><br />
         <input type="checkbox" name="veryDiffSubcatColors" id="veryDiffSubcatColors" /><label for="veryDiffSubcatColors">Very Different Subcategory Colors</label><br />
     </div>
 </div>
-<% if params[:layout] == 'tree' %>
-<style>
-    #notGraph {
-        display: none;
-    }
-</style>
-<% end %>
+<button id="changeLayout">Tree View</button>
+<div id="evidenceHub"><p>Visit the the Evidence Hub for Open Education Resources, which aims to provide an environment to systematically interrogate the Open Education movement on what are the people, projects, organizations, challenges, solutions and claims that scaffold the movement: <a href="http://ci.olnet.org/">http://ci.olnet.org</a></p></div>
 <script> 
     Graph.id = <%= @graph.id %>;
     Graph.config.sortAttr = '<%= params[:sort_attr] or "category" %>';

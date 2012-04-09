@@ -7,7 +7,8 @@ Code::Application.configure do
             :category => 'Category',
             :subcategory => 'Subcategory',
             :stakeholders => 'Stakeholders',
-            :idea => 'Idea'
+            :idea => 'Idea',
+            :type => 'Type'
         }
     }
 end
