@@ -148,8 +148,8 @@ var Graph = {
 
           // Enter any new nodes at the parent's previous position.
           nodeEnter.append("svg:circle")
-              .attr("r", function(d) { return d.children || d._children ? 8.5 : 6.5; })
-              .style("fill", function(d) { return d._children || d.children ? "lightsteelblue" : Graph.typeColorScale(d.idea_type.name); })
+              .attr("r", function(d) { return d.children || d._children ? 8.5 : 3.5; })
+              .style("fill", function(d) { return d._children || d.children ? "lightsteelblue" : '#ccc'; })
               .on("click", click);
 
           nodeEnter.append("svg:text")
@@ -334,7 +334,7 @@ var Graph = {
             entries.forEach(function(u) {
                 $legend.append(function() {
                     return $('<div class="legendEntry" />').append(function() {
-                        return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name)).add($('<span class="legendText" />').text(u.name));
+                        return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name).toString()).add($('<span class="legendText" />').text(u.name));
                     });
                 });
             });
@@ -343,7 +343,7 @@ var Graph = {
             entries.forEach(function(u) {
                 $legend.append(function() {
                     return $('<div class="legendEntry" />').append(function() {
-                        return $('<span class="swatch"/>').css('backgroundColor', Graph.typeColorScale(u.name)).add($('<span class="legendText" />').text(u.name));
+                        return $('<span class="swatch"/>').css('backgroundColor', Graph.typeColorScale(u.name).toString()).add($('<span class="legendText" />').text(u.name));
                     });
                 });
             });
@@ -364,8 +364,8 @@ var Graph = {
 		case 'fast':
 			groups.forEach(function(group) {
 				$('<div class="sortLabel"/>').appendTo('body').text(group).css({
-					'left': Graph.foci[group][0] + $('#graph svg').offset().left,
-					'top': Graph.foci[group][1] + $('#graph svg').offset().top
+					'left': Graph.foci[group][0] + $('#graph').offset().left,
+					'top': Graph.foci[group][1] + $('#graph').offset().top
 				});
 			});
 			break;
@@ -384,8 +384,8 @@ var Graph = {
 				});
 				position = Graph.getNodesAvgPosition(nodes);
 				$('<div class="sortLabel"/>').appendTo('body').text(group).css({
-					'left': position[0] + $('#graph svg').offset().left,
-					'top': position[1] + $('#graph svg').offset().top
+					'left': position[0] + $('#graph').offset().left,
+					'top': position[1] + $('#graph').offset().top
 				});
 			});
 		}
@@ -518,6 +518,7 @@ var Util = {
             $('body').toggleClass('tree');
             $('body').toggleClass('density');
             $('svg').remove();
+            $('#dataClose').trigger('click');
             $('.sortLabel').remove();
             $(this).text(function() { return $(this).text() == 'Tree View' ? 'Density View' : 'Tree View'; });
             Graph.initialized = false;
@@ -561,6 +562,8 @@ var Util = {
 		});
 
         $('a.question').on('click', function(e) {
+            $('#questions li').removeClass('selected');
+            $(this).parent().addClass('selected');
             $('input[name=sort][value=' + $(this).attr('data-sort') + ']').attr('checked', true).trigger('change');
             $('input[name=color][value=' + $(this).attr('data-color') + ']').attr('checked', true).trigger('change');
             $('#hideLabels').attr('checked', function() { return $(e.target).attr('data-hide-labels') == 't' ? true : false; }).trigger('change');
@@ -590,9 +593,14 @@ var Util = {
 			}
 		});
 
+        $('input[name=color], input[name=sort]').on('click', function() { $('#questions li').removeClass('selected'); });
+
 		$('input[name=speed][value=' + Graph.config.browserSpeed + ']').attr('checked', true);
 		$('input[name=speed]').on('change', function() {
 			Graph.config.browserSpeed = $(this).val();
+            if (Graph.forceLayout.on) {
+                Graph.forceLayout.on("tick", null);
+            }
             Graph.setup();
 		});
 		$('#controls h2 ~ *').slideUp();

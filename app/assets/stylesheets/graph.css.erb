@@ -104,7 +104,7 @@ body.density #notGraph {
     padding: 0.3em;
     border-radius: 3px;
 }
-#questions li:hover {
+#questions li:hover, #questions li.selected {
     background-color: #345;
 }
 .panel h2 {
@@ -172,7 +172,7 @@ dd {
 #controls h2 {
     cursor: pointer;
 }
-body.tree #controls, body.tree #questions {
+body.tree #controls, body.tree #questions, body.tree #legend {
     display: none;
 }
 body.tree .legendEntry {
@@ -183,12 +183,10 @@ body.tree #notGraph {
     display: block;
     text-align: center;
 }
-body.tree #legend {
-    display: inline-block;
-}
 a.question {
     color: white;
     text-decoration: none;
+    display: block;
 }
 #evidenceHub {
     text-align: center;
