@@ -149,7 +149,20 @@ var Graph = {
           // Enter any new nodes at the parent's previous position.
           nodeEnter.append("svg:circle")
               .attr("r", function(d) { return d.children || d._children ? 8.5 : 3.5; })
-              .style("fill", function(d) { return d._children || d.children ? "lightsteelblue" : '#ccc'; })
+              .style("fill", function(d) {
+                  if (d._children || d.children) {
+                      switch(d.className) {
+                          case 'category':
+                              return Graph.catColorScale(d.name).toString()
+                          case 'subcategory':
+                              return Util.getSubcatColor(d.name).toString()
+                          default:
+                              return '#ccc'
+                      }
+                  } else {
+                      return '#ccc';
+                  }
+              })
               .on("click", click);
 
           nodeEnter.append("svg:text")
@@ -608,25 +621,28 @@ var Util = {
 			$(this).find('~ *').slideToggle();
 		});
 	},
+    getSubcatColor: function(string) {
+        // Evidently d3 has scales, which could probably do this for me
+        if (Graph.config.subcatColorsAreVeryDifferent) {
+            return d3.rgb(Graph.subcatColorScale(string));
+        } else {
+            var subcategory = Graph.data.subcategories.filter(function(subcat) {
+                return subcat.name == string;
+            })[0],
+            category = Graph.data.categories.filter(function(cat) {
+                return cat.uuid == subcategory.category_uuid;
+            })[0],
+            colorDelta = category.subcategory_uuids.indexOf(subcategory.uuid);
+            colorDelta = (colorDelta - Math.floor(category.subcategory_uuids.length / 2)) * Graph.config.subcatColorScaleFactor;
+            return d3.rgb(Graph.catColorScale(category.name)).darker(colorDelta);
+        }
+    },
 	stringToColor: function(string) {
 		switch (Graph.config.colorAttr) {
 		case 'day':
 			return d3.rgb(Graph.dayColorScale(string));
 		case 'subcategory':
-			// Evidently d3 has scales, which could probably do this for me
-			if (Graph.config.subcatColorsAreVeryDifferent) {
-				return d3.rgb(Graph.subcatColorScale(string));
-			} else {
-				var subcategory = Graph.data.subcategories.filter(function(subcat) {
-					return subcat.name == string;
-				})[0],
-				category = Graph.data.categories.filter(function(cat) {
-					return cat.uuid == subcategory.category_uuid;
-				})[0],
-				colorDelta = category.subcategory_uuids.indexOf(subcategory.uuid);
-				colorDelta = (colorDelta - Math.floor(category.subcategory_uuids.length / 2)) * Graph.config.subcatColorScaleFactor;
-				return d3.rgb(Graph.catColorScale(category.name)).darker(colorDelta);
-			}
+            return Util.getSubcatColor(string);
 		case 'category':
 			return d3.rgb(Graph.catColorScale(string));
 		}

@@ -17,8 +17,8 @@ class Idea < ActiveRecord::Base
 
     api_accessible :hierarchy do |t|
         t.add :content
-        t.add :day
         t.add :stakeholders
+        t.add lambda{ |graph| graph.class.name.downcase }, :as => :className
     end
 
     def day
