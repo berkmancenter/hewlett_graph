@@ -1,3 +1,28 @@
+<% if params[:embed] == 'true' %>
+    <style>
+        body {
+            background-image: none;
+        }
+        body.density {
+            width: 710px;
+        }
+        body.density #notGraph {
+            display: block;
+            margin: 0;
+            margin-top: 1em;
+            width: auto;
+        }
+        .panel {
+            padding: 0.3em 0.4em 1em;
+            display: inline-block;
+            width: 214px;
+            vertical-align: top;
+        }
+        #changeLayout {
+            display: none;
+        }
+    </style>
+<% end %>
 <div id="graph">
     <div id="data" style="display: none;">
         <a href="#"><div id="dataClose">X</div></a>
