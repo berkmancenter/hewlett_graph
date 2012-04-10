@@ -11,7 +11,6 @@ class Graph < ActiveRecord::Base
     has_many :stakeholders, :order => :name
     has_many :subcategories, :through => :categories, :order => 'category_id, name'
     has_many :questions
-    has_many :idea_types
     acts_as_api
 
     attr_accessor :sort_attr, :color_attr
@@ -35,7 +34,6 @@ class Graph < ActiveRecord::Base
         t.add :name
         t.add lambda{ |graph| graph.class.name.downcase }, :as => :className
         t.add :categories, :as => :children
-        t.add :idea_types
     end
 
     def import_data_from_attachment!
