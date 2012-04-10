@@ -26,13 +26,11 @@
             <li><input type="radio" name="sort" id="sortCat" value="category" checked="checked" /><label for="sortCat">Category</label></li>
             <li><input type="radio" name="sort" id="sortSubcat" value="subcategory" /><label for="sortSubcat">Subcategory</label></li>
             <li><input type="radio" name="sort" id="sortStake" value="stakeholders" /><label for="sortStake">Stakeholder</label></li>
-            <li><input type="radio" name="sort" id="sortDay" value="day" /><label for="sortDay">Day</label></li>
         </ul>
         <h3>Color by:</h3>
         <ul>
             <li><input type="radio" name="color" id="colorCat" value="category" checked="checked" /><label for="colorCat">Category</label></li>
             <li><input type="radio" name="color" id="colorSubcat" value="subcategory" /><label for="colorSubcat">Subcategory</label></li>
-            <li><input type="radio" name="color" id="colorDay" value="day" /><label for="colorDay">Day</label></li>
         </ul>
         <h3>Browser Speed:</h3>
         <ul>
@@ -41,11 +39,10 @@
             <li><input type="radio" name="speed" id="speedSlow" value="slow" /><label for="speedSlow">Slow</label></li>
         </ul>
         <input type="checkbox" name="hideLabels" id="hideLabels" /><label for="hideLabels">Hide Labels</label><br />
-        <input type="checkbox" name="veryDiffSubcatColors" id="veryDiffSubcatColors" /><label for="veryDiffSubcatColors">Very Different Subcategory Colors</label><br />
     </div>
 </div>
 <button id="changeLayout">Tree View</button>
-<div id="evidenceHub"><p>Visit the the Evidence Hub for Open Education Resources, which aims to provide an environment to systematically interrogate the Open Education movement on what are the people, projects, organizations, challenges, solutions and claims that scaffold the movement: <a href="http://ci.olnet.org/">http://ci.olnet.org</a></p></div>
+<div id="evidenceHub"><p>Visit the the Evidence Hub for Open Education Resources, which aims to provide an environment to systematically interrogate the Open Education movement on what are the people, projects, organizations, challenges, solutions and claims that scaffold the movement: <a target="_blank" href="http://ci.olnet.org/">http://ci.olnet.org</a></p></div>
 <script> 
     Graph.id = <%= @graph.id %>;
     Graph.config.sortAttr = '<%= params[:sort_attr] or "category" %>';

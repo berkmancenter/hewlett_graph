@@ -11,6 +11,7 @@ class Category < ActiveRecord::Base
 
     api_accessible :hierarchy do |t|
         t.add :name
+        t.add lambda{ |graph| graph.class.name.downcase }, :as => :className
         t.add :subcategories, :as => :children
     end
 
