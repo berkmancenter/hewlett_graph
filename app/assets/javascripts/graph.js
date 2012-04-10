@@ -163,6 +163,7 @@ var Graph = {
                       return '#ccc';
                   }
               })
+              .style('stroke-width', function(d) { return d.className == 'category' || d.className == 'subcategory' ? 0 : 1.5; })
               .on("click", click);
 
           nodeEnter.append("svg:text")
