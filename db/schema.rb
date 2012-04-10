@@ -59,8 +59,10 @@ ActiveRecord::Schema.define(:version => 20120409182526) do
   end
 
   create_table "dependencies", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "dependencies_interventions", :id => false, :force => true do |t|
@@ -137,6 +139,7 @@ ActiveRecord::Schema.define(:version => 20120409182526) do
     t.text     "additional_info"
     t.integer  "subcategory_id"
     t.integer  "graph_id"
+    t.integer  "cluster_id"
     t.integer  "intervention_type_id"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false

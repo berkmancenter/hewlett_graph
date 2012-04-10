@@ -12,6 +12,7 @@ class Intervention < ActiveRecord::Base
 
     belongs_to :subcategory
     belongs_to :graph
+    belongs_to :cluster
     has_one :category, :through => :subcategory
     acts_as_api
 
