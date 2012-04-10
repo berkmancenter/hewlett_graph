@@ -352,17 +352,8 @@ var Graph = {
                     });
                 });
             });
-        } else {
-            var entries = Graph.hierarchy.idea_types;
-            entries.forEach(function(u) {
-                $legend.append(function() {
-                    return $('<div class="legendEntry" />').append(function() {
-                        return $('<span class="swatch"/>').css('backgroundColor', Graph.typeColorScale(u.name).toString()).add($('<span class="legendText" />').text(u.name));
-                    });
-                });
-            });
         }
-		$('#legend :header').after($legend.html());
+        $('#legend :header').after($legend.html());
 	},
 	updateLabels: function() {
 		var groups = Graph.data[Graph.config.sortAttr].map(function(s) {
