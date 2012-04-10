@@ -571,7 +571,7 @@ var Util = {
             $(this).parent().addClass('selected');
             $('input[name=sort][value=' + $(this).attr('data-sort') + ']').attr('checked', true).trigger('change');
             $('input[name=color][value=' + $(this).attr('data-color') + ']').attr('checked', true).trigger('change');
-            $('#hideLabels').attr('checked', function() { return $(e.target).attr('data-hide-labels') == 't' ? true : false; }).trigger('change');
+            $('#hideLabels').attr('checked', function() { return $(e.target).attr('data-hide-labels') == 't' ? true : false; });
             return false;
             //$(this).attr('data-selected-idea')
         });
