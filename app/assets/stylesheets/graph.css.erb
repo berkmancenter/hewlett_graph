@@ -7,6 +7,9 @@ html, body, svg {
     padding: 0;
     font-size: 13px;
 }
+svg, body, html {
+    font-family: Arial, sans-serif;
+}
 body {
     padding: 0.5em 0.2em 0;
     margin: 0 auto;
@@ -23,9 +26,6 @@ circle:hover {
     fill: #ccc !important;
     stroke: #666 !important;
 }
-svg, body, html {
-    font-family: Arial, sans-serif;
-}
 svg.density {
     background-color: #999;
     box-shadow: inset 0 0 20px #333;
@@ -41,17 +41,17 @@ circle.activated {
     stroke: #660 !important;
 }
 .node.open circle, .node.closed circle {
-   stroke: #123 !important;
-   stroke-width: 1.5px;
+   /*stroke: #123 !important;
+   stroke-width: 0px;*/
 } 
 .node.closed circle {
-    fill: #ABC !important;
+    /*fill: #ABC !important;*/
 }
 .node.open text {
     font-weight: bold;
 }
 .node.open circle {
-    fill: #123 !important;
+    /*fill: #123 !important;*/
 }
 g.node.idea {
     cursor: auto;
@@ -104,7 +104,7 @@ body.density #notGraph {
     padding: 0.3em;
     border-radius: 3px;
 }
-#questions li:hover {
+#questions li:hover, #questions li.selected {
     background-color: #345;
 }
 .panel h2 {
@@ -172,7 +172,7 @@ dd {
 #controls h2 {
     cursor: pointer;
 }
-body.tree #controls, body.tree #questions {
+body.tree #controls, body.tree #questions, body.tree #legend {
     display: none;
 }
 body.tree .legendEntry {
@@ -183,12 +183,10 @@ body.tree #notGraph {
     display: block;
     text-align: center;
 }
-body.tree #legend {
-    display: inline-block;
-}
 a.question {
     color: white;
     text-decoration: none;
+    display: block;
 }
 #evidenceHub {
     text-align: center;

@@ -1,0 +1,12 @@
+<h1>Questions#index</h1>
+<table>
+    <thead>
+        <tr><th>Question</th></tr>
+    </thead>
+    <tbody>
+        <% @questions.each do |question| %>
+            <%= render :partial => 'shared/line_items/question_row', :locals => { :question => question } %>
+        <% end %>
+    </tbody>
+</table>
+

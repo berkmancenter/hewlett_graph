@@ -4,7 +4,6 @@ class CreateIdeas < ActiveRecord::Migration
       t.text :content
       t.references :subcategory
       t.references :graph
-      t.references :idea_type
 
       t.timestamps
     end

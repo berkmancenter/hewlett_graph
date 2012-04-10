@@ -8,6 +8,13 @@
 Question.create([
     {
         :graph_id => 1,
+        :content => 'Which categories have received the most attention?',
+        :sort_by => 'category',
+        :color_by => 'category',
+        :hide_labels => true
+    },
+    {
+        :graph_id => 1,
         :content => 'Which subcategories have received the most attention?',
         :sort_by => 'subcategory',
         :color_by => 'subcategory',
@@ -15,16 +22,9 @@ Question.create([
     },
     {
         :graph_id => 1,
-        :content => 'What categories are more interesting to Facilitators than to Builders?',
+        :content => 'Which categories are most interesting to Facilitators, Builders, or Learners?',
         :sort_by => 'stakeholders',
         :color_by => 'category'
-    },
-    {
-        :graph_id => 1,
-        :content => 'What does an "idea" consist of?',
-        :sort_by => 'category',
-        :color_by => 'category',
-        :selected_idea_id => 1
     }
 ])
 
