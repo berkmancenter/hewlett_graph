@@ -1,6 +1,8 @@
 class GraphsController < ApplicationController
     before_filter :load_graph, :except => [:index, :new, :create]
 
+    caches_action :show, :cache_path => Proc.new {|c| c.request.url }
+
     def index
         @graphs = Graph.all
     end
@@ -42,6 +44,7 @@ class GraphsController < ApplicationController
     def update
         @graph.update_attributes(params[:graph])
         @graph.update_data_from_attachment!
+        expire_fragment(Regexp.new(graph_path(@graph) + '\\.*'))
         redirect_to graph_path(@graph)
     end
 
