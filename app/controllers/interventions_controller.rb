@@ -26,6 +26,7 @@ class InterventionsController < ApplicationController
 
     def create
         @intervention = @cluster.interventions.new(params[:intervention])
+        @intervention.graph = Graph.find(1)
         if @intervention.save
             redirect_to cluster_interventions_path(@cluster), :notice => 'Intervention successfully created!'
         else
