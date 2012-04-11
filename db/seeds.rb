@@ -120,3 +120,4 @@ ImplementationComplexity.create([
     { :name => 'Medium', :description => 'reasonable to implement' },
     { :name => 'High', :description => 'it is complicated' }
 ])
+Cluster.create(("A".."S").map{ |l| { :name => l }});

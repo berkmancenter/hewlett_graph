@@ -1,9 +1,9 @@
 class InterventionsController < ApplicationController
     before_filter :load_intervention, :except => [:index, :new, :create]
-    before_filter :load_graph
+    before_filter :load_cluster
 
     def index
-        @interventions = Intervention.all
+        @interventions = @cluster.interventions.all
     end
 
     def show
@@ -29,7 +29,7 @@ class InterventionsController < ApplicationController
         @intervention = Intervention.find(params[:id])
     end
 
-    def load_graph
-        @graph = Graph.find(params[:graph_id])
+    def load_cluster
+        @cluster = Cluster.find(params[:cluster_id])
     end
 end

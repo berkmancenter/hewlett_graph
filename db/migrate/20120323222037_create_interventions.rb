@@ -31,7 +31,6 @@ class CreateInterventions < ActiveRecord::Migration
       t.references :subcategory
       t.references :graph
       t.references :cluster
-      t.references :intervention_type
 
       t.timestamps
     end

@@ -1,2 +1,10 @@
 <h1>Intervention#index</h1>
-<p>Find me in app/views/intervention/index.html.erb</p>
+<table>
+    <thead>
+        <tr><th>Intervention Title</th></tr>
+    </thead>
+    <tbody>
+        <%= render :partial => 'shared/line_items/intervention', :collection => @interventions %>
+    </tbody>
+</table>
+<%= link_to "New Intervention", new_cluster_intervention_path(@cluster) %>
