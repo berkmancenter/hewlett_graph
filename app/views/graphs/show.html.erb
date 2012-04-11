@@ -24,11 +24,11 @@
     </style>
 <% end %>
 <div id="graph">
+    <div id="hiddenCount"></div>
     <div id="data" style="display: none;">
         <a href="#"><div id="dataClose">X</div></a>
         <span class="inline"><dt>Category</dt><dd id="category"></dd></span>
         <span class="inline"><dt>Subcategory</dt><dd id="subcategory"></dd></span>
-        <span class="inline"><dt>Stakeholders</dt><dd id="stakeholders"></dd></span>
         <dt>Intervention</dt><dd id="intervention"></dd>
     </div>
 </div>
@@ -47,15 +47,10 @@
     <div class="panel" id="controls">
         <h2>Advanced</h2>
         <h3>Sort by:</h3>
-        <ul>
-            <li><input type="radio" name="sort" id="sortCat" value="category" checked="checked" /><label for="sortCat">Category</label></li>
-            <li><input type="radio" name="sort" id="sortSubcat" value="subcategory" /><label for="sortSubcat">Subcategory</label></li>
-            <li><input type="radio" name="sort" id="sortStake" value="stakeholders" /><label for="sortStake">Stakeholder</label></li>
+        <ul id="sortList">
         </ul>
         <h3>Color by:</h3>
-        <ul>
-            <li><input type="radio" name="color" id="colorCat" value="category" checked="checked" /><label for="colorCat">Category</label></li>
-            <li><input type="radio" name="color" id="colorSubcat" value="subcategory" /><label for="colorSubcat">Subcategory</label></li>
+        <ul id="colorList">
         </ul>
         <h3>Browser Speed:</h3>
         <ul>
@@ -74,7 +69,7 @@
     Graph.config.colorAttr = '<%= params[:color_attr] or "category" %>';
     Graph.config.oldSortAttr = '<%= params[:sort_attr] or "category" %>';
     Graph.config.oldColorAttr = '<%= params[:color_attr] or "category" %>';
-    Graph.config.browserSpeed =  '<%= params[:browser_speed] or "medium" %>';
+    Graph.config.browserSpeed =  '<%= params[:browser_speed] or "fast" %>';
     Graph.config.layout =  '<%= params[:layout] or "density" %>';
     Graph.init();
 </script>

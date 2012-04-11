@@ -11,7 +11,6 @@ class Graph < ActiveRecord::Base
     has_many :stakeholders, :order => :name
     has_many :subcategories, :through => :categories, :order => 'category_id, name'
     has_many :questions
-    has_many :intervention_types
     acts_as_api
 
     attr_accessor :sort_attr, :color_attr
@@ -19,8 +18,38 @@ class Graph < ActiveRecord::Base
         t.add :interventions
         t.add :categories
         t.add :subcategories
-        t.add :stakeholders
-        t.add :days
+        t.add lambda{|g| ImplementationComplexity.all }, :as => :implementation_complexities
+        t.add lambda{|g| Cluster.all }, :as => :cluster
+        t.add lambda{|g| Context.all }, :as => :contexts
+        t.add lambda{|g| ManagementNeed.all }, :as => :management_needs
+        t.add lambda{|g| TimeFrame.all }, :as => :time_frames
+        t.add lambda{|g| PolicyFocus.all }, :as => :policy_focii
+        t.add lambda{|g| CoordinationNeed.all }, :as => :coordination_needs
+        t.add lambda{|g| Actor.all }, :as => :actors
+        t.add lambda{|g| Dependency.all }, :as => :dependencies
+        t.add lambda{|g| FinancialRequirement.all }, :as => :financial_requirements
+        t.add lambda{|g| Risk.all }, :as => :risks
+        t.add lambda{|g| [true, false] }, :as => :can_be_implemented_by_existing_orgs
+        t.add lambda{|g| [true, false] }, :as => :requires_new_coop_of_existing_orgs
+        t.add lambda{|g| [true, false] }, :as => :requires_expanded_coop_of_existing_org
+        t.add lambda{|g| [true, false] }, :as => :requires_new_orgs
+        t.add lambda{|g| [true, false] }, :as => :hackable
+        t.add lambda{|g| [true, false] }, :as => :facilitates_sustainability
+        t.add lambda{|g| [true, false] }, :as => :facilitates_reusability
+        t.add lambda{|g| [true, false] }, :as => :has_translation_component
+        t.add lambda{|g| [true, false] }, :as => :has_legal_or_policy_changes
+        t.add lambda{|g| [true, false] }, :as => :facilitates_feedback
+        t.add lambda{|g| [true, false] }, :as => :promotes_interop
+        t.add lambda{|g| [true, false] }, :as => :promotes_access
+        t.add lambda{|g| [true, false] }, :as => :promotes_discovery
+        t.add lambda{|g| [true, false] }, :as => :increases_adoption
+        t.add lambda{|g| [true, false] }, :as => :engages_nontraditional
+        t.add lambda{|g| [true, false] }, :as => :focuses_on_community
+        t.add lambda{|g| [true, false] }, :as => :requires_public_outreach
+        t.add lambda{|g| [true, false] }, :as => :likely_to_face_opposition
+        t.add lambda{|g| [true, false] }, :as => :requires_culture_shift
+        t.add lambda{|g| [true, false] }, :as => :supports_data_collection
+        t.add lambda{|g| [true, false] }, :as => :requires_more_research
     end
 
     api_accessible :prerendered do |t|
@@ -110,7 +139,7 @@ class Graph < ActiveRecord::Base
             end
         end
     end
-   
+
     protected
     def table
         if data.exists?

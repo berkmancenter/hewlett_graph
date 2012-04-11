@@ -2,7 +2,7 @@
 // All this logic will automatically be available in application.js.
 var Graph = {
 	config: {
-		browserSpeed: 'slow',
+		browserSpeed: 'fast',
 		reorganizePercent: 0.09,
 		subcatColorScaleFactor: 0.55,
 		theta: 1.2,
@@ -40,6 +40,7 @@ var Graph = {
 	forceLayout: {},
 	tickCount: 0,
 	totalTicks: 298,
+    hiddenCount: 0,
 	initialized: false,
 
 	init: function() {
@@ -98,8 +99,10 @@ var Graph = {
 		Graph.data.category = data.graph.categories;
 		Graph.data.subcategory = data.graph.subcategories;
 		Graph.data.day = data.graph.days;
+        Graph.updateAdvanced();
+        Graph.initColorScales();
 
-		switch (Graph.config.browserSpeed) {
+		/*switch (Graph.config.browserSpeed) {
 		case 'serverside':
 		case 'fast':
 			if (!Graph.initialized) {
@@ -110,7 +113,8 @@ var Graph = {
 		case 'medium':
 		case 'slow':
 			Graph.updateLameCircles();
-		}
+		}*/
+        Graph.createForceLayout();
 
 	},
     createDendrogram: function() {
@@ -148,8 +152,21 @@ var Graph = {
 
           // Enter any new nodes at the parent's previous position.
           nodeEnter.append("svg:circle")
-              .attr("r", function(d) { return d.children || d._children ? 8.5 : 6.5; })
-              .style("fill", function(d) { return d._children || d.children ? "lightsteelblue" : Graph.typeColorScale(d.intervention_type.name); })
+              .attr("r", function(d) { return d.children || d._children ? 8.5 : 3.5; })
+              .style("fill", function(d) {
+                  if (d._children || d.children) {
+                      switch(d.className) {
+                          case 'category':
+                              return Graph.catColorScale(d.name).toString()
+                          case 'subcategory':
+                              return Util.getSubcatColor(d.name).toString()
+                          default:
+                              return '#ccc'
+                      }
+                  } else {
+                      return '#ccc';
+                  }
+              })
               .on("click", click);
 
           nodeEnter.append("svg:text")
@@ -306,6 +323,23 @@ var Graph = {
 			Graph.initialized = true;
 		}
 	},
+    initColorScales: function() {
+        d3.map(Graph.data.interventions[0]).forEach(function(k, v) {
+            if (['uuid', 'title', 'description', 'required_innovations', 'additional_info'].indexOf(k) == -1) {
+                var colorScale;
+                if (Graph.data[k].length <= 10) {
+                    colorScale = d3.scale.category10();
+                }
+                else if (Graph.data[k].length <= 20) {
+                    colorScale = d3.scale.category20();
+                }
+                else if (Graph.data[k].length > 20) {
+                    colorScale = d3.scale.category30();
+                }
+                Graph[k + 'ColorScale'] = colorScale;
+            }
+        });
+    },
 	initDimensions: function() {
         if (Graph.config.layout == 'tree') {
             Graph.width = 1400;
@@ -334,26 +368,15 @@ var Graph = {
             entries.forEach(function(u) {
                 $legend.append(function() {
                     return $('<div class="legendEntry" />').append(function() {
-                        return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name)).add($('<span class="legendText" />').text(u.name));
+                        return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name || u.toString())).add($('<span class="legendText" />').text(u.name || u.toString()));
                     });
                 });
             });
-        } else {
-            var entries = Graph.hierarchy.intervention_types;
-            entries.forEach(function(u) {
-                $legend.append(function() {
-                    return $('<div class="legendEntry" />').append(function() {
-                        return $('<span class="swatch"/>').css('backgroundColor', Graph.typeColorScale(u.name)).add($('<span class="legendText" />').text(u.name));
-                    });
-                });
-            });
-        }
-        $('#legend :header').after($legend.html());
+            $('#legend :header').after($legend.html());
+        } 
 	},
 	updateLabels: function() {
-		var groups = Graph.data[Graph.config.sortAttr].map(function(s) {
-			return s.name;
-		}),
+		var groups = Util.flattenData(Graph.config.sortAttr),
 		hidden = $('#hideLabels').is(':checked'),
 		position;
 		$('.sortLabel').fadeOut(300, function() {
@@ -393,6 +416,18 @@ var Graph = {
 			$('.sortLabel').fadeIn();
 		}
 	},
+    updateAdvanced: function() {
+        d3.map(Graph.data.interventions[0]).forEach(function(k, v) {
+            if (['uuid', 'title', 'description', 'required_innovations', 'additional_info'].indexOf(k) == -1) {
+                $('#sortList').append('<li><input type="radio" name="sort" id="sort' + k + '" value="' + k + '" /><label for="sort' + k + '">' + k + '</label></li>');
+                $('#colorList').append('<li><input type="radio" name="color" id="color' + k + '" value="' + k + '" /><label for="color' + k + '">' + k + '</label></li>');
+            }
+        });
+        if (!Graph.initialized) {
+            Graph.config.sortAttr = $('#sortList li:first input').attr('checked', true).val();
+            Graph.config.colorAttr = $('#colorList li:first input').attr('checked', true).val();
+        }
+    },
 	outputNodes: function() {
 		$('<span id="d3Nodes" />').text(JSON.stringify(Graph.forceLayout.nodes())).appendTo('body');
 	},
@@ -437,28 +472,51 @@ var Graph = {
             // TODO: Fix this
 			//	Graph.correctLabelPositions();
 		}
-		if (Graph.tickCount == Graph.totalTicks - 1 && Graph.config.browserSpeed == 'serverside') {
-			Graph.outputNodes();
+		if (Graph.tickCount == Graph.totalTicks - 1) {
+            if (Graph.config.browserSpeed == 'serverside') {
+                Graph.outputNodes();
+            }
 		}
 
 		Graph.forceLayout.nodes().forEach(function(o, i) {
-			o.y += (Node.getY(thisFoci, o, nodeAttr) - o.y) * k;
-			o.x += (Node.getX(thisFoci, o, nodeAttr) - o.x) * k;
+            if (!o.hidden) {
+                o.y += (Node.getY(thisFoci, o, nodeAttr) - o.y) * k;
+                o.x += (Node.getX(thisFoci, o, nodeAttr) - o.x) * k;
+            }
 		});
 		Graph.tickCount++;
+
 
 		d3.selectAll("circle.node").attr("cx", function(d) {
 			return d.x;
 		}).attr("cy", function(d) {
 			return d.y;
-		});
+		}).style("display", function(d) { return d.hidden ? 'none' : 'inline'; });
 	},
+    filterNodes: function() {
+        Graph.hiddenCount = 0;
+		Graph.forceLayout.nodes().forEach(function(o, i) {
+            o.hidden = false;
+            if (o[Graph.config.sortAttr].length == 0) {
+                o.hidden = true;
+                Graph.hiddenCount++;
+            }
+		});
+        if (Graph.hiddenCount > 0) {
+            $('#hiddenCount').text(Graph.hiddenCount + ' interventions hidden');
+        }
+    },
 	correctLabelPositions: function() {
 		var position, nodes;
 		$('div.sortLabel').fadeOut(150, function() {
 			$(this).each(function(label) {
 				nodes = Graph.forceLayout.nodes().filter(function(d) {
-					return d[Graph.config.sortAttr].name == $(label).text();
+                    if (d[Graph.config.sortAttr] instanceof Object && d[Graph.config.sortAttr].name) {
+                        return d[Graph.config.sortAttr].name == $(label).text();
+                    }
+                    else {
+                        return d[Graph.config.sortAttr].toString() == $(label).text();
+                    }
 				});
 				position = Graph.getNodesAvgPosition(nodes);
 				$(this).css({
@@ -473,7 +531,7 @@ var Graph = {
 var Node = {
 
 	getColor: function(node) {
-		return Util.stringToColor(node[Graph.config.colorAttr].name);
+		return Util.stringToColor(Node.getAttrString(node, Graph.config.colorAttr));
 	},
 	getX: function(foci, node, attr, index) {
 		// I should do caching in here so it doesn't take any time
@@ -487,13 +545,24 @@ var Node = {
 			xs = d3.mean(xs);
 		}
 		else {
-			xs = foci[node[attr].name][index];
+            if (node[attr] instanceof Object && node[attr].name) {
+                xs = foci[node[attr].name][index];
+            } else {
+                xs = foci[node[attr].toString()][index];
+            }
 		}
 		return xs;
 	},
 	getY: function(foci, node, attr) {
 		return Node.getX(foci, node, attr, 1);
 	},
+    getAttrString: function(node, attr) {
+        if (node[attr] instanceof Object && node[attr].name) {
+            return node[attr].name;
+        } else {
+            return node[attr].toString();
+        }
+    }
 }
 var Util = {
 	updateGraphEventHandlers: function() {
@@ -544,15 +613,18 @@ var Util = {
 			Graph.config.subcatColorsAreVeryDifferent = $(this).is(':checked');
 		});
 
-		$("input[name=sort]").on("change", function(e) {
+		$("#sortList").on("change", 'input[name=sort]', function(e) {
 			Graph.config.oldSortAttr = Graph.config.sortAttr;
 			Graph.config.sortAttr = $(this).val();
+            $('#hiddenCount').text('');
 			switch (Graph.config.browserSpeed) {
 			case 'serverside':
 			case 'fast':
+                Graph.forceLayout.stop();
 				Graph.tickCount = 0;
 				Graph.updateFoci();
 				Graph.updateLabels();
+                Graph.filterNodes();
 				Graph.forceLayout.start();
 				break;
 			case 'medium':
@@ -571,7 +643,7 @@ var Util = {
             //$(this).attr('data-selected-intervention')
         });
 
-		$("input[name=color]").on("change", function(e) {
+		$('#colorList').on("change", 'input[name=color]', function(e) {
 			Graph.config.oldColorAttr = Graph.config.colorAttr;
 			Graph.config.colorAttr = $(e.target).val();
 			switch (Graph.config.browserSpeed) {
@@ -626,17 +698,19 @@ var Util = {
     },
 	stringToColor: function(string) {
 		switch (Graph.config.colorAttr) {
-		case 'day':
-			return d3.rgb(Graph.dayColorScale(string));
 		case 'subcategory':
             return Util.getSubcatColor(string);
-		case 'category':
-			return d3.rgb(Graph.catColorScale(string));
+		default:
+			return d3.rgb(Graph[Graph.config.colorAttr + 'ColorScale'](string));
 		}
 	},
 	flattenData: function(attr) {
 		return Graph.data[attr].map(function(s) {
-			return s.name;
+            if (s instanceof Object && s.name) {
+                return s.name;
+            } else {
+                return s.toString();
+            }
 		});
 	},
 	getFociFromArray: function(groups) {

@@ -20,10 +20,43 @@ class Intervention < ActiveRecord::Base
 
     api_accessible :everything do |t|
         t.add :uuid
-        t.add :category
         t.add :subcategory
         t.add :title
         t.add :description
+        t.add :cluster
+        t.add :can_be_implemented_by_existing_orgs
+        t.add :requires_new_coop_of_existing_orgs
+        t.add :requires_expanded_coop_of_existing_org
+        t.add :requires_new_orgs
+        t.add :hackable
+        t.add :facilitates_sustainability
+        t.add :facilitates_reusability
+        t.add :has_translation_component
+        t.add :has_legal_or_policy_changes
+        t.add :facilitates_feedback
+        t.add :promotes_interop
+        t.add :promotes_access
+        t.add :promotes_discovery
+        t.add :increases_adoption
+        t.add :engages_nontraditional
+        t.add :focuses_on_community
+        t.add :requires_public_outreach
+        t.add :likely_to_face_opposition
+        t.add :requires_culture_shift
+        t.add :supports_data_collection
+        t.add :requires_more_research
+        t.add :required_innovations
+        t.add :additional_info
+        t.add :implementation_complexities
+        t.add :contexts
+        t.add :management_needs
+        t.add :time_frames
+        t.add :policy_focii
+        t.add :coordination_needs
+        t.add :actors
+        t.add :dependencies
+        t.add :financial_requirements
+        t.add :risks
     end
 
     api_accessible :hierarchy do |t|
