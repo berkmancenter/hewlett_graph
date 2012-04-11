@@ -75,8 +75,8 @@ Context.create([
 ])
 Actor.create([
     { :name => 'Content Creators' },
-    { :name => 'End Users' },
-    { :name => 'Facilitators/Intermediaries' },
+    { :name => 'End Users', :description => 'Teachers, Learners, etc.' },
+    { :name => 'Facilitators/Intermediaries', :description => 'Tool Builders, Distributors, Publishers, Schools, etc.' },
     { :name => 'Researchers' },
     { :name => 'Policy Makers' }
 ])

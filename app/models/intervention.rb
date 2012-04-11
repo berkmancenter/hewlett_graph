@@ -16,6 +16,8 @@ class Intervention < ActiveRecord::Base
     has_one :category, :through => :subcategory
     acts_as_api
 
+    validates :title, :subcategory, :cluster, :presence => true
+
     api_accessible :everything do |t|
         t.add :uuid
         t.add :category

@@ -10,7 +10,7 @@ class InterventionsController < ApplicationController
     end
 
     def new
-        @intervention = Intervention.new
+        @intervention = @cluster.interventions.new
     end
 
     def edit
@@ -18,16 +18,16 @@ class InterventionsController < ApplicationController
 
     def update
         if @intervention.update_attributes(params[:intervention])
-            redirect_to cluster_intervention_path(@cluster, @intervention), :notice => 'Intervention successfully updated!'
+            redirect_to cluster_interventions_path(@cluster), :notice => 'Intervention successfully updated!'
         else
             render :action => "edit"
         end
     end
 
     def create
-        @intervention = Intervention.new(params[:intervention])
+        @intervention = @cluster.interventions.new(params[:intervention])
         if @intervention.save
-            redirect_to cluster_intervention_path(@cluster, @intervention), :notice => 'Intervention successfully created!'
+            redirect_to cluster_interventions_path(@cluster), :notice => 'Intervention successfully created!'
         else
             render :action => 'new'
         end

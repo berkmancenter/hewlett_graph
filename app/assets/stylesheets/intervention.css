@@ -14,3 +14,17 @@
     font-size: 1.2em;
     margin-left: 1em !important;
 }
+.formtastic .input.boolean {
+    margin-bottom: 0;
+}
+.formtastic fieldset.choices legend.label label {
+    position: static;
+}
+.formtastic .input legend.label {
+    float: none;
+    position: static;
+    width: auto;
+}
+.formtastic fieldset.inputs fieldset.inputs fieldset.choices {
+    background-color: #eee;
+}
