@@ -1,10 +1,14 @@
 Code::Application.routes.draw do
 
-  resources :graphs do
-      resources :questions
+  get 'graphs/1/interventions/new' => 'clusters#index'
+
+  resources :clusters do
+      resources :interventions
   end
 
-  root :to => 'graphs#index'
+  resources :graphs
+
+  root :to => 'clusters#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

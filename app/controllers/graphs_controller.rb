@@ -34,7 +34,7 @@ class GraphsController < ApplicationController
 
     def create
         @graph = Graph.new(params[:graph])
-        @graph.import_data_from_attachment!
+        @graph.save
         redirect_to graph_path(@graph)
     end
 

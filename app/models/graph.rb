@@ -6,16 +6,17 @@ require 'headless'
 
 class Graph < ActiveRecord::Base
     has_attached_file :data
-    has_many :ideas
+    has_many :interventions
     has_many :categories, :order => :name
     has_many :stakeholders, :order => :name
     has_many :subcategories, :through => :categories, :order => 'category_id, name'
     has_many :questions
+    has_many :intervention_types
     acts_as_api
 
     attr_accessor :sort_attr, :color_attr
     api_accessible :everything do |t|
-        t.add :ideas
+        t.add :interventions
         t.add :categories
         t.add :subcategories
         t.add :stakeholders
@@ -23,7 +24,7 @@ class Graph < ActiveRecord::Base
     end
 
     api_accessible :prerendered do |t|
-        t.add :prerendered_ideas, :as => :ideas
+        t.add :prerendered_interventions, :as => :interventions
         t.add :categories, :template => :everything
         t.add :subcategories, :template => :everything
         t.add :stakeholders, :template => :everything
@@ -34,6 +35,7 @@ class Graph < ActiveRecord::Base
         t.add :name
         t.add lambda{ |graph| graph.class.name.downcase }, :as => :className
         t.add :categories, :as => :children
+        t.add :intervention_types
     end
 
     def import_data_from_attachment!
@@ -42,6 +44,11 @@ class Graph < ActiveRecord::Base
         category_names = table[column_names[:category]].uniq!
         category_names.each do |name|
             categories << Category.new(:name => name)
+        end
+
+        type_names = table[column_names[:type]].uniq!
+        type_names.each do |name|
+            intervention_types << InterventionType.new(:name => name)
         end
 
         stakeholder_names = table[column_names[:stakeholders]].uniq!.map{ |n| n.split(', ') }.flatten!.uniq!.delete_if{ |n| n == 'All' }
@@ -58,30 +65,32 @@ class Graph < ActiveRecord::Base
         column_names = Code::Application.config.column_names[:required]
 
         table.each do |row|
-            idea = Idea.new({ :content => row[column_names[:idea]] })
-            idea_category = categories.find_by_name(row[column_names[:category]])
-            idea_stakeholder_names = row[column_names[:stakeholders]].split(', ')
-            if idea_stakeholder_names.include? 'All'
-                idea.stakeholders = stakeholders.all
+            intervention = Intervention.new({ :content => row[column_names[:intervention]] })
+            intervention_category = categories.find_by_name(row[column_names[:category]])
+            intervention_type = intervention_types.find_by_name(row[column_names[:type]])
+            intervention_stakeholder_names = row[column_names[:stakeholders]].split(', ')
+            if intervention_stakeholder_names.include? 'All'
+                intervention.stakeholders = stakeholders.all
             else 
-                idea.stakeholders << stakeholders.find_all_by_name(idea_stakeholder_names)
+                intervention.stakeholders << stakeholders.find_all_by_name(intervention_stakeholder_names)
             end
-            idea.subcategory = Subcategory.where(:name => row[column_names[:subcategory]], :category_id => idea_category.id).first_or_initialize
-            ideas << idea
+            intervention.subcategory = Subcategory.where(:name => row[column_names[:subcategory]], :category_id => intervention_category.id).first_or_initialize
+            intervention.intervention_type = intervention_type
+            interventions << intervention
         end
 
         self.save!
     end
 
-    def days_of_ideas
-        (ideas.maximum('created_at').to_date - ideas.minimum('created_at').to_date).to_i + 1
+    def days_of_interventions
+        (interventions.maximum('created_at').to_date - interventions.minimum('created_at').to_date).to_i + 1
     end
 
     def days
-        return (0..days_of_ideas - 1).map{ |i| { :name => (ideas.minimum('created_at').to_date + i.days).strftime('%A') } }
+        return (0..days_of_interventions - 1).map{ |i| { :name => (interventions.minimum('created_at').to_date + i.days).strftime('%A') } }
     end
 
-    def prerendered_ideas
+    def prerendered_interventions
         Capybara.default_driver = :webkit
         Capybara.default_wait_time = 20
         Capybara.app_host = 'http://localhost:3000' 

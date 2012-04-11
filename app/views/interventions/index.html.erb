@@ -1,0 +1,10 @@
+<h1>Interventions for Cluster <%= @cluster.name %></h1>
+<table>
+    <thead>
+        <tr><th>Intervention Title</th></tr>
+    </thead>
+    <tbody>
+        <%= render :partial => 'shared/line_items/intervention', :collection => @interventions %>
+    </tbody>
+</table>
+<%= link_to "New Intervention", new_cluster_intervention_path(@cluster) %>

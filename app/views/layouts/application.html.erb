@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Code</title>
+  <title>OER Interventions</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
+<% if flash[:notice] %>
+    <p class="flash notice"><%= flash[:notice] %></p>
+<% end %>
+<% if flash[:alert] %>
+    <p class="flash alert"><%= flash[:alert] %></p>
+<% end %>
+<% if flash[:error] %>
+    <p class="flash error"><%= flash[:error] %></p>
+<% end %>
 <%= yield %>
 
 </body>

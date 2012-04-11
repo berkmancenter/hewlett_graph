@@ -16,4 +16,6 @@
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.irregular 'category', 'categories'
   inflect.irregular 'subcategory', 'subcategories'
+  inflect.irregular 'dependency', 'dependencies'
+  inflect.irregular 'focus', 'focii'
 end

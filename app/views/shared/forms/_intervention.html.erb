@@ -1,0 +1,55 @@
+<%= semantic_form_for [@cluster, @intervention] do |f| %>
+    <%= f.inputs do %>
+        <%= f.input :title %>
+        <%= f.input :description, :input_html => { :rows => 5 } %>
+        <%= f.input :subcategory, :collection => Hash[Subcategory.order('category_id, name').map{ |s| ["#{s.category.name} - #{s.name}", s.id] }] %>
+        <%= f.inputs :name => 'Intended time frame' do %>
+            <%= f.input :time_frames, :as => :radio, :collection => collection(TimeFrame) %>
+            <%= f.input :hackable, :hint => true %>
+        <% end %>
+        <%= f.input :contexts, :as => :check_boxes %>
+        <%= f.input :actors, :as => :check_boxes, :collection => collection(Actor) %>
+        <%= f.inputs :name => 'Requires new intermediary or supporting organizations?' do %>
+            <%= f.input :can_be_implemented_by_existing_orgs %>
+            <%= f.input :requires_new_coop_of_existing_orgs %>
+            <%= f.input :requires_expanded_coop_of_existing_org %>
+            <%= f.input :requires_new_orgs %>
+        <% end %>
+        <%= f.inputs :name => 'Contributes to high quality OER supply' do %>
+            <%= f.input :facilitates_sustainability %>
+            <%= f.input :facilitates_reusability %>
+            <%= f.input :has_translation_component %>
+        <% end %>
+        <%= f.inputs :name => 'Contributes to supportive policies' do %>
+            <%= f.input :policy_focii, :as => :check_boxes %>
+            <%= f.input :has_legal_or_policy_changes %>
+        <% end %>
+        <%= f.inputs :name => 'Contributes to OER standards' do %>
+            <%= f.input :facilitates_feedback %>
+            <%= f.input :promotes_interop %>
+            <%= f.input :promotes_access %>
+            <%= f.input :promotes_discovery %>
+        <% end %>
+        <%= f.inputs :name => 'Adoption & Reach' do %>
+            <%= f.input :increases_adoption %>
+            <%= f.input :engages_nontraditional %>
+            <%= f.input :focuses_on_community %>
+            <%= f.input :requires_public_outreach %>
+            <%= f.input :likely_to_face_opposition %>
+            <%= f.input :requires_culture_shift %>
+        <% end %>
+        <%= f.inputs :name => 'Research & Evaluation' do %>
+            <%= f.input :supports_data_collection %>
+            <%= f.input :requires_more_research %>
+        <% end %>
+        <%= f.input :management_needs, :as => :radio, :collection => collection(ManagementNeed) %>
+        <%= f.input :financial_requirements, :as => :radio, :collection => collection(FinancialRequirement) %>
+        <%= f.input :coordination_needs, :as => :radio, :collection => collection(CoordinationNeed) %>
+        <%= f.input :dependencies, :as => :radio, :collection => collection(Dependency) %>
+        <%= f.input :risks, :as => :radio, :collection => collection(Risk) %>
+        <%= f.input :implementation_complexities, :as => :radio, :collection => collection(ImplementationComplexity) %>
+        <%= f.input :required_innovations, :input_html => { :rows => 5 }, :hint => true %>
+        <%= f.input :additional_info, :input_html => { :rows => 5 }, :hint => true %>
+        <%= f.actions %>
+    <% end %>
+<% end %>

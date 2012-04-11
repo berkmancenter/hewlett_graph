@@ -7,7 +7,7 @@ Code::Application.configure do
             :category => 'Category',
             :subcategory => 'Subcategory',
             :stakeholders => 'Stakeholders',
-            :idea => 'Idea',
+            :intervention => 'Intervention',
             :type => 'Type'
         }
     }

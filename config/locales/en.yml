@@ -2,4 +2,34 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  formtastic:
+    hints:
+      intervention:
+        hackable: "Is it possible to explore, initiate, or pilot with a short burst of hacking/development (including Friday's hackday)?"
+        required_innovations: "What kinds of innovations are required for development and implementation?"
+        additional_info: "What are additional important considerations that have not been covered in the above questions?"
+        
+    labels:
+      intervention:
+        contexts: "Primary or initial context of intervention"
+        actors: "Primary actors/drivers of implementation"
+        can_be_implemented_by_existing_orgs: "Can be implemented by existing organizations"
+        requires_new_coop_of_existing_orgs: "Requires a new consortium of existing organizations"
+        requires_expanded_coop_of_existing_org: "Requires expanded cooperation of an existing cooperative arrangement of organizations"
+        requires_new_orgs: "Requires the creation of new organizations"
+        management_needs: "Ongoing management needs"
+        facilitates_feedback: "Facilitates feedback and quality assessment"
+        has_legal_or_policy_changes: "Requires or focuses on changes to supporting laws and/or formal policy"
+        promotes_interop: "Promotes interoperability"
+        promotes_access: "Promotes accessibility"
+        promotes_discovery: "Promotes discoverability"
+        increases_adoption: "Expands audiences and increases OER adoption"
+        engages_nontraditional: "Engages nontraditional audiences"
+        focuses_on_community: "Focuses on community building"
+        requires_public_outreach: "Requires a significant public outreach campaign"
+        likely_to_face_opposition: "Will likely face opposition from vested interests"
+        requires_culture_shift: "Requires behavioral changes or a cultural shift"
+        supports_data_collection: "Supports evidence-gathering, data collection, or impact assessment"
+        requires_more_research: "Requires more research and supporting information"
+        risks: "Level of risk and uncertainty"
+        time_frames: "Time frame"

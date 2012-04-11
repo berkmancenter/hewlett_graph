@@ -1,6 +1,6 @@
 class Subcategory < ActiveRecord::Base
     belongs_to :category
-    has_many :ideas
+    has_many :interventions, :order => 'intervention_type_id'
     acts_as_api
 
     api_accessible :everything do |t|
@@ -11,8 +11,7 @@ class Subcategory < ActiveRecord::Base
 
     api_accessible :hierarchy do |t|
         t.add :name
-        t.add lambda{ |graph| graph.class.name.downcase }, :as => :className
-        t.add :ideas, :as => :children
+        t.add :interventions, :as => :children
     end
 
     def category_uuid

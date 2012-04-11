@@ -1,0 +1,30 @@
+/*
+  Place all the styles related to the matching controller here.
+  They will automatically be included in application.css.
+*/
+.formtastic fieldset.choices, .formtastic li > fieldset.inputs {
+    border: 1px solid #ccc;
+    padding: 1em;
+    background: #F8F8F8;
+    border-radius: 20px;
+    margin: 1em;
+}
+.formtastic legend {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-left: 1em !important;
+}
+.formtastic .input.boolean {
+    margin-bottom: 0;
+}
+.formtastic fieldset.choices legend.label label {
+    position: static;
+}
+.formtastic .input legend.label {
+    float: none;
+    position: static;
+    width: auto;
+}
+.formtastic fieldset.inputs fieldset.inputs fieldset.choices {
+    background-color: #eee;
+}

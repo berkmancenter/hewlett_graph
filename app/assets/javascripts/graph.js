@@ -24,7 +24,7 @@ var Graph = {
 		categories: {},
 		subcategories: {},
 		stakeholders: {},
-		ideas: {},
+		interventions: {},
 		days: {}
 	},
     hierarchy: {},
@@ -148,22 +148,8 @@ var Graph = {
 
           // Enter any new nodes at the parent's previous position.
           nodeEnter.append("svg:circle")
-              .attr("r", function(d) { return d.children || d._children ? 8.5 : 3.5; })
-              .style("fill", function(d) {
-                  if (d._children || d.children) {
-                      switch(d.className) {
-                          case 'category':
-                              return Graph.catColorScale(d.name).toString()
-                          case 'subcategory':
-                              return Util.getSubcatColor(d.name).toString()
-                          default:
-                              return '#ccc'
-                      }
-                  } else {
-                      return '#ccc';
-                  }
-              })
-              .style('stroke-width', function(d) { return d.className == 'category' || d.className == 'subcategory' ? 0 : 1.5; })
+              .attr("r", function(d) { return d.children || d._children ? 8.5 : 6.5; })
+              .style("fill", function(d) { return d._children || d.children ? "lightsteelblue" : Graph.typeColorScale(d.intervention_type.name); })
               .on("click", click);
 
           nodeEnter.append("svg:text")
@@ -193,7 +179,7 @@ var Graph = {
           node
               .classed('closed', function(d) { return d._children; })
               .classed('open', function(d) { return d.children; })
-              .classed('idea', function(d) { return !d.children && !d._children; });
+              .classed('intervention', function(d) { return !d.children && !d._children; });
 
           // Update the links…
           var link = vis.selectAll("path.link")
@@ -257,7 +243,7 @@ var Graph = {
 	createForceLayout: function() {
 		Graph.foci = Graph.getFoci();
 		Graph.colorFoci = Graph.getColorFoci();
-		d3.select('svg').selectAll("circle.node").data(Graph.data.ideas, function(d) {
+		d3.select('svg').selectAll("circle.node").data(Graph.data.interventions, function(d) {
 			return d.uuid
 		}).enter().append("svg:circle").attr("class", "node").attr("cx", function(d) {
 			return Node.getX(Graph.foci, d, Graph.config.sortAttr);
@@ -279,7 +265,7 @@ var Graph = {
 		Graph.initialized = true;
 	},
 	updateLameCircles: function() {
-		var nodes = d3.select('svg').selectAll("circle.node").data(Graph.data.ideas, function(d) {
+		var nodes = d3.select('svg').selectAll("circle.node").data(Graph.data.interventions, function(d) {
 			return d.uuid
 		});
 		nodes.enter().append("svg:circle").attr("class", "node").attr("r", Graph.config.nodeRadius).attr("stroke-width", Graph.config.strokeWidth).attr("cx", function(d) {
@@ -348,7 +334,16 @@ var Graph = {
             entries.forEach(function(u) {
                 $legend.append(function() {
                     return $('<div class="legendEntry" />').append(function() {
-                        return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name).toString()).add($('<span class="legendText" />').text(u.name));
+                        return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name)).add($('<span class="legendText" />').text(u.name));
+                    });
+                });
+            });
+        } else {
+            var entries = Graph.hierarchy.intervention_types;
+            entries.forEach(function(u) {
+                $legend.append(function() {
+                    return $('<div class="legendEntry" />').append(function() {
+                        return $('<span class="swatch"/>').css('backgroundColor', Graph.typeColorScale(u.name)).add($('<span class="legendText" />').text(u.name));
                     });
                 });
             });
@@ -510,7 +505,7 @@ var Util = {
 			d3.select("#stakeholders").text(c.stakeholders.map(function(s) {
 				return ' ' + s.name;
 			}).toString());
-			d3.select("#idea").text(c.content);
+			d3.select("#intervention").text(c.content);
 			$('#data').show();
 		});
 
@@ -573,7 +568,7 @@ var Util = {
             $('input[name=color][value=' + $(this).attr('data-color') + ']').attr('checked', true).trigger('change');
             $('#hideLabels').attr('checked', function() { return $(e.target).attr('data-hide-labels') == 't' ? true : false; });
             return false;
-            //$(this).attr('data-selected-idea')
+            //$(this).attr('data-selected-intervention')
         });
 
 		$("input[name=color]").on("change", function(e) {
