@@ -1,5 +1,7 @@
 Code::Application.routes.draw do
 
+  get 'graphs/1/interventions/new' => 'clusters#index'
+
   resources :clusters do
       resources :interventions
   end

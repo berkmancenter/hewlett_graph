@@ -17,9 +17,20 @@ class InterventionsController < ApplicationController
     end
 
     def update
+        if @intervention.update_attributes(params[:intervention])
+            redirect_to cluster_intervention_path(@cluster, @intervention), :notice => 'Intervention successfully updated!'
+        else
+            render :action => "edit"
+        end
     end
 
     def create
+        @intervention = Intervention.new(params[:intervention])
+        if @intervention.save
+            redirect_to cluster_intervention_path(@cluster, @intervention), :notice => 'Intervention successfully created!'
+        else
+            render :action => 'new'
+        end
     end
 
     def destroy
