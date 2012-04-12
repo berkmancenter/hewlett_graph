@@ -1,6 +1,6 @@
 class Subcategory < ActiveRecord::Base
     belongs_to :category
-    has_many :interventions, :order => 'intervention_type_id'
+    has_many :interventions
     acts_as_api
 
     api_accessible :everything do |t|
@@ -11,6 +11,7 @@ class Subcategory < ActiveRecord::Base
 
     api_accessible :hierarchy do |t|
         t.add :name
+        t.add lambda{ |sc| sc.class.name.downcase }, :as => :className
         t.add :interventions, :as => :children
     end
 

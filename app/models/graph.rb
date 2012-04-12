@@ -13,6 +13,7 @@ class Graph < ActiveRecord::Base
     has_many :questions
     acts_as_api
 
+    #TODO: Holy shit, this is ludicrous
     attr_accessor :sort_attr, :color_attr
     api_accessible :everything do |t|
         t.add :interventions
@@ -56,15 +57,44 @@ class Graph < ActiveRecord::Base
         t.add :prerendered_interventions, :as => :interventions
         t.add :categories, :template => :everything
         t.add :subcategories, :template => :everything
-        t.add :stakeholders, :template => :everything
-        t.add :days, :template => :everything
+        t.add lambda{|g| ImplementationComplexity.all }, :as => :implementation_complexities, :template => :everything
+        t.add lambda{|g| Cluster.all }, :as => :cluster, :template => :everything
+        t.add lambda{|g| Context.all }, :as => :contexts, :template => :everything
+        t.add lambda{|g| ManagementNeed.all }, :as => :management_needs, :template => :everything
+        t.add lambda{|g| TimeFrame.all }, :as => :time_frames, :template => :everything
+        t.add lambda{|g| PolicyFocus.all }, :as => :policy_focii, :template => :everything
+        t.add lambda{|g| CoordinationNeed.all }, :as => :coordination_needs, :template => :everything
+        t.add lambda{|g| Actor.all }, :as => :actors, :template => :everything
+        t.add lambda{|g| Dependency.all }, :as => :dependencies, :template => :everything
+        t.add lambda{|g| FinancialRequirement.all }, :as => :financial_requirements, :template => :everything
+        t.add lambda{|g| Risk.all }, :as => :risks, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :can_be_implemented_by_existing_orgs, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :requires_new_coop_of_existing_orgs, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :requires_expanded_coop_of_existing_org, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :requires_new_orgs, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :hackable, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :facilitates_sustainability, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :facilitates_reusability, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :has_translation_component, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :has_legal_or_policy_changes, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :facilitates_feedback, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :promotes_interop, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :promotes_access, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :promotes_discovery, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :increases_adoption, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :engages_nontraditional, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :focuses_on_community, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :requires_public_outreach, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :likely_to_face_opposition, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :requires_culture_shift, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :supports_data_collection, :template => :everything
+        t.add lambda{|g| [true, false] }, :as => :requires_more_research, :template => :everything
     end
 
     api_accessible :hierarchy do |t|
         t.add :name
         t.add lambda{ |graph| graph.class.name.downcase }, :as => :className
         t.add :categories, :as => :children
-        t.add :intervention_types
     end
 
     def import_data_from_attachment!
@@ -121,7 +151,7 @@ class Graph < ActiveRecord::Base
 
     def prerendered_interventions
         Capybara.default_driver = :webkit
-        Capybara.default_wait_time = 20
+        Capybara.default_wait_time = 40
         Capybara.app_host = 'http://localhost:3000' 
         cache = ActiveSupport::Cache::FileStore.new Rails.public_path
 

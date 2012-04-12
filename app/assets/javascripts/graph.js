@@ -99,10 +99,12 @@ var Graph = {
 		Graph.data.category = data.graph.categories;
 		Graph.data.subcategory = data.graph.subcategories;
 		Graph.data.day = data.graph.days;
-        Graph.updateAdvanced();
-        Graph.initColorScales();
+        if ($('#sortList').children().length == 0) {
+            Graph.updateAdvanced();
+            Graph.initColorScales();
+        }
 
-		/*switch (Graph.config.browserSpeed) {
+		switch (Graph.config.browserSpeed) {
 		case 'serverside':
 		case 'fast':
 			if (!Graph.initialized) {
@@ -113,9 +115,7 @@ var Graph = {
 		case 'medium':
 		case 'slow':
 			Graph.updateLameCircles();
-		}*/
-        Graph.createForceLayout();
-
+		}
 	},
     createDendrogram: function() {
         var i = 0,
@@ -172,7 +172,7 @@ var Graph = {
           nodeEnter.append("svg:text")
               .attr("x", function(d) { return d.children || d._children ? 12 : 10; })
               .attr("y", 3)
-              .text(function(d) { return typeof d.name == 'undefined' ? d.content : d.name; })
+              .text(function(d) { return typeof d.name == 'undefined' ? d.title : d.name; })
               .on("click", click);
 
           // Transition nodes to their new position.
@@ -325,7 +325,21 @@ var Graph = {
 	},
     initColorScales: function() {
         d3.map(Graph.data.interventions[0]).forEach(function(k, v) {
-            if (['uuid', 'title', 'description', 'required_innovations', 'additional_info'].indexOf(k) == -1) {
+            //TODO: So stupid
+            if ([
+                'uuid',
+                'title',
+                'description',
+                'required_innovations',
+                'additional_info',
+                'index',
+                'px',
+                'py',
+                'x',
+                'y',
+                'fixed',
+                'weight'
+                ].indexOf(k) == -1) {
                 var colorScale;
                 if (Graph.data[k].length <= 10) {
                     colorScale = d3.scale.category10();
@@ -403,7 +417,7 @@ var Graph = {
 						}).indexOf(group) != - 1 && n[Graph.config.sortAttr].length == 1;
 					}
 					else {
-						return n[Graph.config.sortAttr].name == group;
+						return n[Graph.config.sortAttr].name ? n[Graph.config.sortAttr].name == group : n[Graph.config.sortAttr].toString() == group;
 					}
 				});
 				position = Graph.getNodesAvgPosition(nodes);
@@ -424,10 +438,8 @@ var Graph = {
                 $('#colorList').append('<li><input type="radio" name="color" id="color' + k + '" value="' + k + '" /><label for="color' + k + '">' + Util.toTitle(k) + '</label></li>');
             }
         });
-        if (!Graph.initialized) {
-            Graph.config.sortAttr = $('#sortList li:first input').attr('checked', true).val();
-            Graph.config.colorAttr = $('#colorList li:first input').attr('checked', true).val();
-        }
+        $('#sortList input[value="' + Graph.config.sortAttr + '"]').attr('checked', true);
+        $('#colorList input[value="' + Graph.config.colorAttr + '"]').attr('checked', true);
     },
 	outputNodes: function() {
 		$('<span id="d3Nodes" />').text(JSON.stringify(Graph.forceLayout.nodes())).appendTo('body');

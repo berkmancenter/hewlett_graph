@@ -20,6 +20,7 @@ class Intervention < ActiveRecord::Base
 
     api_accessible :everything do |t|
         t.add :uuid
+        t.add :category
         t.add :subcategory
         t.add :title
         t.add :description
@@ -62,8 +63,6 @@ class Intervention < ActiveRecord::Base
     api_accessible :hierarchy do |t|
         t.add :title
         t.add :description
-        t.add :intervention_type
-        t.add :stakeholders
     end
 
     def day
