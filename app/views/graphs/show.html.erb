@@ -25,6 +25,8 @@
 <% end %>
 <div id="graph">
     <div id="hiddenCount"></div>
+    <div id="colorTextWrap">Colored by: <span id="colorText"></span></div>
+    <div id="sortTextWrap">Sorted by: <span id="sortText"></span></div>
     <div id="data" style="display: none;">
         <a href="#"><div id="dataClose">X</div></a>
         <dt>Intervention</dt><dd id="intervention"></dd>
@@ -60,6 +62,7 @@
     </div>
 </div>
 <button id="changeLayout">Tree View</button>
+<a target="_blank" href="<%= asset_path 'description.png' %>">Description word cloud</a>
 <div id="evidenceHub"><p>Visit the the Evidence Hub for Open Education Resources, which aims to provide an environment to systematically interrogate the Open Education movement on what are the people, projects, organizations, challenges, solutions and claims that scaffold the movement: <a target="_blank" href="http://ci.olnet.org/">http://ci.olnet.org</a></p></div>
 <script> 
     Graph.id = <%= @graph.id %>;

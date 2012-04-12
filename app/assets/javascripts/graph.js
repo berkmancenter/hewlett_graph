@@ -392,6 +392,7 @@ var Graph = {
             });
             $('#legend :header').after($legend.html());
         } 
+        $('#colorText').text(Util.toTitle(Graph.config.colorAttr));
 	},
 	updateLabels: function() {
 		var groups = Util.flattenData(Graph.config.sortAttr),
@@ -434,6 +435,7 @@ var Graph = {
 		if (!hidden) {
 			$('.sortLabel').fadeIn();
 		}
+        $('#sortText').text(Util.toTitle(Graph.config.sortAttr));
 	},
     updateAdvanced: function() {
         d3.map(Graph.data.interventions[0]).forEach(function(k, v) {
