@@ -368,7 +368,7 @@ var Graph = {
             entries.forEach(function(u) {
                 $legend.append(function() {
                     return $('<div class="legendEntry" />').append(function() {
-                        return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name || u.toString())).add($('<span class="legendText" />').text(u.name || u.toString()));
+                        return $('<span class="swatch"/>').css('backgroundColor', Util.stringToColor(u.name || u.toString())).add($('<span class="legendText" />').text(Util.groupNameToText(u.name || u.toString())));
                     });
                 });
             });
@@ -378,7 +378,8 @@ var Graph = {
 	updateLabels: function() {
 		var groups = Util.flattenData(Graph.config.sortAttr),
 		hidden = $('#hideLabels').is(':checked'),
-		position;
+		position,
+        groupText;
 		$('.sortLabel').fadeOut(300, function() {
 			$(this).remove();
 		});
@@ -386,7 +387,7 @@ var Graph = {
 		case 'serverside':
 		case 'fast':
 			groups.forEach(function(group) {
-				$('<div class="sortLabel"/>').appendTo('body').text(group).css({
+				$('<div class="sortLabel"/>').appendTo('body').text(Util.groupNameToText(group)).css({
 					'left': Graph.foci[group][0] + $('#graph').offset().left,
 					'top': Graph.foci[group][1] + $('#graph').offset().top
 				});
@@ -406,7 +407,7 @@ var Graph = {
 					}
 				});
 				position = Graph.getNodesAvgPosition(nodes);
-				$('<div class="sortLabel"/>').appendTo('body').text(group).css({
+				$('<div class="sortLabel"/>').appendTo('body').text(Util.groupNameToText(group)).css({
 					'left': position[0] + $('#graph').offset().left,
 					'top': position[1] + $('#graph').offset().top
 				});
@@ -419,8 +420,8 @@ var Graph = {
     updateAdvanced: function() {
         d3.map(Graph.data.interventions[0]).forEach(function(k, v) {
             if (['uuid', 'title', 'description', 'required_innovations', 'additional_info'].indexOf(k) == -1) {
-                $('#sortList').append('<li><input type="radio" name="sort" id="sort' + k + '" value="' + k + '" /><label for="sort' + k + '">' + k + '</label></li>');
-                $('#colorList').append('<li><input type="radio" name="color" id="color' + k + '" value="' + k + '" /><label for="color' + k + '">' + k + '</label></li>');
+                $('#sortList').append('<li><input type="radio" name="sort" id="sort' + k + '" value="' + k + '" /><label for="sort' + k + '">' + Util.toTitle(k) + '</label></li>');
+                $('#colorList').append('<li><input type="radio" name="color" id="color' + k + '" value="' + k + '" /><label for="color' + k + '">' + Util.toTitle(k) + '</label></li>');
             }
         });
         if (!Graph.initialized) {
@@ -497,13 +498,13 @@ var Graph = {
         Graph.hiddenCount = 0;
 		Graph.forceLayout.nodes().forEach(function(o, i) {
             o.hidden = false;
-            if (o[Graph.config.sortAttr].length == 0) {
+            if (o[Graph.config.sortAttr].length == 0 || o[Graph.config.colorAttr].length == 0) {
                 o.hidden = true;
                 Graph.hiddenCount++;
             }
 		});
         if (Graph.hiddenCount > 0) {
-            $('#hiddenCount').text(Graph.hiddenCount + ' interventions hidden');
+            $('#hiddenCount').text(function() { var output = Graph.hiddenCount + ' intervention'; if (Graph.hiddenCount > 1) { output += 's'; }; return output += ' hidden due to missing data'});
         }
     },
 	correctLabelPositions: function() {
@@ -531,7 +532,17 @@ var Graph = {
 var Node = {
 
 	getColor: function(node) {
-		return Util.stringToColor(Node.getAttrString(node, Graph.config.colorAttr));
+        attr = Graph.config.colorAttr
+        if (node[attr] instanceof Array) {
+            var colors = [];
+            node[attr].forEach(function(i) {
+                colors.push(Util.stringToColor(i.name || i.toString()));
+            });
+            return colors.reduce(function(prev, curr) { return d3.interpolateRgb(prev, curr)(0.5); }, colors[0]);
+        }
+        else {
+            return Util.stringToColor(Node.getAttrString(node, Graph.config.colorAttr));
+        }
 	},
 	getX: function(foci, node, attr, index) {
 		// I should do caching in here so it doesn't take any time
@@ -545,11 +556,7 @@ var Node = {
 			xs = d3.mean(xs);
 		}
 		else {
-            if (node[attr] instanceof Object && node[attr].name) {
-                xs = foci[node[attr].name][index];
-            } else {
-                xs = foci[node[attr].toString()][index];
-            }
+            xs = foci[Node.getAttrString(node, attr)][index];
 		}
 		return xs;
 	},
@@ -650,13 +657,16 @@ var Util = {
 			case 'serverside':
 			case 'fast':
 				Graph.tickCount = 0;
+				Graph.updateColorFoci();
+				Graph.updateLegend();
+                Graph.filterNodes();
 				d3.selectAll('circle.node').transition().duration(300).style("fill", function(d, i) {
-					return Node.getColor(d);
+                    if (!d.hidden) {
+                        return Node.getColor(d);
+                    }
 				}).style("stroke", function(d, i) {
 					return d3.rgb(Node.getColor(d)).darker(2);
 				});
-				Graph.updateColorFoci();
-				Graph.updateLegend();
 				Graph.forceLayout.start();
 				break;
 			case 'medium':
@@ -704,6 +714,9 @@ var Util = {
 			return d3.rgb(Graph[Graph.config.colorAttr + 'ColorScale'](string));
 		}
 	},
+    toTitle: function(str) {
+        return str.replace(/_/g, ' ').replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    },
 	flattenData: function(attr) {
 		return Graph.data[attr].map(function(s) {
             if (s instanceof Object && s.name) {
@@ -713,6 +726,13 @@ var Util = {
             }
 		});
 	},
+    groupNameToText: function(str) { 
+         var groupText;
+         if (str == 'true') { groupText = 'Yes'; }
+         else if (str == 'false') { groupText = 'No'; }
+         else { groupText = str; }
+         return groupText;
+    },
 	getFociFromArray: function(groups) {
 		// TODO: use d3 scales to do this
 		var fociStack = [],
