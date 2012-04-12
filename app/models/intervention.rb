@@ -20,6 +20,8 @@ class Intervention < ActiveRecord::Base
 
     api_accessible :everything do |t|
         t.add :uuid
+        t.add :id
+        t.add lambda{|i| i.cluster.id }, :as => :cluster_id 
         t.add :category
         t.add :subcategory
         t.add :title

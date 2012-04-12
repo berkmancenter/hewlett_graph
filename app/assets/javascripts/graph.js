@@ -108,7 +108,6 @@ var Graph = {
 		case 'serverside':
 		case 'fast':
 			if (!Graph.initialized) {
-                Util.updateGraphEventHandlers();
 				Graph.createForceLayout();
 			}
 			break;
@@ -279,6 +278,9 @@ var Graph = {
 		Graph.forceLayout.start();
 		Graph.updateLabels();
 		Graph.updateLegend();
+        if (!Graph.initialized) {
+            Util.updateGraphEventHandlers();
+        }
 		Graph.initialized = true;
 	},
 	updateLameCircles: function() {
@@ -328,6 +330,8 @@ var Graph = {
             //TODO: So stupid
             if ([
                 'uuid',
+                'id',
+                'cluster_id',
                 'title',
                 'description',
                 'required_innovations',
@@ -433,7 +437,7 @@ var Graph = {
 	},
     updateAdvanced: function() {
         d3.map(Graph.data.interventions[0]).forEach(function(k, v) {
-            if (['uuid', 'title', 'description', 'required_innovations', 'additional_info'].indexOf(k) == -1) {
+            if (['uuid', 'id', 'cluster_id', 'title', 'description', 'required_innovations', 'additional_info'].indexOf(k) == -1) {
                 $('#sortList').append('<li><input type="radio" name="sort" id="sort' + k + '" value="' + k + '" /><label for="sort' + k + '">' + Util.toTitle(k) + '</label></li>');
                 $('#colorList').append('<li><input type="radio" name="color" id="color' + k + '" value="' + k + '" /><label for="color' + k + '">' + Util.toTitle(k) + '</label></li>');
             }
@@ -588,12 +592,7 @@ var Util = {
 		d3.selectAll("circle.node").on("click", function(c) {
 			d3.select('circle.node.activated').classed('activated', false);
 			d3.select(this).classed('activated', true);
-			d3.select("#category").text(c.category.name);
-			d3.select("#subcategory").text(c.subcategory.name);
-			d3.select("#stakeholders").text(c.stakeholders.map(function(s) {
-				return ' ' + s.name;
-			}).toString());
-			d3.select("#intervention").text(c.content);
+			d3.select("#intervention").html('<p>' + c.title + '</p><a target="_blank" href="/clusters/' + c.cluster_id + '/interventions/' + c.id + '/edit">View / Edit</a>');
 			$('#data').show();
 		});
 
