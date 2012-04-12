@@ -53,3 +53,10 @@
         <%= f.actions %>
     <% end %>
 <% end %>
+<script>
+    <% ['time_frames', 'actors', 'management_needs', 'financial_requirements', 'coordination_needs', 'dependencies', 'risks', 'implementation_complexities'].each do |field| %>
+        <% @intervention.send(field).each do |a| %>
+            $('#intervention_<%= field %>_input input[value=<%= a.id %>]').attr('checked', true);
+        <% end %>
+    <% end %>
+</script>
